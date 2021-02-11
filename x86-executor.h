@@ -56,6 +56,8 @@ extern int debug;
 extern uint64_t *inputs;
 extern uint64_t current_input;
 #define DEFAULT_INPUT 0;
+extern uint64_t input_mask;
+#define DEFAULT_INPUT_MASK 0xffffffff;
 
 extern char *code;
 extern size_t code_length;

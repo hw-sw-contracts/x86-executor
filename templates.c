@@ -32,7 +32,7 @@
 #define MAGIC_BYTES_RUNTIME_R14 0x40b513b1C2813F04
 #define MAGIC_BYTES_RUNTIME_RBP 0x50b513b1C2813F04
 #define MAGIC_BYTES_INPUT 0x60b513b1C2813F04
-// unused value 0x70b513b1C2813F04
+#define MAGIC_BYTES_INPUT_MASK 0x70b513b1C2813F04
 #define MAGIC_BYTES_RUNTIME_RSP 0x80b513b1C2813F04
 #define MAGIC_BYTES_HTRACE 0x90b513b1C2813F04
 #define MAGIC_BYTES_MSR 0xA0b513b1C2813F04
@@ -111,6 +111,11 @@ void load_template(char *measurement_template) {
             templateI += 8;
             rcI += 8;
         } else if (starts_with_magic_bytes(&measurement_template[templateI],
+                                           MAGIC_BYTES_INPUT_MASK)) {
+            *(void **) (&runtime_code[rcI]) = &input_mask;
+            templateI += 8;
+            rcI += 8;
+        } else if (starts_with_magic_bytes(&measurement_template[templateI],
                                            MAGIC_BYTES_RUNTIME_RSP)) {
             *(void **) (&runtime_code[rcI]) = runtime_rsp;
             templateI += 8;
@@ -163,19 +168,23 @@ void load_template(char *measurement_template) {
         "   add "START", "STEP" \n" \
         "cmp "START", "END"; jl 1b \n"
 
-#define SET_REGISTERS_RANDOM() \
+#define SET_REGISTERS_RANDOM(MASK) \
         "imul edi, edi, 2891336453  \n" \
         "add edi, 12345  \n" \
-        "mov eax, edi  \n" \
+        "mov rax, "MASK"\n" \
+        "and rax, rdi \n " \
         "imul edi, edi, 2891336453  \n" \
         "add edi, 12345  \n" \
-        "mov ebx, edi  \n" \
+        "mov rbx, "MASK"\n" \
+        "and rbx, rdi \n " \
         "imul edi, edi, 2891336453  \n" \
         "add edi, 12345  \n" \
-        "mov ecx, edi  \n" \
+        "mov rcx, "MASK"\n" \
+        "and rcx, rdi \n " \
         "imul edi, edi, 2891336453  \n" \
         "add edi, 12345  \n" \
-        "mov edx, edi  \n" \
+        "mov rdx, "MASK"\n" \
+        "and rdx, rdi \n " \
         "imul edi, edi, 2891336453  \n" \
         "add edi, 12345  \n" \
         "pushq rdi  \n" \
@@ -253,7 +262,10 @@ inline void prologue(void) {
             "add rbx, 4096 \n " \
             "imul edi, edi, 2891336453  \n" \
             "add edi, 12345  \n" \
-            SET_MEMORY("rax", "rbx", "64", "rdi"));
+            "mov rcx, "STRINGIFY(MAGIC_BYTES_INPUT_MASK)"\n" \
+            "mov rcx, [rcx] \n" \
+            "and rcx, rdi \n " \
+            SET_MEMORY("rax", "rbx", "64", "rcx"));
 
     // randomize the values stored in memory
     //asm_volatile_intel(
@@ -361,6 +373,11 @@ void template_l1d_prime_probe(void) {
     // start monitoring SMIs
     asm_volatile_intel(READ_SMI_START("r12"));
 
+    // not to compromise the P+P measurement, load the input mask beforehand
+    asm_volatile_intel("" \
+        "mov rsi, "STRINGIFY(MAGIC_BYTES_INPUT_MASK)"\n" \
+        "mov rsi, [rsi] \n");
+
     // Prime
     asm_volatile_intel(""\
         "mov rax, r14\n" \
@@ -371,8 +388,7 @@ void template_l1d_prime_probe(void) {
     asm_volatile_intel(SB_FLUSH("r11", "60"));
 
     // Initialize registers
-    asm_volatile_intel(SET_REGISTERS_RANDOM());
-    //asm_volatile_intel(SET_REGISTERS_FIXED("42"));
+    asm_volatile_intel(SET_REGISTERS_RANDOM("rsi"));
 
     // indicate the beginning of the test case
     // used to align the test case code in memory
@@ -442,7 +458,10 @@ void template_l1d_flush_reload(void) {
     asm_volatile_intel(SB_FLUSH("r11", "60"));
 
     // Initialize registers
-    asm_volatile_intel(SET_REGISTERS_RANDOM());
+    asm_volatile_intel("" \
+        "mov rsi, "STRINGIFY(MAGIC_BYTES_INPUT_MASK)"\n" \
+        "mov rsi, [rsi] \n"
+        SET_REGISTERS_RANDOM("rsi"));
 
     // indicate the beginning of the test case
     // used to align the test case code in memory

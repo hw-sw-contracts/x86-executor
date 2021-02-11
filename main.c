@@ -111,6 +111,7 @@ int64_t *measurement_results[HTRACE_WIDTH];
 
 uint64_t *inputs;
 uint64_t current_input = DEFAULT_INPUT;
+uint64_t input_mask = DEFAULT_INPUT_MASK;
 
 char *runtime_code_base = NULL;
 
@@ -209,6 +210,18 @@ static ssize_t n_inputs_store(struct kobject *kobj,
 }
 static struct kobj_attribute n_inputs_attribute =
         __ATTR(n_inputs, 0666, n_inputs_show, n_inputs_store);
+
+/// Setting a mask for randomly generated values
+///
+static ssize_t input_mask_store(struct kobject *kobj,
+                              struct kobj_attribute *attr,
+                              const char *buf,
+                              size_t count) {
+    sscanf(buf, "%llu", &input_mask);
+    return count;
+}
+static struct kobj_attribute input_mask_attribute =
+        __ATTR(input_mask, 0666, dummy_show, input_mask_store);
 
 /// Setting the number of warm up rounds
 ///
@@ -394,6 +407,7 @@ static int __init nb_init(void) {
     error |= sysfs_create_file(nb_kobject, &code_offset_attribute.attr);
     error |= sysfs_create_file(nb_kobject, &inputs_attribute.attr);
     error |= sysfs_create_file(nb_kobject, &n_inputs_attribute.attr);
+    error |= sysfs_create_file(nb_kobject, &input_mask_attribute.attr);
     error |= sysfs_create_file(nb_kobject, &warmups_attribute.attr);
     error |= sysfs_create_file(nb_kobject, &print_sandbox_base_attribute.attr);
     error |= sysfs_create_file(nb_kobject, &print_stack_base_attribute.attr);
