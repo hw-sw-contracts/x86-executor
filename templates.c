@@ -161,30 +161,25 @@ void load_template(char *measurement_template) {
         "   add "START", "STEP" \n" \
         "cmp "START", "END"; jl 1b \n"
 
-#define SET_MEMORY_RANDOM(START, END, STEP) \
-        "   1: imul edi, edi, 2891336453  \n" \
-        "   add edi, 12345  \n" \
-        "   mov ["START"], dil \n" \
+#define LCG(DEST, MASK) \
+        "imul edi, edi, 2891336453  \n" \
+        "add edi, 12345 \n"\
+        "mov "DEST", edi \n" \
+        "shr "DEST", 16 \n" \
+        "xor "DEST", edi \n" \
+        "and "DEST", "MASK" \n"
+
+#define SET_MEMORY_RANDOM(START, END, STEP, MASK, TMP32, TMP64) \
+        "   1: "LCG(TMP32, MASK) \
+        "   mov qword ptr ["START"], "TMP64" \n" \
         "   add "START", "STEP" \n" \
         "cmp "START", "END"; jl 1b \n"
 
 #define SET_REGISTERS_RANDOM(MASK) \
-        "imul edi, edi, 2891336453  \n" \
-        "add edi, 12345  \n" \
-        "mov rax, "MASK"\n" \
-        "and rax, rdi \n " \
-        "imul edi, edi, 2891336453  \n" \
-        "add edi, 12345  \n" \
-        "mov rbx, "MASK"\n" \
-        "and rbx, rdi \n " \
-        "imul edi, edi, 2891336453  \n" \
-        "add edi, 12345  \n" \
-        "mov rcx, "MASK"\n" \
-        "and rcx, rdi \n " \
-        "imul edi, edi, 2891336453  \n" \
-        "add edi, 12345  \n" \
-        "mov rdx, "MASK"\n" \
-        "and rdx, rdi \n " \
+        LCG("eax", MASK) \
+        LCG("ebx", MASK) \
+        LCG("ecx", MASK) \
+        LCG("edx", MASK) \
         "imul edi, edi, 2891336453  \n" \
         "add edi, 12345  \n" \
         "pushq rdi  \n" \
@@ -256,23 +251,25 @@ inline void prologue(void) {
         "mov rdi, [rax] \n");
 
     // store the same random value into all addresses within the sandbox
-    asm_volatile_intel("" \
-            "mov rax, r14 \n" \
-            "mov rbx, r14 \n " \
-            "add rbx, 4096 \n " \
-            "imul edi, edi, 2891336453  \n" \
-            "add edi, 12345  \n" \
-            "mov rcx, "STRINGIFY(MAGIC_BYTES_INPUT_MASK)"\n" \
-            "mov rcx, [rcx] \n" \
-            "and rcx, rdi \n " \
-            SET_MEMORY("rax", "rbx", "64", "rcx"));
-
-    // randomize the values stored in memory
-    //asm_volatile_intel(
+    //asm_volatile_intel("" \
     //        "mov rax, r14 \n" \
     //        "mov rbx, r14 \n " \
     //        "add rbx, 4096 \n " \
-    //        SET_MEMORY_RANDOM("rax", "rbx", "64"));
+    //        "imul edi, edi, 2891336453  \n" \
+    //        "add edi, 12345  \n" \
+    //        "mov rcx, "STRINGIFY(MAGIC_BYTES_INPUT_MASK)"\n" \
+    //        "mov rcx, [rcx] \n" \
+    //        "and rcx, rdi \n " \
+    //        SET_MEMORY("rax", "rbx", "64", "rcx"));
+
+    // randomize the values stored in memory
+    asm_volatile_intel(
+            "mov rax, r14 \n" \
+            "mov rbx, r14 \n " \
+            "add rbx, 4096 \n " \
+            "mov rcx, "STRINGIFY(MAGIC_BYTES_INPUT_MASK)"\n" \
+            "mov rcx, [rcx] \n" \
+            SET_MEMORY_RANDOM("rax", "rbx", "64", "ecx", "edx", "rdx"));
 }
 
 inline void epilogue(void) {
@@ -388,7 +385,7 @@ void template_l1d_prime_probe(void) {
     asm_volatile_intel(SB_FLUSH("r11", "60"));
 
     // Initialize registers
-    asm_volatile_intel(SET_REGISTERS_RANDOM("rsi"));
+    asm_volatile_intel(SET_REGISTERS_RANDOM("esi"));
 
     // indicate the beginning of the test case
     // used to align the test case code in memory
@@ -460,8 +457,8 @@ void template_l1d_flush_reload(void) {
     // Initialize registers
     asm_volatile_intel("" \
         "mov rsi, "STRINGIFY(MAGIC_BYTES_INPUT_MASK)"\n" \
-        "mov rsi, [rsi] \n"
-        SET_REGISTERS_RANDOM("rsi"));
+        "mov rsi, [rsi] \n" \
+        SET_REGISTERS_RANDOM("esi"));
 
     // indicate the beginning of the test case
     // used to align the test case code in memory
