@@ -94,7 +94,12 @@ static inline void pre_measurement_setup(void) {
 #endif
 }
 
-static inline void pre_run_setup(void) {
+
+static inline void single_run(long i, int64_t *results[]) {
+    // ignore "warm-up" runs (i<0)
+    long i_ = (i < 0) ? 0 : i;
+    current_input = inputs[i_];
+
     if (pre_run_flush == 1) {
         static const u16 ds = __KERNEL_DS;
         asm volatile("verw %[ds]" : : [ds] "m"(ds) : "cc");
@@ -102,10 +107,15 @@ static inline void pre_run_setup(void) {
     }
 
 #if ENABLE_ABIT_ASSIST == 1
-    // reset the assist page values
-    for (int j = 0; j < 4069; j += 1) {
-        ((long long unsigned *) assist_page_addr)[j] = 0;
+    // initialize the assist page values
+    uint64_t random_value = current_input;
+    uint64_t masked_rvalue;
+    for (int j = 0; j < 64; j += 1) {
+        random_value = (((random_value * 2891336453) % 4294967296) + 12345) % 4294967296;
+        masked_rvalue = (random_value ^ (random_value >> 16)) & input_mask;
+        ((uint64_t *) assist_page_addr)[j * 8] = masked_rvalue;
     }
+    current_input = random_value;
 
     // clear the ACCESSED bit and flush the corresponding TLB entry
     assist_page_pte.pte = assist_page_ptep->pte & ~_PAGE_ACCESSED;
@@ -113,12 +123,6 @@ static inline void pre_run_setup(void) {
     asm volatile("clflush (%0)\nlfence\n"::"r" (assist_page_addr) : "memory");
     asm volatile("invlpg (%0)"::"r" (assist_page_addr) : "memory");
 #endif
-}
-
-static inline void single_run(long i, int64_t *results[]) {
-    // ignore "warm-up" runs (i<0)
-    long i_ = (i < 0) ? 0 : i;
-    current_input = inputs[i_];
 
     // execute
     ((void (*)(void)) runtime_code)();
@@ -133,7 +137,6 @@ void run_experiment(int64_t *results[]) {
     raw_local_irq_save(flags);
 
     for (long i = -warm_up_count; i < n_inputs; i++) {
-        pre_run_setup();
         single_run(i, results);
     }
 

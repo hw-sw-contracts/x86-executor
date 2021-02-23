@@ -250,18 +250,6 @@ inline void prologue(void) {
         "mov rax, "STRINGIFY(MAGIC_BYTES_INPUT)" \n" \
         "mov rdi, [rax] \n");
 
-    // store the same random value into all addresses within the sandbox
-    //asm_volatile_intel("" \
-    //        "mov rax, r14 \n" \
-    //        "mov rbx, r14 \n " \
-    //        "add rbx, 4096 \n " \
-    //        "imul edi, edi, 2891336453  \n" \
-    //        "add edi, 12345  \n" \
-    //        "mov rcx, "STRINGIFY(MAGIC_BYTES_INPUT_MASK)"\n" \
-    //        "mov rcx, [rcx] \n" \
-    //        "and rcx, rdi \n " \
-    //        SET_MEMORY("rax", "rbx", "64", "rcx"));
-
     // randomize the values stored in memory
     asm_volatile_intel(
             "mov rax, r14 \n" \
