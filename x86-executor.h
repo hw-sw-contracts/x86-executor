@@ -100,7 +100,7 @@ int measurement(struct seq_file *output_file,
 
 void template_l1d_prime_probe(void);
 void template_l1d_flush_reload(void);
-void template_l1d_prime_reload(void);
+void template_l1d_evict_reload(void);
 
 #define ENABLE_ABIT_ASSIST 1
 

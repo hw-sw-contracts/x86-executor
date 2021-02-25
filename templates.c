@@ -470,7 +470,7 @@ void template_l1d_flush_reload(void) {
     epilogue();
 }
 
-void template_l1d_prime_reload(void) {
+void template_l1d_evict_reload(void) {
     prologue();
 
     // Zero out the eviction region of Prime+Probe

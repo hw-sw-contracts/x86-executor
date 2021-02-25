@@ -335,12 +335,11 @@ static ssize_t measurement_mode_store(struct kobject *kobj,
     if (buf[0] == 'F') {
         measurement_template = (char *) &template_l1d_flush_reload;
     } else if (buf[0] == 'P') {
-        if (buf[2] == 'R') {
-            measurement_template = (char *) &template_l1d_prime_reload;
-        } else {
-            measurement_template = (char *) &template_l1d_prime_probe;
-        }
+        measurement_template = (char *) &template_l1d_prime_probe;
+    } else if (buf[0] == 'E') {
+        measurement_template = (char *) &template_l1d_evict_reload;
     }
+
     return count;
 }
 static struct kobj_attribute
