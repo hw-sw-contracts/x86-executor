@@ -437,7 +437,10 @@ void template_l1d_flush_reload(void) {
     asm_volatile_intel(READ_SMI_START("r12"));
 
     // Flush
-    asm_volatile_intel(FLUSH("r14", "rax"));
+    asm_volatile_intel(
+        "mov rbx, r14\n" \
+        "add rbx, 0\n" \
+        FLUSH("rbx", "rax"));
 
     // Push empty values into the store buffer (just in case)
     asm_volatile_intel(SB_FLUSH("r11", "60"));
@@ -459,7 +462,60 @@ void template_l1d_flush_reload(void) {
 
     // Reload
     // Note: it internally clobbers rcx, rdx, rax
-    asm_volatile_intel(RELOAD("r14", "rbx", "r13", "r11"));
+    asm_volatile_intel(
+        "mov r15, r14\n" \
+        "add r15, 0\n" \
+        RELOAD("r15", "rbx", "r13", "r11"));
+
+    epilogue();
+}
+
+void template_l1d_prime_reload(void) {
+    prologue();
+
+    // Zero out the eviction region of Prime+Probe
+    // The eviction region is 32kB memory region before right before the sandbox
+    asm_volatile_intel("" \
+        "mov rax, r14 \n" \
+        "sub rax, 32768 \n" \
+        "mov rbx, r14 \n " \
+        SET_MEMORY("rax", "rbx", "64", "0"));
+
+    // start monitoring SMIs
+    asm_volatile_intel(READ_SMI_START("r12"));
+
+    // not to compromise the P+P measurement, load the input mask beforehand
+    asm_volatile_intel("" \
+        "mov rsi, "STRINGIFY(MAGIC_BYTES_INPUT_MASK)"\n" \
+        "mov rsi, [rsi] \n");
+
+    // Prime
+    asm_volatile_intel(""\
+        "mov rax, r14\n" \
+        "sub rax, 32768\n" \
+        PRIME("rax", "rbx", "rcx", "rdx", "16"));
+
+    // Push empty values into the store buffer (just in case)
+    asm_volatile_intel(SB_FLUSH("r11", "60"));
+
+    // Initialize registers
+    asm_volatile_intel(SET_REGISTERS_RANDOM("esi"));
+
+    // indicate the beginning of the test case
+    // used to align the test case code in memory
+    asm(".quad "STRINGIFY(MAGIC_BYTES_INIT));
+
+    // Execute the test case
+    asm("lfence\n"
+        ".quad "STRINGIFY(MAGIC_BYTES_CODE)
+        "\nmfence\n");
+
+    // Reload
+    // Note: it internally clobbers rcx, rdx, rax
+    asm_volatile_intel(
+        "mov r15, r14\n" \
+        "add r15, 0\n" \
+        RELOAD("r15", "rbx", "r13", "r11"));
 
     epilogue();
 }

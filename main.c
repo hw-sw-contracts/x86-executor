@@ -335,7 +335,11 @@ static ssize_t measurement_mode_store(struct kobject *kobj,
     if (buf[0] == 'F') {
         measurement_template = (char *) &template_l1d_flush_reload;
     } else if (buf[0] == 'P') {
-        measurement_template = (char *) &template_l1d_prime_probe;
+        if (buf[2] == 'R') {
+            measurement_template = (char *) &template_l1d_prime_reload;
+        } else {
+            measurement_template = (char *) &template_l1d_prime_probe;
+        }
     }
     return count;
 }
