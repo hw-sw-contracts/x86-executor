@@ -257,7 +257,7 @@ inline void prologue(void) {
             "add rbx, 4096 \n " \
             "mov rcx, "STRINGIFY(MAGIC_BYTES_INPUT_MASK)"\n" \
             "mov rcx, [rcx] \n" \
-            SET_MEMORY_RANDOM("rax", "rbx", "64", "ecx", "edx", "rdx"));
+            SET_MEMORY_RANDOM("rax", "rbx", "8", "ecx", "edx", "rdx"));
 }
 
 inline void epilogue(void) {

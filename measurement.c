@@ -110,10 +110,10 @@ static inline void single_run(long i, int64_t *results[]) {
     // initialize the assist page values
     uint64_t random_value = current_input;
     uint64_t masked_rvalue;
-    for (int j = 0; j < 64; j += 1) {
+    for (int j = 0; j < 512; j += 1) {
         random_value = (((random_value * 2891336453) % 4294967296) + 12345) % 4294967296;
         masked_rvalue = (random_value ^ (random_value >> 16)) & input_mask;
-        ((uint64_t *) assist_page_addr)[j * 8] = masked_rvalue;
+        ((uint64_t *) assist_page_addr)[j] = masked_rvalue;
     }
     current_input = random_value;
 
