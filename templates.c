@@ -180,6 +180,9 @@ void load_template(char *measurement_template) {
         LCG("ebx", MASK) \
         LCG("ecx", MASK) \
         LCG("edx", MASK) \
+        LCG("r8d", MASK) \
+        LCG("r9d", MASK) \
+        LCG("r10d", MASK) \
         "imul edi, edi, 2891336453  \n" \
         "add edi, 12345  \n" \
         "pushq rdi  \n" \
