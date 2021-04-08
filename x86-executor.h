@@ -86,6 +86,7 @@ extern void *RSP_mem;
 
 // Configuration Variables
 extern char ssbp_patch_control;
+extern char enable_mds_page;
 extern char pre_run_flush;
 extern char *measurement_template;
 

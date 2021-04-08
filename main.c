@@ -122,6 +122,7 @@ size_t runtime_code_base_memory_size = 0;
 // Configuration Variables
 char ssbp_patch_control = 0b011;
 char pre_run_flush = 1;
+char enable_mds_page = 0;
 char *measurement_template = (char *) &template_l1d_flush_reload;
 
 // ====================================================
@@ -311,6 +312,21 @@ static struct kobj_attribute
         enable_ssbp_patch_attribute =
         __ATTR(enable_ssbp_patch, 0666, dummy_show, enable_ssbp_patch_store);
 
+/// MDS
+///
+static ssize_t enable_mds_store(struct kobject *kobj,
+                          struct kobj_attribute *attr,
+                          const char *buf,
+                          size_t count) {
+    unsigned value = 0;
+    sscanf(buf, "%u", &value);
+    enable_mds_page = (value == 0) ? 0 : 1;
+    return count;
+}
+static struct kobj_attribute
+        enable_mds_attribute =
+        __ATTR(enable_mds, 0666, dummy_show, enable_mds_store);
+
 /// Flushing before measurements
 ///
 static ssize_t enable_pre_run_flush_store(struct kobject *kobj,
@@ -416,6 +432,7 @@ static int __init nb_init(void) {
     error |= sysfs_create_file(nb_kobject, &print_stack_base_attribute.attr);
     error |= sysfs_create_file(nb_kobject, &print_code_base_attribute.attr);
     error |= sysfs_create_file(nb_kobject, &enable_ssbp_patch_attribute.attr);
+    error |= sysfs_create_file(nb_kobject, &enable_mds_attribute.attr);
     error |= sysfs_create_file(nb_kobject, &enable_pre_run_flush_attribute.attr);
     error |= sysfs_create_file(nb_kobject, &measurement_mode_attribute.attr);
 

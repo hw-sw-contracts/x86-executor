@@ -118,10 +118,12 @@ static inline void single_run(long i, int64_t *results[]) {
     current_input = random_value;
 
     // clear the ACCESSED bit and flush the corresponding TLB entry
-    assist_page_pte.pte = assist_page_ptep->pte & ~_PAGE_ACCESSED;
-    set_pte_at(current->mm, assist_page_addr, assist_page_ptep, assist_page_pte);
-    asm volatile("clflush (%0)\nlfence\n"::"r" (assist_page_addr) : "memory");
-    asm volatile("invlpg (%0)"::"r" (assist_page_addr) : "memory");
+    if (enable_mds_page) {
+        assist_page_pte.pte = assist_page_ptep->pte & ~_PAGE_ACCESSED;
+        set_pte_at(current->mm, assist_page_addr, assist_page_ptep, assist_page_pte);
+        asm volatile("clflush (%0)\nlfence\n"::"r" (assist_page_addr) : "memory");
+        asm volatile("invlpg (%0)"::"r" (assist_page_addr) : "memory");
+    }
 #endif
 
     // execute
