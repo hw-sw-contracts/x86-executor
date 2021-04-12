@@ -167,7 +167,8 @@ void load_template(char *measurement_template) {
         "mov "DEST", edi \n" \
         "shr "DEST", 16 \n" \
         "xor "DEST", edi \n" \
-        "and "DEST", "MASK" \n"
+        "and "DEST", "MASK" \n" \
+        "shl "DEST", 6 \n"
 
 #define SET_MEMORY_RANDOM(START, END, STEP, MASK, TMP32, TMP64) \
         "   1: "LCG(TMP32, MASK) \
