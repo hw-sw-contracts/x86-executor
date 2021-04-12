@@ -170,9 +170,9 @@ void load_template(char *measurement_template) {
         "and "DEST", "MASK" \n" \
         "shl "DEST", 6 \n"
 
-#define SET_MEMORY_RANDOM(START, END, STEP, MASK, TMP32, TMP64) \
+#define SET_MEMORY_RANDOM(START, END, STEP, MASK, TMP32) \
         "   1: "LCG(TMP32, MASK) \
-        "   mov qword ptr ["START"], "TMP64" \n" \
+        "   mov dword ptr ["START"], "TMP32" \n" \
         "   add "START", "STEP" \n" \
         "cmp "START", "END"; jl 1b \n"
 
@@ -261,7 +261,7 @@ inline void prologue(void) {
             "add rbx, 4096 \n " \
             "mov rcx, "STRINGIFY(MAGIC_BYTES_INPUT_MASK)"\n" \
             "mov rcx, [rcx] \n" \
-            SET_MEMORY_RANDOM("rax", "rbx", "8", "ecx", "edx", "rdx"));
+            SET_MEMORY_RANDOM("rax", "rbx", "4", "ecx", "edx"));
 }
 
 inline void epilogue(void) {
