@@ -105,9 +105,10 @@ void *runtime_r14;
 void *runtime_rbp;
 void *runtime_rsp;
 int64_t latest_htrace[HTRACE_WIDTH];
+int64_t latest_pfc_readings[NUM_PFC];
 void *RSP_mem;
 
-int64_t *measurement_results[HTRACE_WIDTH];
+int64_t *measurement_results[NUM_MEASUREMENT_FIELDS];
 
 uint64_t *inputs;
 uint64_t current_input = DEFAULT_INPUT;
@@ -189,7 +190,7 @@ static ssize_t n_inputs_store(struct kobject *kobj,
 
     if (old_n_inputs < n_inputs) {
         // allocate more memory for measurements
-        for (int i = 0; i < HTRACE_WIDTH; i++) {
+        for (int i = 0; i < NUM_MEASUREMENT_FIELDS; i++) {
             kfree(measurement_results[i]);
             measurement_results[i] = kmalloc(n_inputs * sizeof(int64_t), GFP_KERNEL);
             if (!measurement_results[i]) {
@@ -376,7 +377,7 @@ static int __init nb_init(void) {
     }
 
     // Memory for traces
-    for (int i = 0; i < HTRACE_WIDTH; i++) {
+    for (int i = 0; i < NUM_MEASUREMENT_FIELDS; i++) {
         measurement_results[i] = kmalloc(n_inputs * sizeof(int64_t), GFP_KERNEL);
         if (!measurement_results[i]) {
             printk(KERN_ERR "Could not allocate memory for measurement_results\n");
@@ -464,7 +465,7 @@ static void __exit nb_exit(void) {
 
     kfree(inputs);
 
-    for (int i = 0; i < HTRACE_WIDTH; i++) {
+    for (int i = 0; i < NUM_MEASUREMENT_FIELDS; i++) {
         kfree(measurement_results[i]);
     }
 
@@ -591,11 +592,15 @@ static int read_file_into_buffer(const char *file_name,
 
 void report(struct seq_file *output_file) {
     // CSV header
-    seq_printf(output_file, "CACHE_MAP\n");
+    seq_printf(output_file, "CACHE_MAP, pfc1, pfc2, pfc3\n");
 
     // measurements
     for (int i = 0; i < n_inputs; i++) {
-        seq_printf(output_file, "%llu\n", measurement_results[0][i]);
+        seq_printf(output_file, "%llu, %llu, %llu, %llu\n",
+                   measurement_results[0][i],
+                   measurement_results[1][i],
+                   measurement_results[2][i],
+                   measurement_results[3][i]);
     }
 }
 

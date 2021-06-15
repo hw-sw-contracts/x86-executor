@@ -62,7 +62,6 @@ extern uint64_t input_mask;
 extern char *code;
 extern size_t code_length;
 
-
 // Pointers to the memory regions that are writable and executable.
 extern char *runtime_code;
 
@@ -78,8 +77,13 @@ extern void *runtime_rsp;
 #define HTRACE_WIDTH 1
 extern int64_t latest_htrace[HTRACE_WIDTH];
 
+// Stores PFC readings during measurements
+#define NUM_PFC 3
+extern int64_t latest_pfc_readings[NUM_PFC];
+
 // Stores all measured HTraces
-extern int64_t *measurement_results[HTRACE_WIDTH];
+#define NUM_MEASUREMENT_FIELDS (HTRACE_WIDTH+NUM_PFC)
+extern int64_t *measurement_results[NUM_MEASUREMENT_FIELDS];
 
 // Stores the RSP during measurements.
 extern void *RSP_mem;

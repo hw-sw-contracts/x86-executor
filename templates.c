@@ -35,7 +35,7 @@
 #define MAGIC_BYTES_INPUT_MASK 0x70b513b1C2813F04
 #define MAGIC_BYTES_RUNTIME_RSP 0x80b513b1C2813F04
 #define MAGIC_BYTES_HTRACE 0x90b513b1C2813F04
-#define MAGIC_BYTES_MSR 0xA0b513b1C2813F04
+#define MAGIC_BYTES_PFC_READING 0xA0b513b1C2813F04
 #define MAGIC_BYTES_TEMPLATE_END 0xB0b513b1C2813F04
 
 #define STRINGIFY2(X) #X
@@ -44,8 +44,6 @@
 // =================================================================================================
 // Template Loader
 // =================================================================================================
-unsigned long cur_rdmsr = 0;
-
 int starts_with_magic_bytes(char *c, int64_t magic_bytes) {
     return (*((int64_t *) c) == magic_bytes);
 }
@@ -67,7 +65,7 @@ void load_template(char *measurement_template) {
         if (starts_with_magic_bytes(&measurement_template[templateI], MAGIC_BYTES_INIT)) {
             templateI += 8;
             size_t dist = get_distance_to_code(measurement_template, templateI);
-            size_t nFill = (64 - ((uintptr_t) &runtime_code[rcI + dist] % 64)) % 64;
+            size_t nFill = (64 - ((uintptr_t) & runtime_code[rcI + dist] % 64)) % 64;
             nFill += alignment_offset;
             for (size_t i = 0; i < nFill; i++) {
                 runtime_code[rcI++] = '\x90';
@@ -82,12 +80,14 @@ void load_template(char *measurement_template) {
             if (debug) {
                 runtime_code[rcI++] = '\xCC'; // INT3
             }
-        } else if (starts_with_magic_bytes(&measurement_template[templateI], MAGIC_BYTES_HTRACE)) {
+        } else if (starts_with_magic_bytes(&measurement_template[templateI],
+                                           MAGIC_BYTES_HTRACE)) {
             *(void **) (&runtime_code[rcI]) = latest_htrace;
             templateI += 8;
             rcI += 8;
-        } else if (starts_with_magic_bytes(&measurement_template[templateI], MAGIC_BYTES_MSR)) {
-            *(void **) (&runtime_code[rcI]) = (void *) cur_rdmsr;
+        } else if (starts_with_magic_bytes(&measurement_template[templateI],
+                                           MAGIC_BYTES_PFC_READING)) {
+            *(void **) (&runtime_code[rcI]) = (void *) latest_pfc_readings;
             templateI += 8;
             rcI += 8;
         } else if (starts_with_magic_bytes(&measurement_template[templateI],
@@ -154,6 +154,27 @@ void load_template(char *measurement_template) {
 
 #define READ_SMI_START(DEST) READ_MSR_START("0x00000034", DEST)
 #define READ_SMI_END(DEST) READ_MSR_END("0x00000034", DEST)
+
+#define READ_PFC_ONE(ID) \
+        "mov rcx, "ID" \n"      \
+        "lfence; rdpmc; lfence \n" \
+        "shl rdx, 32; or rdx, rax \n"
+
+#define READ_PFC_START() \
+        READ_PFC_ONE("1") \
+        "sub r10, rdx \n" \
+        READ_PFC_ONE("2") \
+        "sub r9, rdx \n" \
+        READ_PFC_ONE("3") \
+        "sub r8, rdx \n"
+
+#define READ_PFC_END() \
+        READ_PFC_ONE("1") \
+        "add r10, rdx \n" \
+        READ_PFC_ONE("2") \
+        "add r9, rdx \n" \
+        READ_PFC_ONE("3") \
+        "add r8, rdx \n"
 
 #define SET_MEMORY(START, END, STEP, VALUE) \
         "   1: mov qword ptr ["START"], "VALUE" \n" \
@@ -243,11 +264,11 @@ inline void prologue(void) {
 
     // reset stack values
     asm_volatile_intel("" \
-            "mov rax, rsp \n" \
-            "mov rbx, rsp \n " \
-            "sub rax, 4096 \n " \
-            "add rbx, 4096 \n " \
-            SET_MEMORY("rax", "rbx", "64", "0"));
+        "mov rax, rsp \n" \
+        "mov rbx, rsp \n " \
+        "sub rax, 4096 \n " \
+        "add rbx, 4096 \n " \
+        SET_MEMORY("rax", "rbx", "64", "0"));
 
     // move the input value into RDI
     asm_volatile_intel("" \
@@ -256,12 +277,12 @@ inline void prologue(void) {
 
     // randomize the values stored in memory
     asm_volatile_intel(
-            "mov rax, r14 \n" \
-            "mov rbx, r14 \n " \
-            "add rbx, 4096 \n " \
-            "mov rcx, "STRINGIFY(MAGIC_BYTES_INPUT_MASK)"\n" \
-            "mov rcx, [rcx] \n" \
-            SET_MEMORY_RANDOM("rax", "rbx", "4", "ecx", "edx"));
+        "mov rax, r14 \n" \
+        "mov rbx, r14 \n " \
+        "add rbx, 4096 \n " \
+        "mov rcx, "STRINGIFY(MAGIC_BYTES_INPUT_MASK)"\n" \
+        "mov rcx, [rcx] \n" \
+        SET_MEMORY_RANDOM("rax", "rbx", "4", "ecx", "edx"));
 }
 
 inline void epilogue(void) {
@@ -270,8 +291,12 @@ inline void epilogue(void) {
     asm_volatile_intel(""\
         READ_SMI_END("r12") \
        "mov rax, "STRINGIFY(MAGIC_BYTES_HTRACE)" \n" \
+       "mov rbx, "STRINGIFY(MAGIC_BYTES_PFC_READING)" \n" \
         "cmp r12, 0; jne 1f \n" \
         "   mov [rax], r11 \n" \
+        "   mov [rbx], r10 \n" \
+        "   mov [rbx + 8], r9 \n" \
+        "   mov [rbx + 16], r8 \n" \
         "   jmp 2f \n" \
         "1: \n" \
         "   mov qword ptr [rax], 0 \n" \
@@ -376,6 +401,9 @@ void template_l1d_prime_probe(void) {
     // Push empty values into the store buffer (just in case)
     asm_volatile_intel(SB_FLUSH("r11", "60"));
 
+    // PFC
+    asm_volatile_intel(READ_PFC_START());
+
     // Initialize registers
     asm_volatile_intel(SET_REGISTERS_RANDOM("esi"));
 
@@ -387,6 +415,9 @@ void template_l1d_prime_probe(void) {
     asm("lfence\n"
         ".quad "STRINGIFY(MAGIC_BYTES_CODE)
         "\nmfence\n");
+
+    // PFC
+    asm_volatile_intel(READ_PFC_END());
 
     // Probe and store the resulting eviction bitmap map into r11
     // Note: it internally clobbers rcx, rdx, rax
@@ -449,6 +480,9 @@ void template_l1d_flush_reload(void) {
     // Push empty values into the store buffer (just in case)
     asm_volatile_intel(SB_FLUSH("r11", "60"));
 
+    // PFC
+    asm_volatile_intel(READ_PFC_START());
+
     // Initialize registers
     asm_volatile_intel("" \
         "mov rsi, "STRINGIFY(MAGIC_BYTES_INPUT_MASK)"\n" \
@@ -463,6 +497,9 @@ void template_l1d_flush_reload(void) {
     asm("lfence\n"
         ".quad "STRINGIFY(MAGIC_BYTES_CODE)
         "\nmfence\n");
+
+    // PFC
+    asm_volatile_intel(READ_PFC_END());
 
     // Reload
     // Note: it internally clobbers rcx, rdx, rax
@@ -502,6 +539,9 @@ void template_l1d_evict_reload(void) {
     // Push empty values into the store buffer (just in case)
     asm_volatile_intel(SB_FLUSH("r11", "60"));
 
+    // PFC
+    asm_volatile_intel(READ_PFC_START());
+
     // Initialize registers
     asm_volatile_intel(SET_REGISTERS_RANDOM("esi"));
 
@@ -513,6 +553,9 @@ void template_l1d_evict_reload(void) {
     asm("lfence\n"
         ".quad "STRINGIFY(MAGIC_BYTES_CODE)
         "\nmfence\n");
+
+    // PFC
+    asm_volatile_intel(READ_PFC_END());
 
     // Reload
     // Note: it internally clobbers rcx, rdx, rax
