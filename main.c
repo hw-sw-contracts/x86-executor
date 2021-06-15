@@ -592,11 +592,11 @@ static int read_file_into_buffer(const char *file_name,
 
 void report(struct seq_file *output_file) {
     // CSV header
-    seq_printf(output_file, "CACHE_MAP, pfc1, pfc2, pfc3\n");
+    seq_printf(output_file, "CACHE_MAP,pfc1,pfc2,pfc3\n");
 
     // measurements
     for (int i = 0; i < n_inputs; i++) {
-        seq_printf(output_file, "%llu, %llu, %llu, %llu\n",
+        seq_printf(output_file, "%llu,%llu,%llu,%llu\n",
                    measurement_results[0][i],
                    measurement_results[1][i],
                    measurement_results[2][i],
