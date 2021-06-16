@@ -50,6 +50,14 @@ int (*set_memory_nx)(unsigned long, int) = 0;
 #include <linux/set_memory.h>
 #endif
 
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(5,7,0)
+#define KPROBE_LOOKUP 1
+#include <linux/kprobes.h>
+static struct kprobe kp = {
+    .symbol_name = "kallsyms_lookup_name"
+};
+#endif
+
 MODULE_LICENSE("GPL");
 MODULE_AUTHOR("Oleksii Oleksenko");
 
@@ -369,6 +377,13 @@ static struct kobj_attribute
 static int __init nb_init(void) {
     pr_debug("Initializing x86-executor kernel module...\n");
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(5, 4, 0)
+#ifdef KPROBE_LOOKUP
+    typedef unsigned long (*kallsyms_lookup_name_t)(const char *name);
+    kallsyms_lookup_name_t kallsyms_lookup_name;
+    register_kprobe(&kp);
+    kallsyms_lookup_name = (kallsyms_lookup_name_t) kp.addr;
+    unregister_kprobe(&kp);
+#endif
     set_memory_x = (void *) kallsyms_lookup_name("set_memory_x");
     set_memory_nx = (void *) kallsyms_lookup_name("set_memory_nx");
 #endif
