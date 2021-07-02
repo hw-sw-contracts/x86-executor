@@ -24,6 +24,19 @@
 // See the file LICENCE in the main directory of the Revizor distribution for more details.
 //
 
+// -----------------------------------------------------------------------------------------------
+// Note on registers:
+// Some of the registers are reserved for a specific purpose and should never be overwritten.
+// These include:
+//   R8 - performance counter #1
+//   R9 - performance counter #2
+//   R10 - performance counter #3
+//   R11 - hardware trace
+//   R12 - SMI counter
+//   R13 - input seed
+//   R14 - sandbox base address
+//
+
 #include "x86-executor.h"
 
 #define MAGIC_BYTES_INIT 0x10b513b1C2813F04
@@ -183,11 +196,11 @@ void load_template(char *measurement_template) {
         "cmp "START", "END"; jl 1b \n"
 
 #define LCG(DEST, MASK) \
-        "imul edi, edi, 2891336453  \n" \
-        "add edi, 12345 \n"\
-        "mov "DEST", edi \n" \
+        "imul r13d, r13d, 2891336453  \n" \
+        "add r13d, 12345 \n"\
+        "mov "DEST", r13d \n" \
         "shr "DEST", 16 \n" \
-        "xor "DEST", edi \n" \
+        "xor "DEST", r13d \n" \
         "and "DEST", "MASK" \n" \
         "shl "DEST", 6 \n"
 
@@ -202,9 +215,11 @@ void load_template(char *measurement_template) {
         LCG("ebx", MASK) \
         LCG("ecx", MASK) \
         LCG("edx", MASK) \
-        "imul edi, edi, 2891336453  \n" \
-        "add edi, 12345  \n" \
-        "pushq rdi  \n" \
+        LCG("esi", MASK) \
+        LCG("edi", MASK) \
+        "imul r13d, r13d, 2891336453  \n" \
+        "add r13d, 12345  \n" \
+        "pushq r13  \n" \
         "and qword ptr [rsp], 2263  \n" \
         "or qword ptr [rsp], 2  \n" \
         "popfq  \n"
@@ -214,9 +229,11 @@ void load_template(char *measurement_template) {
         "mov ebx, "VALUE"  \n" \
         "mov ecx, "VALUE"  \n" \
         "mov edx, "VALUE"  \n" \
-        "imul edi, edi, 2891336453  \n" \
-        "add edi, 12345  \n" \
-        "pushq rdi  \n" \
+        "mov esi, "VALUE"  \n" \
+        "mov edi, "VALUE"  \n" \
+        "imul r13d, r13d, 2891336453  \n" \
+        "add r13d, 12345  \n" \
+        "pushq r13  \n" \
         "and qword ptr [rsp], 2263  \n" \
         "or qword ptr [rsp], 2  \n" \
         "popfq  \n"
@@ -267,10 +284,10 @@ inline void prologue(void) {
         "add rbx, 4096 \n " \
         SET_MEMORY("rax", "rbx", "64", "0"));
 
-    // move the input value into RDI
+    // move the input value into R13
     asm_volatile_intel("" \
         "mov rax, "STRINGIFY(MAGIC_BYTES_INPUT)" \n" \
-        "mov rdi, [rax] \n");
+        "mov r13, [rax] \n");
 
     // randomize the values stored in memory
     asm_volatile_intel(
@@ -386,8 +403,8 @@ void template_l1d_prime_probe(void) {
 
     // not to compromise the P+P measurement, load the input mask beforehand
     asm_volatile_intel("" \
-        "mov rsi, "STRINGIFY(MAGIC_BYTES_INPUT_MASK)"\n" \
-        "mov rsi, [rsi] \n");
+        "mov r15, "STRINGIFY(MAGIC_BYTES_INPUT_MASK)"\n" \
+        "mov r15, [r15] \n");
 
     // Prime
     asm_volatile_intel(""\
@@ -402,7 +419,7 @@ void template_l1d_prime_probe(void) {
     asm_volatile_intel(READ_PFC_START());
 
     // Initialize registers
-    asm_volatile_intel(SET_REGISTERS_RANDOM("esi"));
+    asm_volatile_intel(SET_REGISTERS_RANDOM("r15d"));
 
     // indicate the beginning of the test case
     // used to align the test case code in memory
@@ -482,9 +499,9 @@ void template_l1d_flush_reload(void) {
 
     // Initialize registers
     asm_volatile_intel("" \
-        "mov rsi, "STRINGIFY(MAGIC_BYTES_INPUT_MASK)"\n" \
-        "mov rsi, [rsi] \n" \
-        SET_REGISTERS_RANDOM("esi"));
+        "mov r15, "STRINGIFY(MAGIC_BYTES_INPUT_MASK)"\n" \
+        "mov r15, [r15] \n" \
+        SET_REGISTERS_RANDOM("r15d"));
 
     // indicate the beginning of the test case
     // used to align the test case code in memory
@@ -524,8 +541,8 @@ void template_l1d_evict_reload(void) {
 
     // not to compromise the P+P measurement, load the input mask beforehand
     asm_volatile_intel("" \
-        "mov rsi, "STRINGIFY(MAGIC_BYTES_INPUT_MASK)"\n" \
-        "mov rsi, [rsi] \n");
+        "mov r15, "STRINGIFY(MAGIC_BYTES_INPUT_MASK)"\n" \
+        "mov r15, [r15] \n");
 
     // Prime
     asm_volatile_intel(""\
@@ -540,7 +557,7 @@ void template_l1d_evict_reload(void) {
     asm_volatile_intel(READ_PFC_START());
 
     // Initialize registers
-    asm_volatile_intel(SET_REGISTERS_RANDOM("esi"));
+    asm_volatile_intel(SET_REGISTERS_RANDOM("r15d"));
 
     // indicate the beginning of the test case
     // used to align the test case code in memory
