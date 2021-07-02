@@ -80,10 +80,10 @@ pte_t *get_pte(unsigned long address);
 static inline void pre_measurement_setup(void) {
     // on some microarchitectures (e.g., Broadwell), some events
     // (e.g., L1 misses) are not counted properly if only the OS field is set
-    config_pfc(0, "D1.01", 1, 1);  // L1 hits - for htrace collection
-    config_pfc(1, "0E.01", 1, 1);  // issued uops - fuzzing feedback
-    config_pfc(2, "D1.01", 1, 1);  // unused
-    config_pfc(3, "D1.01", 1, 1);  // unused
+    config_pfc(0, "D1.01", 1, 1);             // L1 hits - for htrace collection
+    config_pfc(1, "C3.01.CMSK=1.EDG", 1, 1);  // machine clears - fuzzing feedback
+    config_pfc(2, "C5.00", 1, 1);             // mispredicted branches - fuzzing feedback
+    config_pfc(3, "0E.01", 1, 1);             // unused
 
     write_msr(MSR_IA32_SPEC_CTRL, ssbp_patch_control);
 
