@@ -87,16 +87,13 @@ static inline void pre_measurement_setup(void) {
 
     write_msr(MSR_IA32_SPEC_CTRL, ssbp_patch_control);
 
-#if ENABLE_ABIT_ASSIST == 1
     assist_page_addr = (unsigned long) runtime_r14 + 4096;
     assist_page_ptep = get_pte(assist_page_addr);
     if (assist_page_ptep == NULL) {
         printk(KERN_ERR "pre_measurement_setup: Couldn't get the sandbox pte entry");
         return;
     }
-#endif
 }
-
 
 static inline void single_run(long i, int64_t *results[]) {
     // ignore "warm-up" runs (i<0)
@@ -109,15 +106,27 @@ static inline void single_run(long i, int64_t *results[]) {
         write_msr(MSR_IA32_FLUSH_CMD, L1D_FLUSH);
     }
 
-#if ENABLE_ABIT_ASSIST == 1
-    // initialize the assist page values
+    // initialize the "stack" with zeroes
+    unsigned long stack_base = (unsigned long) runtime_rsp;
+    for (int j = -1024; j < 1024; j += 1) {
+        ((uint32_t *) stack_base)[j] = 0;
+    }
+
+    // initialize eviction region with zeroes
+    unsigned long eviction_region = (unsigned long) runtime_r14 - 36864;
+    for (int j = 0; j < 8192; j += 1) {
+        ((uint32_t *) eviction_region)[j] = 0;
+    }
+
+    // initialize memory: sandbox page, assist page, and two pages around them (for overflows)
+    unsigned long initialized_memory_base = (unsigned long) runtime_r14 - 4096;
     uint64_t random_value = current_input;
     uint64_t masked_rvalue;
-    for (int j = 0; j < 1025; j += 1) {  // initialize the page + 4 bytes after it
+    for (int j = 0; j < 4096; j += 1) {
         random_value = (((random_value * 2891336453) % 0x100000000) + 12345) % 0x100000000;
         masked_rvalue = (random_value ^ (random_value >> 16)) & input_mask;
         masked_rvalue = masked_rvalue << 6;
-        ((uint32_t *) assist_page_addr)[j] = masked_rvalue;
+        ((uint32_t *) initialized_memory_base)[j] = masked_rvalue;
     }
     current_input = random_value;
 
@@ -128,7 +137,6 @@ static inline void single_run(long i, int64_t *results[]) {
         asm volatile("clflush (%0)\nlfence\n"::"r" (assist_page_addr) : "memory");
         asm volatile("invlpg (%0)"::"r" (assist_page_addr) : "memory");
     }
-#endif
 
     // execute
     ((void (*)(void)) runtime_code)();
@@ -198,7 +206,7 @@ int measurement(struct seq_file *output_file,
 // Helper Functions
 // ====================================================
 void write_msr(unsigned int msr, uint64_t value) {
-    native_write_msr(msr, (uint32_t) value, (uint32_t) (value >> 32));
+    native_write_msr(msr, (uint32_t) value, (uint32_t)(value >> 32));
 }
 
 /// Clears the programmable performance counters and writes the
@@ -264,7 +272,7 @@ size_t get_required_runtime_code_length() {
 }
 
 pte_t *get_pte(unsigned long address) {
-    pgd_t *pgd;
+    pgd_t * pgd;
     p4d_t *p4d;
     pud_t *pud;
     pmd_t *pmd;

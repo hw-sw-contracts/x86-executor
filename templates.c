@@ -189,12 +189,6 @@ void load_template(char *measurement_template) {
         READ_PFC_ONE("3") \
         "add r8, rdx \n"
 
-#define SET_MEMORY(START, END, STEP, VALUE) \
-        "   1: mov qword ptr ["START"], "VALUE" \n" \
-        "   clflush qword ptr ["START"] \n" \
-        "   add "START", "STEP" \n" \
-        "cmp "START", "END"; jl 1b \n"
-
 #define LCG(DEST, MASK) \
         "imul r13d, r13d, 2891336453  \n" \
         "add r13d, 12345 \n"\
@@ -203,12 +197,6 @@ void load_template(char *measurement_template) {
         "xor "DEST", r13d \n" \
         "and "DEST", "MASK" \n" \
         "shl "DEST", 6 \n"
-
-#define SET_MEMORY_RANDOM(START, END, STEP, MASK, TMP32) \
-        "   1: "LCG(TMP32, MASK) \
-        "   mov dword ptr ["START"], "TMP32" \n" \
-        "   add "START", "STEP" \n" \
-        "cmp "START", "END"; jl 1b \n"
 
 #define SET_REGISTERS_RANDOM(MASK) \
         LCG("eax", MASK) \
@@ -224,6 +212,24 @@ void load_template(char *measurement_template) {
         "or qword ptr [rsp], 2  \n" \
         "popfq  \n"
 
+#define SB_FLUSH(TMP, REPS)                          \
+        "mov "TMP", "REPS"                          \n" \
+        "1: sfence                                  \n" \
+        "dec "TMP"; jnz 1b                          \n"
+
+// deprecated definitions:
+#define SET_MEMORY(START, END, STEP, VALUE) \
+        "   1: mov qword ptr ["START"], "VALUE" \n" \
+        "   clflush qword ptr ["START"] \n" \
+        "   add "START", "STEP" \n" \
+        "cmp "START", "END"; jl 1b \n"
+
+#define SET_MEMORY_RANDOM(START, END, STEP, MASK, TMP32) \
+        "   1: "LCG(TMP32, MASK) \
+        "   mov dword ptr ["START"], "TMP32" \n" \
+        "   add "START", "STEP" \n" \
+        "cmp "START", "END"; jl 1b \n"
+
 #define SET_REGISTERS_FIXED(VALUE) \
         "mov eax, "VALUE"  \n" \
         "mov ebx, "VALUE"  \n" \
@@ -237,11 +243,6 @@ void load_template(char *measurement_template) {
         "and qword ptr [rsp], 2263  \n" \
         "or qword ptr [rsp], 2  \n" \
         "popfq  \n"
-
-#define SB_FLUSH(TMP, REPS)                          \
-        "mov "TMP", "REPS"                          \n" \
-        "1: sfence                                  \n" \
-        "dec "TMP"; jnz 1b                          \n"
 
 inline void prologue(void) {
     // As we don't use the compiler to track clobbering,
@@ -276,27 +277,10 @@ inline void prologue(void) {
         "mov rbp, "STRINGIFY(MAGIC_BYTES_RUNTIME_RBP)"\n" \
         "mov rsp, "STRINGIFY(MAGIC_BYTES_RUNTIME_RSP)"\n");
 
-    // reset stack values
-    asm_volatile_intel("" \
-        "mov rax, rsp \n" \
-        "mov rbx, rsp \n " \
-        "sub rax, 4096 \n " \
-        "add rbx, 4096 \n " \
-        SET_MEMORY("rax", "rbx", "64", "0"));
-
     // move the input value into R13
     asm_volatile_intel("" \
         "mov rax, "STRINGIFY(MAGIC_BYTES_INPUT)" \n" \
         "mov r13, [rax] \n");
-
-    // randomize the values stored in memory
-    asm_volatile_intel(
-        "mov rax, r14 \n" \
-        "mov rbx, r14 \n " \
-        "add rbx, 4096 \n " \
-        "mov rcx, "STRINGIFY(MAGIC_BYTES_INPUT_MASK)"\n" \
-        "mov rcx, [rcx] \n" \
-        SET_MEMORY_RANDOM("rax", "rbx", "4", "ecx", "edx"));
 }
 
 inline void epilogue(void) {
@@ -390,14 +374,6 @@ inline void epilogue(void) {
 void template_l1d_prime_probe(void) {
     prologue();
 
-    // Zero out the eviction region of Prime+Probe
-    // The eviction region is 32kB memory region before right before the sandbox
-    asm_volatile_intel("" \
-        "mov rax, r14 \n" \
-        "sub rax, 32768 \n" \
-        "mov rbx, r14 \n " \
-        SET_MEMORY("rax", "rbx", "64", "0"));
-
     // start monitoring SMIs
     asm_volatile_intel(READ_SMI_START("r12"));
 
@@ -409,7 +385,7 @@ void template_l1d_prime_probe(void) {
     // Prime
     asm_volatile_intel(""\
         "mov rax, r14\n" \
-        "sub rax, 32768\n" \
+        "sub rax, 36864\n" \
         PRIME("rax", "rbx", "rcx", "rdx", "16"));
 
     // Push empty values into the store buffer (just in case)
@@ -437,7 +413,7 @@ void template_l1d_prime_probe(void) {
     // Note: it internally clobbers rcx, rdx, rax
     asm_volatile_intel(""\
         "mov r15, r14                            \n" \
-        "sub r15, 32768                          \n" \
+        "sub r15, 36864                          \n" \
         PROBE("r15", "rbx", "r13", "r11"));
 
     epilogue();
@@ -528,14 +504,6 @@ void template_l1d_flush_reload(void) {
 void template_l1d_evict_reload(void) {
     prologue();
 
-    // Zero out the eviction region of Prime+Probe
-    // The eviction region is 32kB memory region before right before the sandbox
-    asm_volatile_intel("" \
-        "mov rax, r14 \n" \
-        "sub rax, 32768 \n" \
-        "mov rbx, r14 \n " \
-        SET_MEMORY("rax", "rbx", "64", "0"));
-
     // start monitoring SMIs
     asm_volatile_intel(READ_SMI_START("r12"));
 
@@ -547,7 +515,7 @@ void template_l1d_evict_reload(void) {
     // Prime
     asm_volatile_intel(""\
         "mov rax, r14\n" \
-        "sub rax, 32768\n" \
+        "sub rax, 36864\n" \
         PRIME("rax", "rbx", "rcx", "rdx", "16"));
 
     // Push empty values into the store buffer (just in case)

@@ -107,6 +107,4 @@ void template_l1d_prime_probe(void);
 void template_l1d_flush_reload(void);
 void template_l1d_evict_reload(void);
 
-#define ENABLE_ABIT_ASSIST 1
-
 #endif
