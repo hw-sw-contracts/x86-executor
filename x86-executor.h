@@ -59,6 +59,19 @@ extern uint64_t current_input;
 extern uint64_t input_mask;
 #define DEFAULT_INPUT_MASK 0xffffffff;
 
+// Deltas 
+// MG-TODO: define default values 
+extern uint64_t *delta_inputs; 
+extern uint64_t current_delta_input; // define it somewhere
+#define DEFAULT_DELTA_INPUT 0;
+extern char enabled_deltas;
+extern long deltas_threshold; 
+extern unsigned current_deps_pos;
+extern unsigned current_deps_length;
+extern uint32_t *current_deps; 
+extern char *deps; 
+
+
 extern char *code;
 extern size_t code_length;
 

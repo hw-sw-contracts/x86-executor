@@ -134,6 +134,22 @@ char pre_run_flush = 1;
 char enable_mds_page = 0;
 char *measurement_template = (char *) &template_l1d_flush_reload;
 
+// Deltas variabels
+char enabled_deltas = 0;
+long deps_size = 0;
+char *deps;
+unsigned deps_top = 0; 
+long deltas_threshold = 0; 
+long delta_inputs_size = 0; 
+uint64_t *delta_inputs; 
+uint64_t current_delta_input = 0;
+unsigned delta_inputs_top = 0;
+unsigned current_deps_pos = 0;
+unsigned current_deps_length = 0;
+uint32_t *current_deps; 
+
+
+
 // ====================================================
 // Pseudo-file system interface to the kernel module
 // ====================================================
@@ -301,6 +317,15 @@ static ssize_t reset_show(struct kobject *kobj, struct kobj_attribute *attr, cha
     inputs[0] = DEFAULT_INPUT;
     code_length = 0;
     code_offset = 0;
+    // reset delta variables
+    delta_inputs_size = 0;
+    delta_inputs[0] = 0;
+    delta_inputs_top = 0;
+    deps_size = 0;
+    deps[0] = 0;
+    deps_top = 0; 
+    deltas_threshold = 0; 
+
     return 0;
 }
 
@@ -371,6 +396,152 @@ static struct kobj_attribute
         measurement_mode_attribute =
         __ATTR(measurement_mode, 0666, dummy_show, measurement_mode_store);
 
+/// Delta support flag
+///
+static ssize_t enable_deltas_store(struct kobject *kobj,
+                                          struct kobj_attribute *attr,
+                                          const char *buf,
+                                          size_t count) {
+    unsigned value = 0;
+    sscanf(buf, "%u", &value);
+    enabled_deltas = (value == 0) ? 0 : 1;
+    return count;
+}
+static struct kobj_attribute
+        enable_deltas_attribute =
+        __ATTR(enable_deltas, 0666, dummy_show, enable_deltas_store);
+
+/// Delta threshold
+///
+static ssize_t deltas_threshold_store(struct kobject *kobj,
+                                          struct kobj_attribute *attr,
+                                          const char *buf,
+                                          size_t count) {
+    unsigned deltas_threshold = 0;
+    sscanf(buf, "%u", &deltas_threshold);
+    return count;
+}
+static struct kobj_attribute
+        deltas_threshold_attribute =
+        __ATTR(deltas_threshold, 0666, dummy_show, deltas_threshold_store);
+
+/// Changing the size of delta_inputs 
+///
+static ssize_t delta_inputs_size_show(struct kobject *kobj, struct kobj_attribute *attr, char *buf) {
+    return sprintf(buf, "%ld\n", delta_inputs_size);
+}
+static ssize_t delta_inputs_size_store(struct kobject *kobj,
+                              struct kobj_attribute *attr,
+                              const char *buf,
+                              size_t count) {
+    delta_inputs_top = 0;  // restart input loading
+    unsigned long old_delta_inputs_size = delta_inputs_size;
+    sscanf(buf, "%ld", &delta_inputs_size);
+
+    if (old_delta_inputs_size < delta_inputs_size) {
+        // allocate more memory for deltas
+        kfree(delta_inputs);
+        delta_inputs = kmalloc(delta_inputs_size * sizeof(int64_t), GFP_KERNEL);
+        if (!delta_inputs) {
+            printk(KERN_ERR "Could not allocate memory for delta_inputs\n");
+            return -1;
+        }
+    }
+    return count;
+}
+static struct kobj_attribute delta_inputs_size_attribute =
+        __ATTR(delta_inputs_size, 0666, delta_inputs_size_show, delta_inputs_size_store);
+
+/// Loading delta inputs 
+/// Because of buffering in sysfs, this function may be called several times for
+/// the same sequence of values
+///
+static ssize_t delta_inputs_store(struct kobject *kobj,
+                            struct kobj_attribute *attr,
+                            const char *buf,
+                            size_t count) {
+    unsigned batch_size = count / 8; // inputs are 8 byte long
+
+    // first, check for overflows
+    if (delta_inputs_top + batch_size > delta_inputs_size) {
+        //printk(KERN_ERR "Loading too many inputs %d %lu\n", inputs_top + batch_size, n_inputs);
+        delta_inputs_size = 0;
+        return count;
+    }
+    if (!delta_inputs) {
+        printk(KERN_ERR "Did not allocate memory for delta_inputs\n");
+        return count;
+    }
+
+    // load the batch
+    uint64_t *new_delta_inputs = (uint64_t *) buf;
+    for (unsigned i = 0; i < batch_size; i++) {
+        delta_inputs[delta_inputs_top + i] = new_delta_inputs[i];
+    }
+    delta_inputs_top += batch_size;
+    return count;
+}
+static struct kobj_attribute delta_inputs_attribute = __ATTR(delta_inputs, 0666, dummy_show, delta_inputs_store);
+
+/// Changing the size of deps 
+///
+static ssize_t deps_size_show(struct kobject *kobj, struct kobj_attribute *attr, char *buf) {
+    return sprintf(buf, "%ld\n", deps_size);
+}
+static ssize_t deps_size_store(struct kobject *kobj,
+                              struct kobj_attribute *attr,
+                              const char *buf,
+                              size_t count) {
+    deps_top = 0;  // restart input loading
+    unsigned long old_deps_size = deps_size;
+    sscanf(buf, "%ld", &deps_size);
+
+    if (old_deps_size < deps_size) {
+        // allocate more memory for deltas
+        kfree(deps);
+        deps = kmalloc(deps_size * sizeof(char), GFP_KERNEL);
+        if (!deps) {
+            printk(KERN_ERR "Could not allocate memory for deps\n");
+            return -1;
+        }
+    }
+    return count;
+}
+static struct kobj_attribute deps_size_attribute =
+        __ATTR(deps_size, 0666, deps_size_show, deps_size_store);
+
+/// Loading deps 
+/// Because of buffering in sysfs, this function may be called several times for
+/// the same sequence of values
+///
+static ssize_t deps_store(struct kobject *kobj,
+                            struct kobj_attribute *attr,
+                            const char *buf,
+                            size_t count) {
+
+    // first, check for overflows
+    if (deps_top + count > deps_size) {
+        //printk(KERN_ERR "Loading too many inputs %d %lu\n", inputs_top + batch_size, n_inputs);
+        deps_size = 0;
+        return count;
+    }
+    if (!deps) {
+        printk(KERN_ERR "Did not allocate memory for deps\n");
+        return count;
+    }
+
+    // load the batch
+    char *new_deps = (char *) buf;
+    for (unsigned i = 0; i < count; i++) {
+        deps[deps_top + i] = new_deps[i];
+    }
+    deps_top += count;
+    return count;
+}
+static struct kobj_attribute deps_attribute = __ATTR(deps, 0666, dummy_show, deps_store);
+
+
+
 // ====================================================
 // Module's constructor and destructor
 // ====================================================
@@ -408,6 +579,9 @@ static int __init nb_init(void) {
         return -1;
     }
     inputs[0] = DEFAULT_INPUT;
+
+    // MG-TODO: initialize delta_inputs and deps
+    // MG-TODO: also add variabels for storing current dep, current delta_input, and current_deps_len!
 
     // Memory for sandbox and stack
     runtime_r14 = vmalloc(RUNTIME_R_SIZE);     // vmalloc addresses are page aligned
@@ -451,6 +625,12 @@ static int __init nb_init(void) {
     error |= sysfs_create_file(nb_kobject, &enable_mds_attribute.attr);
     error |= sysfs_create_file(nb_kobject, &enable_pre_run_flush_attribute.attr);
     error |= sysfs_create_file(nb_kobject, &measurement_mode_attribute.attr);
+    error |= sysfs_create_file(nb_kobject, &enable_deltas_attribute.attr);
+    error |= sysfs_create_file(nb_kobject, &deltas_threshold_attribute.attr);
+    error |= sysfs_create_file(nb_kobject, &delta_inputs_size_attribute.attr); 
+    error |= sysfs_create_file(nb_kobject, &delta_inputs_attribute.attr); 
+    error |= sysfs_create_file(nb_kobject, &deps_size_attribute.attr); 
+    error |= sysfs_create_file(nb_kobject, &deps_attribute.attr); 
 
     if (error) {
         pr_debug("failed to create file in /sys/x86-executor/\n");
@@ -483,6 +663,10 @@ static void __exit nb_exit(void) {
     for (int i = 0; i < NUM_MEASUREMENT_FIELDS; i++) {
         kfree(measurement_results[i]);
     }
+
+
+    kfree(deps);
+    kfree(delta_inputs);
 
     kobject_put(nb_kobject);
     remove_proc_entry("x86-executor", NULL);

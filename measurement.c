@@ -65,6 +65,7 @@ struct pfc_config {
     unsigned int inv;
 };
 
+
 unsigned long assist_page_addr;
 pte_t assist_page_pte;
 pte_t *assist_page_ptep;
@@ -99,6 +100,31 @@ static inline void single_run(long i, int64_t *results[]) {
     // ignore "warm-up" runs (i<0)
     long i_ = (i < 0) ? 0 : i;
     current_input = inputs[i_];
+    // MG-TODO: Select current deps, current delta_input, ... 
+    bool overwrite = i_ >= deltas_threshold && enabled_deltas;
+    if (overwrite) {
+        printk(KERN_ERR "Init overwrite\n");
+        // MG-TODO: declare current_delta_input
+        printk(KERN_ERR "index %ld", i_ - deltas_threshold);
+        current_delta_input = delta_inputs[i_ - deltas_threshold];
+        printk(KERN_ERR "Current delta input %llu\n", current_delta_input);
+
+        // MG-TODO: declare current_deps_pos (unsigned char)
+        // MG-TODO: declare the correct variables  
+        current_deps_length = deps[current_deps_pos];
+        printk(KERN_ERR "Current deps length %u", current_deps_length);
+        current_deps_pos += 1;
+        printk(KERN_ERR "Current pos %u", current_deps_pos);
+        if (current_deps_length > 0) 
+            current_deps = deps[current_deps_pos];
+        else 
+            overwrite = false; // if there are no deps information
+    }
+    else
+        printk(KERN_ERR "Initial overwrite is false!");
+
+
+
 
     if (pre_run_flush == 1) {
         static const u16 ds = __KERNEL_DS;
@@ -129,6 +155,69 @@ static inline void single_run(long i, int64_t *results[]) {
         ((uint32_t *) initialized_memory_base)[j] = masked_rvalue;
     }
     current_input = random_value;
+
+    if (overwrite){
+        printk(KERN_ERR "Beginning overwrite");
+        uint64_t random_delta_value = current_delta_input;
+        uint64_t masked_rvalue;
+        for (int j = 0; j < 4096; j += 1) {
+            printk(KERN_ERR "current_deps[0] %u", current_deps[0]);
+            // Initialize the new value
+            random_delta_value = (((random_delta_value * 2891336453) % 0x100000000) + 12345) % 0x100000000;
+            masked_rvalue = (random_delta_value ^ (random_delta_value >> 16)) & input_mask;
+            masked_rvalue = masked_rvalue << 6;
+
+            bool flag = current_deps_length == 0 || current_deps[0] < (initialized_memory_base + 4 * j) || current_deps[0] >= initialized_memory_base + 4 * (j+1);
+            if (flag) {
+                // if flag holds, then the current 4 bytes are not involved in
+                // one of the dependencies that should be preserved
+                ((uint32_t *) initialized_memory_base)[j] = masked_rvalue;
+            }
+            else {
+                // the current 4 bytes involve some of the addresses in the
+                // memory dependency (length > 0 and current_deps[0] in the
+                // interval)
+                
+                // 1. look for all further dependencies in deps that also fit into the interval.
+                // We migth have more than 1 address (at most 4)
+                // 2. Here we also increment current_deps correctly!
+                uint64_t addrs [4] ={0, 0, 0, 0};
+
+                for (int idx=0; idx < 4; idx++)
+                    if (current_deps_length > 0)
+                        if (current_deps[idx] < initialized_memory_base + 4 * (j+1) )
+                        {
+                            // we're still in the interval
+                            addrs[idx] = current_deps[idx];
+                            current_deps_length -= 1;
+                            current_deps_pos += 4; // each address is 4 bytes!
+                        }
+
+                bool toPreserve[4] = {0,0,0,0};
+                for(int idx =0; idx < 4; idx++){
+                    if(addrs[idx] != 0 && addrs[idx] == (initialized_memory_base + (4 * j) + idx))
+                        toPreserve[idx] = 1;
+                }
+
+                union {
+                    uint32_t double_word;
+                    uint8_t octets[4];
+                } toWrite;
+                 union {
+                    uint32_t double_word;
+                    uint8_t octets[4];
+                } old;
+                toWrite.double_word = masked_rvalue;
+                old.double_word = ((uint32_t *) initialized_memory_base)[j];
+
+                for(int idx = 0; idx < 4; idx++)
+                    if (toPreserve[idx])
+                        toWrite.octets[idx] = old.octets[idx];
+
+                ((uint32_t *) initialized_memory_base)[j] = toWrite.double_word;
+            }
+        }
+    }
 
     // clear the ACCESSED bit and flush the corresponding TLB entry
     if (enable_mds_page) {
