@@ -65,12 +65,13 @@ extern uint64_t *delta_inputs;
 extern uint64_t current_delta_input; // define it somewhere
 #define DEFAULT_DELTA_INPUT 0;
 extern char enabled_deltas;
-extern long deltas_threshold; 
+extern unsigned delta_threshold; 
 extern unsigned current_deps_pos;
 extern unsigned current_deps_length;
-extern uint32_t *current_deps; 
+extern uint64_t *current_deps; 
 extern char *deps; 
-
+extern long deps_size;
+extern long delta_inputs_size; 
 
 extern char *code;
 extern size_t code_length;

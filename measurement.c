@@ -100,31 +100,27 @@ static inline void single_run(long i, int64_t *results[]) {
     // ignore "warm-up" runs (i<0)
     long i_ = (i < 0) ? 0 : i;
     current_input = inputs[i_];
-    // MG-TODO: Select current deps, current delta_input, ... 
-    bool overwrite = i_ >= deltas_threshold && enabled_deltas;
-    if (overwrite) {
-        printk(KERN_ERR "Init overwrite\n");
-        // MG-TODO: declare current_delta_input
-        printk(KERN_ERR "index %ld", i_ - deltas_threshold);
-        current_delta_input = delta_inputs[i_ - deltas_threshold];
-        printk(KERN_ERR "Current delta input %llu\n", current_delta_input);
 
-        // MG-TODO: declare current_deps_pos (unsigned char)
-        // MG-TODO: declare the correct variables  
+    bool overwrite = i_ >= delta_threshold && enabled_deltas && (i_ - delta_threshold) < delta_inputs_size;
+    if (overwrite) {
+        current_delta_input = delta_inputs[i_ - delta_threshold];
+        // printk(KERN_ERR "Input index %ld Delta_threshold %u Delta index %ld Current delta input %llu\n", i_, delta_threshold, i_ - delta_threshold, current_delta_input);
+
+        if (i_ % delta_threshold == 0)
+            // reset current_deps_pos
+            current_deps_pos = 0;
         current_deps_length = deps[current_deps_pos];
-        printk(KERN_ERR "Current deps length %u", current_deps_length);
+        // printk("%lu current_pos %u Current deps length %u", i_ % delta_threshold, current_deps_pos, current_deps_length);
+        // printk(KERN_ERR "Current deps length %u", current_deps_length);
         current_deps_pos += 1;
-        printk(KERN_ERR "Current pos %u", current_deps_pos);
-        if (current_deps_length > 0) 
-            current_deps = deps[current_deps_pos];
+        // printk(KERN_ERR "Current pos %u", current_deps_pos);
+        if (current_deps_length > 0) {
+            current_deps = (uint64_t*) (deps + current_deps_pos);
+            // printk(KERN_ERR "Current deps %llu", current_deps[0]);
+        }
         else 
             overwrite = false; // if there are no deps information
     }
-    else
-        printk(KERN_ERR "Initial overwrite is false!");
-
-
-
 
     if (pre_run_flush == 1) {
         static const u16 ds = __KERNEL_DS;
@@ -157,17 +153,18 @@ static inline void single_run(long i, int64_t *results[]) {
     current_input = random_value;
 
     if (overwrite){
-        printk(KERN_ERR "Beginning overwrite");
         uint64_t random_delta_value = current_delta_input;
         uint64_t masked_rvalue;
+        uint64_t delta_addr_offset = runtime_r14 - RUNTIME_R_SIZE / 2;
         for (int j = 0; j < 4096; j += 1) {
-            printk(KERN_ERR "current_deps[0] %u", current_deps[0]);
+            current_deps = (uint64_t*) (deps + current_deps_pos);
+
             // Initialize the new value
             random_delta_value = (((random_delta_value * 2891336453) % 0x100000000) + 12345) % 0x100000000;
             masked_rvalue = (random_delta_value ^ (random_delta_value >> 16)) & input_mask;
             masked_rvalue = masked_rvalue << 6;
 
-            bool flag = current_deps_length == 0 || current_deps[0] < (initialized_memory_base + 4 * j) || current_deps[0] >= initialized_memory_base + 4 * (j+1);
+            bool flag = current_deps_length == 0 || (current_deps[0]) < (initialized_memory_base + 4 * j) || (current_deps[0]) >= initialized_memory_base + 4 * (j+1);
             if (flag) {
                 // if flag holds, then the current 4 bytes are not involved in
                 // one of the dependencies that should be preserved
@@ -190,15 +187,19 @@ static inline void single_run(long i, int64_t *results[]) {
                             // we're still in the interval
                             addrs[idx] = current_deps[idx];
                             current_deps_length -= 1;
-                            current_deps_pos += 4; // each address is 4 bytes!
+                            current_deps_pos += 8; // each address is 8 bytes!
+                            // printk(KERN_ERR "found %llu at index %d length %u pos %u", addrs[idx], idx, current_deps_length, current_deps_pos);
                         }
+                        else
+                            break; // as soon as we find a violation we stop!
 
                 bool toPreserve[4] = {0,0,0,0};
                 for(int idx =0; idx < 4; idx++){
                     if(addrs[idx] != 0 && addrs[idx] == (initialized_memory_base + (4 * j) + idx))
                         toPreserve[idx] = 1;
                 }
-
+                // printk(KERN_ERR "toPreserve %u, %u, %u, %u", toPreserve[0], toPreserve[1], toPreserve[2], toPreserve[3]);
+                
                 union {
                     uint32_t double_word;
                     uint8_t octets[4];
@@ -214,6 +215,8 @@ static inline void single_run(long i, int64_t *results[]) {
                     if (toPreserve[idx])
                         toWrite.octets[idx] = old.octets[idx];
 
+                // printk(KERN_ERR "old %u, %u, %u, %u", old.octets[0], old.octets[1], old.octets[2], old.octets[3]);
+                // printk(KERN_ERR "new %u, %u, %u, %u", toWrite.octets[0], toWrite.octets[1], toWrite.octets[2], toWrite.octets[3]);
                 ((uint32_t *) initialized_memory_base)[j] = toWrite.double_word;
             }
         }

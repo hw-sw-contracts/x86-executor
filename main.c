@@ -139,14 +139,14 @@ char enabled_deltas = 0;
 long deps_size = 0;
 char *deps;
 unsigned deps_top = 0; 
-long deltas_threshold = 0; 
+unsigned delta_threshold = 0; 
 long delta_inputs_size = 0; 
 uint64_t *delta_inputs; 
 uint64_t current_delta_input = 0;
 unsigned delta_inputs_top = 0;
 unsigned current_deps_pos = 0;
 unsigned current_deps_length = 0;
-uint32_t *current_deps; 
+uint64_t *current_deps; 
 
 
 
@@ -324,8 +324,7 @@ static ssize_t reset_show(struct kobject *kobj, struct kobj_attribute *attr, cha
     deps_size = 0;
     deps[0] = 0;
     deps_top = 0; 
-    deltas_threshold = 0; 
-
+    delta_threshold = 0; 
     return 0;
 }
 
@@ -413,17 +412,16 @@ static struct kobj_attribute
 
 /// Delta threshold
 ///
-static ssize_t deltas_threshold_store(struct kobject *kobj,
+static ssize_t delta_threshold_store(struct kobject *kobj,
                                           struct kobj_attribute *attr,
                                           const char *buf,
                                           size_t count) {
-    unsigned deltas_threshold = 0;
-    sscanf(buf, "%u", &deltas_threshold);
+    sscanf(buf, "%u", &delta_threshold);
     return count;
 }
 static struct kobj_attribute
-        deltas_threshold_attribute =
-        __ATTR(deltas_threshold, 0666, dummy_show, deltas_threshold_store);
+        delta_threshold_attribute =
+        __ATTR(delta_threshold, 0666, dummy_show, delta_threshold_store);
 
 /// Changing the size of delta_inputs 
 ///
@@ -437,6 +435,12 @@ static ssize_t delta_inputs_size_store(struct kobject *kobj,
     delta_inputs_top = 0;  // restart input loading
     unsigned long old_delta_inputs_size = delta_inputs_size;
     sscanf(buf, "%ld", &delta_inputs_size);
+
+    if ( n_inputs != (delta_threshold + delta_inputs_size))
+    {
+        printk(KERN_ERR "n_inputs must be equivalent to delta_threshold + delta_inputs_size\n");
+        return -1;
+    }
 
     if (old_delta_inputs_size < delta_inputs_size) {
         // allocate more memory for deltas
@@ -464,7 +468,6 @@ static ssize_t delta_inputs_store(struct kobject *kobj,
 
     // first, check for overflows
     if (delta_inputs_top + batch_size > delta_inputs_size) {
-        //printk(KERN_ERR "Loading too many inputs %d %lu\n", inputs_top + batch_size, n_inputs);
         delta_inputs_size = 0;
         return count;
     }
@@ -518,10 +521,8 @@ static ssize_t deps_store(struct kobject *kobj,
                             struct kobj_attribute *attr,
                             const char *buf,
                             size_t count) {
-
     // first, check for overflows
     if (deps_top + count > deps_size) {
-        //printk(KERN_ERR "Loading too many inputs %d %lu\n", inputs_top + batch_size, n_inputs);
         deps_size = 0;
         return count;
     }
@@ -626,11 +627,11 @@ static int __init nb_init(void) {
     error |= sysfs_create_file(nb_kobject, &enable_pre_run_flush_attribute.attr);
     error |= sysfs_create_file(nb_kobject, &measurement_mode_attribute.attr);
     error |= sysfs_create_file(nb_kobject, &enable_deltas_attribute.attr);
-    error |= sysfs_create_file(nb_kobject, &deltas_threshold_attribute.attr);
-    error |= sysfs_create_file(nb_kobject, &delta_inputs_size_attribute.attr); 
-    error |= sysfs_create_file(nb_kobject, &delta_inputs_attribute.attr); 
     error |= sysfs_create_file(nb_kobject, &deps_size_attribute.attr); 
     error |= sysfs_create_file(nb_kobject, &deps_attribute.attr); 
+    error |= sysfs_create_file(nb_kobject, &delta_threshold_attribute.attr);
+    error |= sysfs_create_file(nb_kobject, &delta_inputs_size_attribute.attr); 
+    error |= sysfs_create_file(nb_kobject, &delta_inputs_attribute.attr); 
 
     if (error) {
         pr_debug("failed to create file in /sys/x86-executor/\n");
