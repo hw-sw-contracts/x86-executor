@@ -155,7 +155,6 @@ static inline void single_run(long i, int64_t *results[]) {
     if (overwrite){
         uint64_t random_delta_value = current_delta_input;
         uint64_t masked_rvalue;
-        uint64_t delta_addr_offset = runtime_r14 - RUNTIME_R_SIZE / 2;
         for (int j = 0; j < 4096; j += 1) {
             current_deps = (uint64_t*) (deps + current_deps_pos);
 
@@ -181,7 +180,7 @@ static inline void single_run(long i, int64_t *results[]) {
                 uint64_t addrs [4] ={0, 0, 0, 0};
 
                 for (int idx=0; idx < 4; idx++)
-                    if (current_deps_length > 0)
+                    if (current_deps_length > 0) {
                         if (current_deps[idx] < initialized_memory_base + 4 * (j+1) )
                         {
                             // we're still in the interval
@@ -192,6 +191,8 @@ static inline void single_run(long i, int64_t *results[]) {
                         }
                         else
                             break; // as soon as we find a violation we stop!
+                    }
+                            
 
                 bool toPreserve[4] = {0,0,0,0};
                 for(int idx =0; idx < 4; idx++){
