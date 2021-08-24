@@ -106,7 +106,7 @@ static inline void single_run(long i, int64_t *results[]) {
         current_delta_input = delta_inputs[i_ - delta_threshold];
         // printk(KERN_ERR "Input index %ld Delta_threshold %u Delta index %ld Current delta input %llu\n", i_, delta_threshold, i_ - delta_threshold, current_delta_input);
 
-        if (i_ % delta_threshold == 0)
+        if (delta_threshold > 0 && i_ % delta_threshold == 0)
             // reset current_deps_pos
             current_deps_pos = 0;
         current_deps_length = deps[current_deps_pos];
