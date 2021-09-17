@@ -25,7 +25,7 @@
 //
 
 // -----------------------------------------------------------------------------------------------
-// Note on registers:
+// Note on registers.
 // Some of the registers are reserved for a specific purpose and should never be overwritten.
 // These include:
 //   R8 - performance counter #1
@@ -42,11 +42,11 @@
 #define MAGIC_BYTES_INIT 0x10b513b1C2813F04
 #define MAGIC_BYTES_CODE 0x20b513b1C2813F04
 #define MAGIC_BYTES_RSP_ADDRESS 0x30b513b1C2813F04
-#define MAGIC_BYTES_RUNTIME_R14 0x40b513b1C2813F04
-#define MAGIC_BYTES_RUNTIME_RBP 0x50b513b1C2813F04
+#define MAGIC_BYTES_SANDBOX_BASE 0x40b513b1C2813F04
+#define UNUSED 0x50b513b1C2813F04
 #define MAGIC_BYTES_INPUT 0x60b513b1C2813F04
 #define MAGIC_BYTES_INPUT_MASK 0x70b513b1C2813F04
-#define MAGIC_BYTES_RUNTIME_RSP 0x80b513b1C2813F04
+#define MAGIC_BYTES_STACK_BASE 0x80b513b1C2813F04
 #define MAGIC_BYTES_HTRACE 0x90b513b1C2813F04
 #define MAGIC_BYTES_PFC_READING 0xA0b513b1C2813F04
 #define MAGIC_BYTES_TEMPLATE_END 0xB0b513b1C2813F04
@@ -109,13 +109,8 @@ void load_template(char *measurement_template) {
             templateI += 8;
             rcI += 8;
         } else if (starts_with_magic_bytes(&measurement_template[templateI],
-                                           MAGIC_BYTES_RUNTIME_R14)) {
-            *(void **) (&runtime_code[rcI]) = runtime_r14;
-            templateI += 8;
-            rcI += 8;
-        } else if (starts_with_magic_bytes(&measurement_template[templateI],
-                                           MAGIC_BYTES_RUNTIME_RBP)) {
-            *(void **) (&runtime_code[rcI]) = runtime_rbp;
+                                           MAGIC_BYTES_SANDBOX_BASE)) {
+            *(void **) (&runtime_code[rcI]) = sandbox_base;
             templateI += 8;
             rcI += 8;
         } else if (starts_with_magic_bytes(&measurement_template[templateI],
@@ -129,8 +124,8 @@ void load_template(char *measurement_template) {
             templateI += 8;
             rcI += 8;
         } else if (starts_with_magic_bytes(&measurement_template[templateI],
-                                           MAGIC_BYTES_RUNTIME_RSP)) {
-            *(void **) (&runtime_code[rcI]) = runtime_rsp;
+                                           MAGIC_BYTES_STACK_BASE)) {
+            *(void **) (&runtime_code[rcI]) = stack_base;
             templateI += 8;
             rcI += 8;
         } else {
@@ -189,63 +184,26 @@ void load_template(char *measurement_template) {
         READ_PFC_ONE("3") \
         "add r8, rdx \n"
 
-#define LCG(DEST, MASK) \
-        "imul r13d, r13d, 2891336453  \n" \
-        "add r13d, 12345 \n"\
-        "mov "DEST", r13d \n" \
-        "shr "DEST", 16 \n" \
-        "xor "DEST", r13d \n" \
-        "and "DEST", "MASK" \n" \
-        "shl "DEST", 6 \n"
-
-#define SET_REGISTERS_RANDOM(MASK) \
-        LCG("eax", MASK) \
-        LCG("ebx", MASK) \
-        LCG("ecx", MASK) \
-        LCG("edx", MASK) \
-        LCG("esi", MASK) \
-        LCG("edi", MASK) \
-        "imul r13d, r13d, 2891336453  \n" \
-        "add r13d, 12345  \n" \
-        "pushq r13  \n" \
-        "and qword ptr [rsp], 2263  \n" \
-        "or qword ptr [rsp], 2  \n" \
-        "popfq  \n"
-
 #define SB_FLUSH(TMP, REPS)                          \
         "mov "TMP", "REPS"                          \n" \
         "1: sfence                                  \n" \
         "dec "TMP"; jnz 1b                          \n"
 
-// deprecated definitions:
-#define SET_MEMORY(START, END, STEP, VALUE) \
-        "   1: mov qword ptr ["START"], "VALUE" \n" \
-        "   clflush qword ptr ["START"] \n" \
-        "   add "START", "STEP" \n" \
-        "cmp "START", "END"; jl 1b \n"
-
-#define SET_MEMORY_RANDOM(START, END, STEP, MASK, TMP32) \
-        "   1: "LCG(TMP32, MASK) \
-        "   mov dword ptr ["START"], "TMP32" \n" \
-        "   add "START", "STEP" \n" \
-        "cmp "START", "END"; jl 1b \n"
-
-#define SET_REGISTERS_FIXED(VALUE) \
-        "mov eax, "VALUE"  \n" \
-        "mov ebx, "VALUE"  \n" \
-        "mov ecx, "VALUE"  \n" \
-        "mov edx, "VALUE"  \n" \
-        "mov esi, "VALUE"  \n" \
-        "mov edi, "VALUE"  \n" \
-        "imul r13d, r13d, 2891336453  \n" \
-        "add r13d, 12345  \n" \
-        "pushq r13  \n" \
-        "and qword ptr [rsp], 2263  \n" \
-        "or qword ptr [rsp], 2  \n" \
-        "popfq  \n"
+#define SET_REGISTERS() \
+        "movq rsp, "STRINGIFY(MAGIC_BYTES_SANDBOX_BASE)" \n" \
+        "subq rsp, "STRINGIFY(REG_INITIALIZATION_REGION_SIZE)" \n" \
+        "popq rax \n" \
+        "popq rbx \n" \
+        "popq rcx \n" \
+        "popq rdx \n" \
+        "popq rsi \n" \
+        "popq rdi \n" \
+        "popfq \n" \
+        "popq rsp \n" \
+        "mov rbp, rsp \n"
 
 inline void prologue(void) {
-    // As we don't use the compiler to track clobbering,
+    // As we don't use a compiler to track clobbering,
     // we have to save the callee-saved regs
     asm_volatile_intel("" \
         "push rbx\n" \
@@ -254,33 +212,30 @@ inline void prologue(void) {
         "push r13\n" \
         "push r14\n" \
         "push r15\n" \
-        "pushfq\n");
-
-    // Reset the register values
-    asm_volatile_intel("" \
+        "pushfq\n" \
         "mov r15, "STRINGIFY(MAGIC_BYTES_RSP_ADDRESS)"\n" \
-        "mov [r15], rsp\n"                                \
-        "mov rax, 0\n"                                    \
-        "mov rbx, 0\n"                                    \
-        "mov rcx, 0\n"                                    \
-        "mov rdx, 0\n"                                    \
-        "mov r8,  0\n"                                    \
-        "mov r9,  0\n"                                    \
-        "mov r10, 0\n"                                    \
-        "mov r11, 0\n"                                    \
-        "mov r12, 0\n"                                    \
-        "mov r13, 0\n"                                    \
-        "mov r15, 0\n"                                    \
-        "mov rdi, 0\n"                                    \
-        "mov rsi, 0\n"                                    \
-        "mov r14, "STRINGIFY(MAGIC_BYTES_RUNTIME_R14)"\n" \
-        "mov rbp, "STRINGIFY(MAGIC_BYTES_RUNTIME_RBP)"\n" \
-        "mov rsp, "STRINGIFY(MAGIC_BYTES_RUNTIME_RSP)"\n");
+        "mov [r15], rsp\n");
 
-    // move the input value into R13
+    // Write the sandbox base address into R14;
+    // used to calculate the addresses of all other mem. regions
     asm_volatile_intel("" \
-        "mov rax, "STRINGIFY(MAGIC_BYTES_INPUT)" \n" \
-        "mov r13, [rax] \n");
+        "mov rax, 0\n" \
+        "mov rbx, 0\n" \
+        "mov rcx, 0\n" \
+        "mov rdx, 0\n" \
+        "mov rsi, 0\n" \
+        "mov rdi, 0\n" \
+        "mov r8,  0\n" \
+        "mov r9,  0\n" \
+        "mov r10, 0\n" \
+        "mov r11, 0\n" \
+        "mov r12, 0\n" \
+        "mov r13, 0\n" \
+        "mov r15, 0\n" \
+        "mov r14, "STRINGIFY(MAGIC_BYTES_SANDBOX_BASE)"\n");
+
+    // start monitoring SMIs
+    asm_volatile_intel(READ_SMI_START("r12"));
 }
 
 inline void epilogue(void) {
@@ -374,14 +329,6 @@ inline void epilogue(void) {
 void template_l1d_prime_probe(void) {
     prologue();
 
-    // start monitoring SMIs
-    asm_volatile_intel(READ_SMI_START("r12"));
-
-    // not to compromise the P+P measurement, load the input mask beforehand
-    asm_volatile_intel("" \
-        "mov r15, "STRINGIFY(MAGIC_BYTES_INPUT_MASK)"\n" \
-        "mov r15, [r15] \n");
-
     // Prime
     asm_volatile_intel(""\
         "mov rax, r14\n" \
@@ -389,13 +336,13 @@ void template_l1d_prime_probe(void) {
         PRIME("rax", "rbx", "rcx", "rdx", "16"));
 
     // Push empty values into the store buffer (just in case)
-    asm_volatile_intel(SB_FLUSH("r11", "60"));
+    asm_volatile_intel(SB_FLUSH("rax", "60"));
 
     // PFC
     asm_volatile_intel(READ_PFC_START());
 
     // Initialize registers
-    asm_volatile_intel(SET_REGISTERS_RANDOM("r15d"));
+    asm_volatile_intel(SET_REGISTERS());
 
     // indicate the beginning of the test case
     // used to align the test case code in memory
@@ -458,9 +405,6 @@ void template_l1d_prime_probe(void) {
 void template_l1d_flush_reload(void) {
     prologue();
 
-    // start monitoring SMIs
-    asm_volatile_intel(READ_SMI_START("r12"));
-
     // Flush
     asm_volatile_intel(
         "mov rbx, r14\n" \
@@ -468,16 +412,13 @@ void template_l1d_flush_reload(void) {
         FLUSH("rbx", "rax"));
 
     // Push empty values into the store buffer (just in case)
-    asm_volatile_intel(SB_FLUSH("r11", "60"));
+    asm_volatile_intel(SB_FLUSH("rax", "60"));
 
     // PFC
     asm_volatile_intel(READ_PFC_START());
 
     // Initialize registers
-    asm_volatile_intel("" \
-        "mov r15, "STRINGIFY(MAGIC_BYTES_INPUT_MASK)"\n" \
-        "mov r15, [r15] \n" \
-        SET_REGISTERS_RANDOM("r15d"));
+    asm_volatile_intel(SET_REGISTERS());
 
     // indicate the beginning of the test case
     // used to align the test case code in memory
@@ -504,9 +445,6 @@ void template_l1d_flush_reload(void) {
 void template_l1d_evict_reload(void) {
     prologue();
 
-    // start monitoring SMIs
-    asm_volatile_intel(READ_SMI_START("r12"));
-
     // not to compromise the P+P measurement, load the input mask beforehand
     asm_volatile_intel("" \
         "mov r15, "STRINGIFY(MAGIC_BYTES_INPUT_MASK)"\n" \
@@ -519,13 +457,13 @@ void template_l1d_evict_reload(void) {
         PRIME("rax", "rbx", "rcx", "rdx", "16"));
 
     // Push empty values into the store buffer (just in case)
-    asm_volatile_intel(SB_FLUSH("r11", "60"));
+    asm_volatile_intel(SB_FLUSH("rax", "60"));
 
     // PFC
     asm_volatile_intel(READ_PFC_START());
 
     // Initialize registers
-    asm_volatile_intel(SET_REGISTERS_RANDOM("r15d"));
+    asm_volatile_intel(SET_REGISTERS());
 
     // indicate the beginning of the test case
     // used to align the test case code in memory

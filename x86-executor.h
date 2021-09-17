@@ -65,13 +65,22 @@ extern size_t code_length;
 // Pointers to the memory regions that are writable and executable.
 extern char *runtime_code;
 
-#define RUNTIME_R_SIZE (1024*1024)
+#define WORKING_MEMORY_SIZE (1024*1024)
+#define MAIN_REGION_SIZE 4096
+#define ASSIST_REGION_SIZE 4096
+#define EVICT_REGION_SIZE (8 * 4096)
+#define OVERFLOW_REGION_SIZE 4096
+#define REG_INITIALIZATION_REGION_SIZE 64
 
-// During measurements, R14, RBP, and RSP will contain these addresses plus RUNTIME_R_SIZE/2.
-// If r14_size is set in the kernel module, R14 will not have this offset.
-extern void *runtime_r14;
-extern void *runtime_rbp;
-extern void *runtime_rsp;
+// Base addresses for the main memory regions
+extern void *sandbox_base;
+extern void *upper_overflow_base;
+extern void *assist_base;
+extern void *stack_base;
+extern void *main_base;
+extern void *register_initialization_base;
+extern void *lower_overflow_base;
+extern void *eviction_base;
 
 // Stores HTrace value during measurements
 #define HTRACE_WIDTH 1

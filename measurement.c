@@ -87,10 +87,10 @@ static inline void pre_measurement_setup(void) {
 
     write_msr(MSR_IA32_SPEC_CTRL, ssbp_patch_control);
 
-    assist_page_addr = (unsigned long) runtime_r14 + 4096;
+    assist_page_addr = (unsigned long) assist_base;
     assist_page_ptep = get_pte(assist_page_addr);
     if (assist_page_ptep == NULL) {
-        printk(KERN_ERR "pre_measurement_setup: Couldn't get the sandbox pte entry");
+        printk(KERN_ERR "pre_measurement_setup: Couldn't get the assist page PTE entry");
         return;
     }
 }
@@ -100,34 +100,57 @@ static inline void single_run(long i, int64_t *results[]) {
     long i_ = (i < 0) ? 0 : i;
     current_input = inputs[i_];
 
+    // flush some of the uarch state
     if (pre_run_flush == 1) {
         static const u16 ds = __KERNEL_DS;
         asm volatile("verw %[ds]" : : [ds] "m"(ds) : "cc");
         write_msr(MSR_IA32_FLUSH_CMD, L1D_FLUSH);
     }
 
-    // initialize the "stack" with zeroes
-    unsigned long stack_base = (unsigned long) runtime_rsp;
-    for (int j = -1024; j < 1024; j += 1) {
-        ((uint32_t *) stack_base)[j] = 0;
+    // Initialize memory:
+    // - eviction region is initialized with zeroes
+    for (int j = 0; j < EVICT_REGION_SIZE / 8; j += 1) {
+        ((uint64_t *) eviction_base)[j] = 0;
     }
 
-    // initialize eviction region with zeroes
-    unsigned long eviction_region = (unsigned long) runtime_r14 - 36864;
-    for (int j = 0; j < 8192; j += 1) {
-        ((uint32_t *) eviction_region)[j] = 0;
+    // - overflows are initialized with zeroes
+    for (int j = 0; j < OVERFLOW_REGION_SIZE / 8; j += 1) {
+        ((uint64_t *) lower_overflow_base)[j] = 0;
+        ((uint64_t *) upper_overflow_base)[j] = 0;
     }
 
-    // initialize memory: sandbox page, assist page, and two pages around them (for overflows)
-    unsigned long initialized_memory_base = (unsigned long) runtime_r14 - 4096;
+    // - sandbox: main (i.e., fault-less) and assist regions
     uint64_t random_value = current_input;
     uint64_t masked_rvalue;
-    for (int j = 0; j < 4096; j += 1) {
+    for (int j = 0; j < MAIN_REGION_SIZE / 4; j += 1) {
         random_value = (((random_value * 2891336453) % 0x100000000) + 12345) % 0x100000000;
         masked_rvalue = (random_value ^ (random_value >> 16)) & input_mask;
         masked_rvalue = masked_rvalue << 6;
-        ((uint32_t *) initialized_memory_base)[j] = masked_rvalue;
+        ((uint32_t *) main_base)[j] = masked_rvalue;
     }
+    for (int j = 0; j < ASSIST_REGION_SIZE / 4; j += 1) {
+        random_value = (((random_value * 2891336453) % 0x100000000) + 12345) % 0x100000000;
+        masked_rvalue = (random_value ^ (random_value >> 16)) & input_mask;
+        masked_rvalue = masked_rvalue << 6;
+        ((uint32_t *) assist_base)[j] = masked_rvalue;
+    }
+
+    // Initial register values (the registers will be set to these values in template.c)
+    // - RAX ... RDI
+    for (int j = 0; j < 6; j += 1) {
+        random_value = (((random_value * 2891336453) % 0x100000000) + 12345) % 0x100000000;
+        masked_rvalue = (random_value ^ (random_value >> 16)) & input_mask;
+        masked_rvalue = masked_rvalue << 6;
+        ((uint64_t *) register_initialization_base)[j] = masked_rvalue;
+    }
+    // - flags
+    random_value = (((random_value * 2891336453) % 0x100000000) + 12345) % 0x100000000;
+    masked_rvalue = (random_value & 2263 ) | 2;
+    ((uint64_t *) register_initialization_base)[6] = (uint64_t) masked_rvalue;
+    // - RSP and RBP
+    ((uint64_t *) register_initialization_base)[7] = (uint64_t) stack_base;
+
+    // preserve the seed for next inputs
     current_input = random_value;
 
     // clear the ACCESSED bit and flush the corresponding TLB entry

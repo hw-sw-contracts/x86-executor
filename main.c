@@ -109,9 +109,16 @@ char *code = NULL;
 size_t code_length = 0;
 
 char *runtime_code;
-void *runtime_r14;
-void *runtime_rbp;
-void *runtime_rsp;
+void *allocated_working_region;
+void *sandbox_base;
+void *upper_overflow_base;
+void *assist_base;
+void *stack_base;
+void *main_base;
+void *register_initialization_base;
+void *lower_overflow_base;
+void *eviction_base;
+
 int64_t latest_htrace[HTRACE_WIDTH];
 int64_t latest_pfc_readings[NUM_PFC];
 void *RSP_mem;
@@ -252,22 +259,12 @@ static struct kobj_attribute warmups_attribute = __ATTR(warmups, 0666, warmups_s
 static ssize_t print_sandbox_base_show(struct kobject *kobj,
                                        struct kobj_attribute *attr,
                                        char *buf) {
-    return sprintf(buf, "%llx\n", (long long unsigned) runtime_r14 - RUNTIME_R_SIZE / 2);
+    return sprintf(buf, "%llx\n", (long long unsigned) sandbox_base);
 }
 
 static struct kobj_attribute
         print_sandbox_base_attribute =
         __ATTR(print_sandbox_base, 0664, print_sandbox_base_show, dummy_store);
-
-/// Getting the base address of the stack
-///
-static ssize_t print_stack_base_show(struct kobject *kobj, struct kobj_attribute *attr, char *buf) {
-    return sprintf(buf, "%llx\n", (long long unsigned) runtime_rsp - RUNTIME_R_SIZE / 2);
-}
-
-static struct kobj_attribute
-        print_stack_base_attribute =
-        __ATTR(print_stack_base, 0664, print_stack_base_show, dummy_store);
 
 /// Getting the base address of the memory region where the test case is loaded
 ///
@@ -409,16 +406,22 @@ static int __init nb_init(void) {
     }
     inputs[0] = DEFAULT_INPUT;
 
-    // Memory for sandbox and stack
-    runtime_r14 = vmalloc(RUNTIME_R_SIZE);     // vmalloc addresses are page aligned
-    runtime_rsp = vmalloc(RUNTIME_R_SIZE);
-    if (!runtime_r14 || !runtime_rsp) {
-        printk(KERN_ERR "Could not allocate memory for runtime_r*\n");
+    // Allocate sandbox memory
+    allocated_working_region = vmalloc(WORKING_MEMORY_SIZE); // vmalloc addresses are page aligned
+    if (!allocated_working_region) {
+        printk(KERN_ERR "Could not allocate memory for the sandbox\n");
         return -1;
     }
-    runtime_r14 += RUNTIME_R_SIZE / 2;
-    runtime_rsp += RUNTIME_R_SIZE / 2;
-    runtime_rbp = runtime_rsp;
+
+    // Sandbox layout
+    sandbox_base = allocated_working_region + WORKING_MEMORY_SIZE / 2;
+    upper_overflow_base = sandbox_base + MAIN_REGION_SIZE + ASSIST_REGION_SIZE;
+    assist_base = sandbox_base + MAIN_REGION_SIZE;
+    stack_base = sandbox_base + MAIN_REGION_SIZE - 8; // last byte in the main region
+    main_base = sandbox_base;
+    register_initialization_base = sandbox_base - REG_INITIALIZATION_REGION_SIZE;
+    lower_overflow_base = sandbox_base - OVERFLOW_REGION_SIZE;
+    eviction_base = sandbox_base - OVERFLOW_REGION_SIZE - EVICT_REGION_SIZE;
 
     // Memory for the test case's code
     runtime_code_base = kmalloc(KMALLOC_MAX, GFP_KERNEL);
@@ -445,7 +448,6 @@ static int __init nb_init(void) {
     error |= sysfs_create_file(nb_kobject, &input_mask_attribute.attr);
     error |= sysfs_create_file(nb_kobject, &warmups_attribute.attr);
     error |= sysfs_create_file(nb_kobject, &print_sandbox_base_attribute.attr);
-    error |= sysfs_create_file(nb_kobject, &print_stack_base_attribute.attr);
     error |= sysfs_create_file(nb_kobject, &print_code_base_attribute.attr);
     error |= sysfs_create_file(nb_kobject, &enable_ssbp_patch_attribute.attr);
     error |= sysfs_create_file(nb_kobject, &enable_mds_attribute.attr);
@@ -469,14 +471,13 @@ static int __init nb_init(void) {
 
 static void __exit nb_exit(void) {
     kfree(code);
-    vfree(runtime_rsp - RUNTIME_R_SIZE / 2);
 
     if (runtime_code_base) {
         set_memory_nx((unsigned long) runtime_code_base, runtime_code_base_memory_size / PAGE_SIZE);
         kfree(runtime_code_base);
     }
 
-    vfree(runtime_r14 - RUNTIME_R_SIZE / 2);
+    vfree(allocated_working_region);
 
     kfree(inputs);
 
