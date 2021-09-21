@@ -43,9 +43,9 @@
 #define MAGIC_BYTES_CODE 0x20b513b1C2813F04
 #define MAGIC_BYTES_RSP_ADDRESS 0x30b513b1C2813F04
 #define MAGIC_BYTES_SANDBOX_BASE 0x40b513b1C2813F04
-#define UNUSED 0x50b513b1C2813F04
-#define MAGIC_BYTES_INPUT 0x60b513b1C2813F04
-#define MAGIC_BYTES_INPUT_MASK 0x70b513b1C2813F04
+#define UNUSED1 0x50b513b1C2813F04
+#define UNUSED2 0x60b513b1C2813F04
+#define UNUSED3 0x70b513b1C2813F04
 #define MAGIC_BYTES_STACK_BASE 0x80b513b1C2813F04
 #define MAGIC_BYTES_HTRACE 0x90b513b1C2813F04
 #define MAGIC_BYTES_PFC_READING 0xA0b513b1C2813F04
@@ -111,16 +111,6 @@ void load_template(char *measurement_template) {
         } else if (starts_with_magic_bytes(&measurement_template[templateI],
                                            MAGIC_BYTES_SANDBOX_BASE)) {
             *(void **) (&runtime_code[rcI]) = sandbox_base;
-            templateI += 8;
-            rcI += 8;
-        } else if (starts_with_magic_bytes(&measurement_template[templateI],
-                                           MAGIC_BYTES_INPUT)) {
-            *(void **) (&runtime_code[rcI]) = &current_input;
-            templateI += 8;
-            rcI += 8;
-        } else if (starts_with_magic_bytes(&measurement_template[templateI],
-                                           MAGIC_BYTES_INPUT_MASK)) {
-            *(void **) (&runtime_code[rcI]) = &input_mask;
             templateI += 8;
             rcI += 8;
         } else if (starts_with_magic_bytes(&measurement_template[templateI],
@@ -444,11 +434,6 @@ void template_l1d_flush_reload(void) {
 
 void template_l1d_evict_reload(void) {
     prologue();
-
-    // not to compromise the P+P measurement, load the input mask beforehand
-    asm_volatile_intel("" \
-        "mov r15, "STRINGIFY(MAGIC_BYTES_INPUT_MASK)"\n" \
-        "mov r15, [r15] \n");
 
     // Prime
     asm_volatile_intel(""\

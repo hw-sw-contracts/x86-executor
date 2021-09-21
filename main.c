@@ -126,8 +126,6 @@ void *RSP_mem;
 int64_t *measurement_results[NUM_MEASUREMENT_FIELDS];
 
 uint64_t *inputs;
-uint64_t current_input = DEFAULT_INPUT;
-uint64_t input_mask = DEFAULT_INPUT_MASK;
 
 char *runtime_code_base = NULL;
 
@@ -138,7 +136,7 @@ size_t runtime_code_base_memory_size = 0;
 // Configuration Variables
 char ssbp_patch_control = 0b011;
 char pre_run_flush = 1;
-char enable_mds_page = 0;
+char enable_assist_page = 0;
 char *measurement_template = (char *) &template_l1d_flush_reload;
 
 // ====================================================
@@ -167,10 +165,10 @@ static ssize_t inputs_store(struct kobject *kobj,
                             struct kobj_attribute *attr,
                             const char *buf,
                             size_t count) {
-    unsigned batch_size = count / 8; // inputs are 8 byte long
+    unsigned batch_size = count / 8; // the count is for uint64
 
     // first, check for overflows
-    if (inputs_top + batch_size > n_inputs) {
+    if (inputs_top + batch_size > n_inputs * INPUT_SIZE) {
         //printk(KERN_ERR "Loading too many inputs %d %lu\n", inputs_top + batch_size, n_inputs);
         n_inputs = 0;
         return count;
@@ -216,10 +214,10 @@ static ssize_t n_inputs_store(struct kobject *kobj,
         }
 
         // and for inputs
-        kfree(inputs);
-        inputs = kmalloc(n_inputs * sizeof(int64_t), GFP_KERNEL);
+        vfree(inputs);
+        inputs = vmalloc(n_inputs * INPUT_SIZE);
         if (!inputs) {
-            printk(KERN_ERR "Could not allocate memory for prng_seeds\n");
+            printk(KERN_ERR "Could not allocate memory for inputs\n");
             return -1;
         }
     }
@@ -227,18 +225,6 @@ static ssize_t n_inputs_store(struct kobject *kobj,
 }
 static struct kobj_attribute n_inputs_attribute =
         __ATTR(n_inputs, 0666, n_inputs_show, n_inputs_store);
-
-/// Setting a mask for randomly generated values
-///
-static ssize_t input_mask_store(struct kobject *kobj,
-                              struct kobj_attribute *attr,
-                              const char *buf,
-                              size_t count) {
-    sscanf(buf, "%llu", &input_mask);
-    return count;
-}
-static struct kobj_attribute input_mask_attribute =
-        __ATTR(input_mask, 0666, dummy_show, input_mask_store);
 
 /// Setting the number of warm up rounds
 ///
@@ -295,7 +281,6 @@ static struct kobj_attribute
 ///
 static ssize_t reset_show(struct kobject *kobj, struct kobj_attribute *attr, char *buf) {
     n_inputs = N_INPUTS_DEFAULT;
-    inputs[0] = DEFAULT_INPUT;
     code_length = 0;
     code_offset = 0;
     return 0;
@@ -326,7 +311,7 @@ static ssize_t enable_mds_store(struct kobject *kobj,
                           size_t count) {
     unsigned value = 0;
     sscanf(buf, "%u", &value);
-    enable_mds_page = (value == 0) ? 0 : 1;
+    enable_assist_page = (value == 0) ? 0 : 1;
     return count;
 }
 static struct kobj_attribute
@@ -399,12 +384,11 @@ static int __init nb_init(void) {
     }
 
     // Memory for inputs
-    inputs = kmalloc(n_inputs * sizeof(int64_t), GFP_KERNEL);
+    inputs = vmalloc(n_inputs * INPUT_SIZE);
     if (!inputs) {
         printk(KERN_ERR "Could not allocate memory for inputs\n");
         return -1;
     }
-    inputs[0] = DEFAULT_INPUT;
 
     // Allocate sandbox memory
     allocated_working_region = vmalloc(WORKING_MEMORY_SIZE); // vmalloc addresses are page aligned
@@ -445,7 +429,6 @@ static int __init nb_init(void) {
     error |= sysfs_create_file(nb_kobject, &code_offset_attribute.attr);
     error |= sysfs_create_file(nb_kobject, &inputs_attribute.attr);
     error |= sysfs_create_file(nb_kobject, &n_inputs_attribute.attr);
-    error |= sysfs_create_file(nb_kobject, &input_mask_attribute.attr);
     error |= sysfs_create_file(nb_kobject, &warmups_attribute.attr);
     error |= sysfs_create_file(nb_kobject, &print_sandbox_base_attribute.attr);
     error |= sysfs_create_file(nb_kobject, &print_code_base_attribute.attr);
@@ -478,8 +461,7 @@ static void __exit nb_exit(void) {
     }
 
     vfree(allocated_working_region);
-
-    kfree(inputs);
+    vfree(inputs);
 
     for (int i = 0; i < NUM_MEASUREMENT_FIELDS; i++) {
         kfree(measurement_results[i]);

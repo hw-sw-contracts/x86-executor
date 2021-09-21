@@ -96,16 +96,16 @@ static inline void pre_measurement_setup(void) {
 }
 
 static inline void single_run(long i, int64_t *results[]) {
-    // ignore "warm-up" runs (i<0)
-    long i_ = (i < 0) ? 0 : i;
-    current_input = inputs[i_];
-
     // flush some of the uarch state
     if (pre_run_flush == 1) {
         static const u16 ds = __KERNEL_DS;
         asm volatile("verw %[ds]" : : [ds] "m"(ds) : "cc");
         write_msr(MSR_IA32_FLUSH_CMD, L1D_FLUSH);
     }
+
+    // ignore "warm-up" runs (i<0)
+    long i_ = (i < 0) ? 0 : i;
+    uint64_t *current_input = &inputs[i_ * INPUT_SIZE / 8];
 
     // Initialize memory:
     // - eviction region is initialized with zeroes
@@ -120,41 +120,32 @@ static inline void single_run(long i, int64_t *results[]) {
     }
 
     // - sandbox: main (i.e., fault-less) and assist regions
-    uint64_t random_value = current_input;
-    uint64_t masked_rvalue;
-    for (int j = 0; j < MAIN_REGION_SIZE / 4; j += 1) {
-        random_value = (((random_value * 2891336453) % 0x100000000) + 12345) % 0x100000000;
-        masked_rvalue = (random_value ^ (random_value >> 16)) & input_mask;
-        masked_rvalue = masked_rvalue << 6;
-        ((uint32_t *) main_base)[j] = masked_rvalue;
+    uint64_t *main_page_values = &current_input[0];
+    for (int j = 0; j < MAIN_REGION_SIZE / 8; j += 1) {
+        ((uint64_t *) main_base)[j] = main_page_values[j];
     }
-    for (int j = 0; j < ASSIST_REGION_SIZE / 4; j += 1) {
-        random_value = (((random_value * 2891336453) % 0x100000000) + 12345) % 0x100000000;
-        masked_rvalue = (random_value ^ (random_value >> 16)) & input_mask;
-        masked_rvalue = masked_rvalue << 6;
-        ((uint32_t *) assist_base)[j] = masked_rvalue;
+    uint64_t *assist_page_values = &current_input[MAIN_REGION_SIZE / 8];
+    for (int j = 0; j < ASSIST_REGION_SIZE / 8; j += 1) {
+        ((uint64_t *) assist_base)[j] = assist_page_values[j];
     }
 
     // Initial register values (the registers will be set to these values in template.c)
+    uint64_t *register_values = &current_input[(INPUT_SIZE / 8) - 8];
+
     // - RAX ... RDI
     for (int j = 0; j < 6; j += 1) {
-        random_value = (((random_value * 2891336453) % 0x100000000) + 12345) % 0x100000000;
-        masked_rvalue = (random_value ^ (random_value >> 16)) & input_mask;
-        masked_rvalue = masked_rvalue << 6;
-        ((uint64_t *) register_initialization_base)[j] = masked_rvalue;
+        ((uint64_t *) register_initialization_base)[j] = register_values[j];
     }
+
     // - flags
-    random_value = (((random_value * 2891336453) % 0x100000000) + 12345) % 0x100000000;
-    masked_rvalue = (random_value & 2263 ) | 2;
-    ((uint64_t *) register_initialization_base)[6] = (uint64_t) masked_rvalue;
+    uint64_t masked_flags = (register_values[6] & 2263) | 2;
+    ((uint64_t *) register_initialization_base)[6] = masked_flags;
+
     // - RSP and RBP
     ((uint64_t *) register_initialization_base)[7] = (uint64_t) stack_base;
 
-    // preserve the seed for next inputs
-    current_input = random_value;
-
     // clear the ACCESSED bit and flush the corresponding TLB entry
-    if (enable_mds_page) {
+    if (enable_assist_page) {
         assist_page_pte.pte = assist_page_ptep->pte & ~_PAGE_ACCESSED;
         set_pte_at(current->mm, assist_page_addr, assist_page_ptep, assist_page_pte);
         asm volatile("clflush (%0)\nlfence\n"::"r" (assist_page_addr) : "memory");

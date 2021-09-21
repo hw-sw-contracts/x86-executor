@@ -52,16 +52,6 @@ extern size_t alignment_offset;
 extern int debug;
 #define DEBUG_DEFAULT 0;
 
-// List of inputs
-extern uint64_t *inputs;
-extern uint64_t current_input;
-#define DEFAULT_INPUT 0;
-extern uint64_t input_mask;
-#define DEFAULT_INPUT_MASK 0xffffffff;
-
-extern char *code;
-extern size_t code_length;
-
 // Pointers to the memory regions that are writable and executable.
 extern char *runtime_code;
 
@@ -82,6 +72,18 @@ extern void *register_initialization_base;
 extern void *lower_overflow_base;
 extern void *eviction_base;
 
+// List of inputs
+#define TMP_MIGRATION 1
+#if TMP_MIGRATION == 1
+#define INPUT_SIZE (MAIN_REGION_SIZE + ASSIST_REGION_SIZE)
+#else
+#define INPUT_SIZE 1
+#endif
+extern uint64_t *inputs;
+
+extern char *code;
+extern size_t code_length;
+
 // Stores HTrace value during measurements
 #define HTRACE_WIDTH 1
 extern int64_t latest_htrace[HTRACE_WIDTH];
@@ -99,7 +101,7 @@ extern void *RSP_mem;
 
 // Configuration Variables
 extern char ssbp_patch_control;
-extern char enable_mds_page;
+extern char enable_assist_page;
 extern char pre_run_flush;
 extern char *measurement_template;
 
