@@ -17,7 +17,7 @@ obj-m += $(MODULE_NAME).o
 
 CFLAGS_measurement.o := -DDEBUG -Wno-unused-result -Wno-unused-label
 
-ccflags-y+=-std=gnu99 -Wno-declaration-after-statement
+ccflags-y+=-std=gnu99 -Wno-declaration-after-statement -DL1D_ASSOCIATIVITY=$(shell cat /sys/devices/system/cpu/cpu0/cache/index0/ways_of_associativity)
 
 all:
 	make -C /lib/modules/$(shell uname -r)/build M=$(PWD) modules

@@ -265,6 +265,8 @@ inline void epilogue(void) {
 // =================================================================================================
 // L1D Prime+Probe
 // =================================================================================================
+// TODO: generate this code dynamically
+#if L1D_ASSOCIATIVITY == 8
 #define PRIME(BASE, OFFSET, TMP, COUNTER, REPS)                 \
         "mfence                                             \n" \
         "mov "COUNTER", "REPS"                              \n" \
@@ -315,14 +317,74 @@ inline void epilogue(void) {
         "   3:                                      \n" \
         "   add "OFFSET", 64                        \n" \
         "cmp "OFFSET", 4096; jl 1b                  \n"
+#elif L1D_ASSOCIATIVITY == 12
+#define PRIME(BASE, OFFSET, TMP, COUNTER, REPS)                 \
+        "mfence                                             \n" \
+        "mov "COUNTER", "REPS"                              \n" \
+        "   1: mov "OFFSET", 0                              \n" \
+        "       2: lfence                                   \n" \
+        "       mov "TMP", "OFFSET"                         \n" \
+        "       add "TMP", ["BASE" + "TMP"]                 \n" \
+        "       add "TMP", ["BASE" + "TMP" + 4096]          \n" \
+        "       add "TMP", ["BASE" + "TMP" + 8192]          \n" \
+        "       add "TMP", ["BASE" + "TMP" + 12288]         \n" \
+        "       add "TMP", ["BASE" + "TMP" + 16384]         \n" \
+        "       add "TMP", ["BASE" + "TMP" + 20480]         \n" \
+        "       add "TMP", ["BASE" + "TMP" + 24576]         \n" \
+        "       add "TMP", ["BASE" + "TMP" + 28672]         \n" \
+        "       add "TMP", ["BASE" + "TMP" + 32768]         \n" \
+        "       add "TMP", ["BASE" + "TMP" + 36864]         \n" \
+        "       add "TMP", ["BASE" + "TMP" + 40960]         \n" \
+        "       add "TMP", ["BASE" + "TMP" + 45056]         \n" \
+        "       add "OFFSET", 64                            \n" \
+        "   cmp "OFFSET", 4096; jl 2b                       \n" \
+        "dec "COUNTER"; jnz 1b                              \n" \
+        "mfence;                                            \n"
+
+#define PROBE(BASE, OFFSET, TMP, DEST)                  \
+        "xor "DEST", "DEST"                         \n" \
+        "xor "OFFSET", "OFFSET"                     \n" \
+        "1:                                         \n" \
+        "   xor "TMP", "TMP"                        \n" \
+        "   mov rcx, 0                              \n" \
+        "   mfence; rdpmc; lfence                   \n" \
+        "   shl rdx, 32; or rdx, rax                \n" \
+        "   sub "TMP", rdx                          \n" \
+        "   mov rax, "OFFSET"                       \n" \
+        "   add rax, ["BASE" + rax]                 \n" \
+        "   add rax, ["BASE" + rax + 4096]          \n" \
+        "   add rax, ["BASE" + rax + 8192]          \n" \
+        "   add rax, ["BASE" + rax + 12288]         \n" \
+        "   add rax, ["BASE" + rax + 16384]         \n" \
+        "   add rax, ["BASE" + rax + 20480]         \n" \
+        "   add rax, ["BASE" + rax + 24576]         \n" \
+        "   add rax, ["BASE" + rax + 28672]         \n" \
+        "   add rax, ["BASE" + rax + 32768]         \n" \
+        "   add rax, ["BASE" + rax + 36864]         \n" \
+        "   add rax, ["BASE" + rax + 40960]         \n" \
+        "   add rax, ["BASE" + rax + 45056]         \n" \
+        "   mov rcx, 0                              \n" \
+        "   lfence; rdpmc; mfence                   \n" \
+        "   shl rdx, 32; or rdx, rax                \n" \
+        "   add "TMP", rdx                          \n" \
+        "   cmp "TMP", 12; jne 2f                    \n" \
+        "      shl "DEST", 1                        \n" \
+        "      jmp 3f                               \n" \
+        "   2:                                      \n" \
+        "      shl "DEST", 1                        \n" \
+        "      or "DEST", 1                         \n" \
+        "   3:                                      \n" \
+        "   add "OFFSET", 64                        \n" \
+        "cmp "OFFSET", 4096; jl 1b                  \n"
+#endif
 
 void template_l1d_prime_probe(void) {
     prologue();
 
     // Prime
     asm_volatile_intel(""\
-        "mov rax, r14\n" \
-        "sub rax, 36864\n" \
+        "mov rax, r14                              \n" \
+        "sub rax, "STRINGIFY(EVICT_REGION_OFFSET)" \n" \
         PRIME("rax", "rbx", "rcx", "rdx", "16"));
 
     // Push empty values into the store buffer (just in case)
@@ -349,8 +411,8 @@ void template_l1d_prime_probe(void) {
     // Probe and store the resulting eviction bitmap map into r11
     // Note: it internally clobbers rcx, rdx, rax
     asm_volatile_intel(""\
-        "mov r15, r14                            \n" \
-        "sub r15, 36864                          \n" \
+        "mov r15, r14                              \n" \
+        "sub r15, "STRINGIFY(EVICT_REGION_OFFSET)" \n" \
         PROBE("r15", "rbx", "r13", "r11"));
 
     epilogue();
@@ -437,8 +499,8 @@ void template_l1d_evict_reload(void) {
 
     // Prime
     asm_volatile_intel(""\
-        "mov rax, r14\n" \
-        "sub rax, 36864\n" \
+        "mov rax, r14                              \n" \
+        "sub rax, "STRINGIFY(EVICT_REGION_OFFSET)" \n" \
         PRIME("rax", "rbx", "rcx", "rdx", "16"));
 
     // Push empty values into the store buffer (just in case)

@@ -36,6 +36,14 @@
 #define print_user_verbose(...) pr_debug(__VA_ARGS__)
 #define nb_strtoul(s, base, res) kstrtoul(s, base, res)
 
+// Attack configuration
+#ifndef L1D_ASSOCIATIVITY
+#error "Undefined associativity"
+#elif L1D_ASSOCIATIVITY != 12 && L1D_ASSOCIATIVITY != 8
+#warning "Unsupported/corrupted L1D associativity. Falling back to 8-way"
+#define L1D_ASSOCIATIVITY 8
+#endif
+
 // How many times the measurement will be repeated.
 extern long warm_up_count;
 #define WARM_UP_COUNT_DEFAULT 1
@@ -58,9 +66,11 @@ extern char *runtime_code;
 #define WORKING_MEMORY_SIZE (1024*1024)
 #define MAIN_REGION_SIZE 4096
 #define ASSIST_REGION_SIZE 4096
-#define EVICT_REGION_SIZE (8 * 4096)
+#define EVICT_REGION_SIZE (L1D_ASSOCIATIVITY * 4096)
 #define OVERFLOW_REGION_SIZE 4096
 #define REG_INITIALIZATION_REGION_SIZE 64
+
+#define EVICT_REGION_OFFSET (EVICT_REGION_SIZE + OVERFLOW_REGION_SIZE)
 
 // Base addresses for the main memory regions
 extern void *sandbox_base;
