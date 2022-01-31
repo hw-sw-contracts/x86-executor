@@ -399,11 +399,11 @@ static int __init nb_init(void) {
 
     // Sandbox layout
     sandbox_base = allocated_working_region + WORKING_MEMORY_SIZE / 2;
-    upper_overflow_base = sandbox_base + MAIN_REGION_SIZE + ASSIST_REGION_SIZE;
+    upper_overflow_base = sandbox_base + INPUT_SIZE;
+    register_initialization_base = sandbox_base + MAIN_REGION_SIZE + ASSIST_REGION_SIZE;
     assist_base = sandbox_base + MAIN_REGION_SIZE;
     stack_base = sandbox_base + MAIN_REGION_SIZE - 8; // last byte in the main region
     main_base = sandbox_base;
-    register_initialization_base = sandbox_base - REG_INITIALIZATION_REGION_SIZE;
     lower_overflow_base = sandbox_base - OVERFLOW_REGION_SIZE;
     eviction_base = sandbox_base - OVERFLOW_REGION_SIZE - EVICT_REGION_SIZE;
 

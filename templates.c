@@ -43,7 +43,7 @@
 #define MAGIC_BYTES_CODE 0x20b513b1C2813F04
 #define MAGIC_BYTES_RSP_ADDRESS 0x30b513b1C2813F04
 #define MAGIC_BYTES_SANDBOX_BASE 0x40b513b1C2813F04
-#define UNUSED1 0x50b513b1C2813F04
+#define MAGIC_BYTES_REG_INITIALIZATION 0x50b513b1C2813F04
 #define UNUSED2 0x60b513b1C2813F04
 #define UNUSED3 0x70b513b1C2813F04
 #define MAGIC_BYTES_STACK_BASE 0x80b513b1C2813F04
@@ -114,6 +114,11 @@ void load_template(char *measurement_template) {
             templateI += 8;
             rcI += 8;
         } else if (starts_with_magic_bytes(&measurement_template[templateI],
+                                           MAGIC_BYTES_REG_INITIALIZATION)) {
+            *(void **) (&runtime_code[rcI]) = register_initialization_base;
+            templateI += 8;
+            rcI += 8;            
+        } else if (starts_with_magic_bytes(&measurement_template[templateI],
                                            MAGIC_BYTES_STACK_BASE)) {
             *(void **) (&runtime_code[rcI]) = stack_base;
             templateI += 8;
@@ -180,8 +185,7 @@ void load_template(char *measurement_template) {
         "dec "TMP"; jnz 1b                          \n"
 
 #define SET_REGISTERS() \
-        "movq rsp, "STRINGIFY(MAGIC_BYTES_SANDBOX_BASE)" \n" \
-        "subq rsp, "STRINGIFY(REG_INITIALIZATION_REGION_SIZE)" \n" \
+        "movq rsp, "STRINGIFY(MAGIC_BYTES_REG_INITIALIZATION)" \n" \
         "popq rax \n" \
         "popq rbx \n" \
         "popq rcx \n" \
