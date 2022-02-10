@@ -63,9 +63,9 @@ extern int debug;
 // Pointers to the memory regions that are writable and executable.
 extern char *runtime_code;
 
-#define WORKING_MEMORY_SIZE (1024*1024)
+#define WORKING_MEMORY_SIZE (1024 * 1024)
 #define REG_INITIALIZATION_REGION_SIZE 64
-#define ASSIST_REGION_SIZE (4096 - REG_INITIALIZATION_REGION_SIZE)
+#define ASSIST_REGION_SIZE 4096
 #define MAIN_REGION_SIZE 4096
 #define EVICT_REGION_SIZE (L1D_ASSOCIATIVITY * 4096)
 #define OVERFLOW_REGION_SIZE 4096
@@ -85,7 +85,8 @@ extern void *eviction_base;
 // List of inputs
 #define TMP_MIGRATION 1
 #if TMP_MIGRATION == 1
-#define INPUT_SIZE (MAIN_REGION_SIZE + ASSIST_REGION_SIZE + REG_INITIALIZATION_REGION_SIZE)
+#define REG_INITIALIZATION_REGION_SIZE_ALIGNED 4096
+#define INPUT_SIZE (MAIN_REGION_SIZE + ASSIST_REGION_SIZE + REG_INITIALIZATION_REGION_SIZE_ALIGNED)
 #else
 #define INPUT_SIZE 1
 #endif
@@ -103,7 +104,7 @@ extern int64_t latest_htrace[HTRACE_WIDTH];
 extern int64_t latest_pfc_readings[NUM_PFC];
 
 // Stores all measured HTraces
-#define NUM_MEASUREMENT_FIELDS (HTRACE_WIDTH+NUM_PFC)
+#define NUM_MEASUREMENT_FIELDS (HTRACE_WIDTH + NUM_PFC)
 extern int64_t *measurement_results[NUM_MEASUREMENT_FIELDS];
 
 // Stores the RSP during measurements.

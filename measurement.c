@@ -130,7 +130,7 @@ static inline void single_run(long i, int64_t *results[]) {
     }
 
     // Initial register values (the registers will be set to these values in template.c)
-    uint64_t *register_values = &current_input[(INPUT_SIZE / 8) - 8];
+    uint64_t *register_values = &current_input[(MAIN_REGION_SIZE + ASSIST_REGION_SIZE) / 8];
 
     // - RAX ... RDI
     for (int j = 0; j < 6; j += 1) {
