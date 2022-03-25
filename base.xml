@@ -85,12 +85,12 @@
             <op idx="2" r="1" type="reg" width="8">GPR</op>
             <op flag_AF="w" flag_CF="r/w" flag_OF="w" flag_PF="w" flag_SF="w" flag_ZF="w" idx="3" r="1" suppressed="1" type="flags" w="1"/>
         </instruction>
-        <instruction asm="{load} ADC" category="BINARY" cpl="3" extension="BASE" rex="0">
+        <instruction asm="ADC" category="BINARY" cpl="3" extension="BASE" rex="0">
             <op idx="1" r="1" type="reg" w="1" width="8">AL,CL,DL,BL,AH,CH,DH,BH</op>
             <op idx="2" r="1" type="reg" width="8">AL,CL,DL,BL,AH,CH,DH,BH</op>
             <op flag_AF="w" flag_CF="r/w" flag_OF="w" flag_PF="w" flag_SF="w" flag_ZF="w" idx="3" r="1" suppressed="1" type="flags" w="1"/>
         </instruction>
-        <instruction asm="{load} REX ADC" category="BINARY" cpl="3" extension="BASE" rex="1">
+        <instruction asm="REX ADC" category="BINARY" cpl="3" extension="BASE" rex="1">
             <op idx="1" r="1" type="reg" w="1" width="8">GPR</op>
             <op idx="2" r="1" type="reg" width="8">GPR</op>
             <op flag_AF="w" flag_CF="r/w" flag_OF="w" flag_PF="w" flag_SF="w" flag_ZF="w" idx="3" r="1" suppressed="1" type="flags" w="1"/>
@@ -110,17 +110,17 @@
             <op idx="2" r="1" type="reg" width="64">GPR</op>
             <op flag_AF="w" flag_CF="r/w" flag_OF="w" flag_PF="w" flag_SF="w" flag_ZF="w" idx="3" r="1" suppressed="1" type="flags" w="1"/>
         </instruction>
-        <instruction asm="{load} ADC" category="BINARY" cpl="3" eosz="1" extension="BASE">
+        <instruction asm="ADC" category="BINARY" cpl="3" eosz="1" extension="BASE">
             <op idx="1" r="1" type="reg" w="1" width="16">GPR</op>
             <op idx="2" r="1" type="reg" width="16">GPR</op>
             <op flag_AF="w" flag_CF="r/w" flag_OF="w" flag_PF="w" flag_SF="w" flag_ZF="w" idx="3" r="1" suppressed="1" type="flags" w="1"/>
         </instruction>
-        <instruction asm="{load} ADC" category="BINARY" cpl="3" eosz="2" extension="BASE">
+        <instruction asm="ADC" category="BINARY" cpl="3" eosz="2" extension="BASE">
             <op idx="1" r="1" type="reg" w="1" width="32">GPR</op>
             <op idx="2" r="1" type="reg" width="32">GPR</op>
             <op flag_AF="w" flag_CF="r/w" flag_OF="w" flag_PF="w" flag_SF="w" flag_ZF="w" idx="3" r="1" suppressed="1" type="flags" w="1"/>
         </instruction>
-        <instruction asm="{load} ADC" category="BINARY" cpl="3" eosz="3" extension="BASE">
+        <instruction asm="ADC" category="BINARY" cpl="3" eosz="3" extension="BASE">
             <op idx="1" r="1" type="reg" w="1" width="64">GPR</op>
             <op idx="2" r="1" type="reg" width="64">GPR</op>
             <op flag_AF="w" flag_CF="r/w" flag_OF="w" flag_PF="w" flag_SF="w" flag_ZF="w" idx="3" r="1" suppressed="1" type="flags" w="1"/>
@@ -135,12 +135,12 @@
             <op idx="2" r="1" type="mem" width="8" xtype="u8"/>
             <op flag_AF="w" flag_CF="r/w" flag_OF="w" flag_PF="w" flag_SF="w" flag_ZF="w" idx="3" r="1" suppressed="1" type="flags" w="1"/>
         </instruction>
-        <instruction asm="{store} ADC" category="BINARY" cpl="3" extension="BASE" rex="0">
+        <instruction asm="ADC" category="BINARY" cpl="3" extension="BASE" rex="0">
             <op idx="1" r="1" type="reg" w="1" width="8">AL,CL,DL,BL,AH,CH,DH,BH</op>
             <op idx="2" r="1" type="reg" width="8">AL,CL,DL,BL,AH,CH,DH,BH</op>
             <op flag_AF="w" flag_CF="r/w" flag_OF="w" flag_PF="w" flag_SF="w" flag_ZF="w" idx="3" r="1" suppressed="1" type="flags" w="1"/>
         </instruction>
-        <instruction asm="{store} REX ADC" category="BINARY" cpl="3" extension="BASE" rex="1">
+        <instruction asm="REX ADC" category="BINARY" cpl="3" extension="BASE" rex="1">
             <op idx="1" r="1" type="reg" w="1" width="8">GPR</op>
             <op idx="2" r="1" type="reg" width="8">GPR</op>
             <op flag_AF="w" flag_CF="r/w" flag_OF="w" flag_PF="w" flag_SF="w" flag_ZF="w" idx="3" r="1" suppressed="1" type="flags" w="1"/>
@@ -160,17 +160,17 @@
             <op idx="2" r="1" type="mem" width="64" xtype="int"/>
             <op flag_AF="w" flag_CF="r/w" flag_OF="w" flag_PF="w" flag_SF="w" flag_ZF="w" idx="3" r="1" suppressed="1" type="flags" w="1"/>
         </instruction>
-        <instruction asm="{store} ADC" category="BINARY" cpl="3" eosz="1" extension="BASE">
+        <instruction asm="ADC" category="BINARY" cpl="3" eosz="1" extension="BASE">
             <op idx="1" r="1" type="reg" w="1" width="16">GPR</op>
             <op idx="2" r="1" type="reg" width="16">GPR</op>
             <op flag_AF="w" flag_CF="r/w" flag_OF="w" flag_PF="w" flag_SF="w" flag_ZF="w" idx="3" r="1" suppressed="1" type="flags" w="1"/>
         </instruction>
-        <instruction asm="{store} ADC" category="BINARY" cpl="3" eosz="2" extension="BASE">
+        <instruction asm="ADC" category="BINARY" cpl="3" eosz="2" extension="BASE">
             <op idx="1" r="1" type="reg" w="1" width="32">GPR</op>
             <op idx="2" r="1" type="reg" width="32">GPR</op>
             <op flag_AF="w" flag_CF="r/w" flag_OF="w" flag_PF="w" flag_SF="w" flag_ZF="w" idx="3" r="1" suppressed="1" type="flags" w="1"/>
         </instruction>
-        <instruction asm="{store} ADC" category="BINARY" cpl="3" eosz="3" extension="BASE">
+        <instruction asm="ADC" category="BINARY" cpl="3" eosz="3" extension="BASE">
             <op idx="1" r="1" type="reg" w="1" width="64">GPR</op>
             <op idx="2" r="1" type="reg" width="64">GPR</op>
             <op flag_AF="w" flag_CF="r/w" flag_OF="w" flag_PF="w" flag_SF="w" flag_ZF="w" idx="3" r="1" suppressed="1" type="flags" w="1"/>
@@ -340,12 +340,12 @@
             <op idx="2" r="1" type="reg" width="8">GPR</op>
             <op flag_AF="w" flag_CF="w" flag_OF="w" flag_PF="w" flag_SF="w" flag_ZF="w" idx="3" suppressed="1" type="flags" w="1"/>
         </instruction>
-        <instruction asm="{load} ADD" category="BINARY" cpl="3" extension="BASE" rex="0">
+        <instruction asm="ADD" category="BINARY" cpl="3" extension="BASE" rex="0">
             <op idx="1" r="1" type="reg" w="1" width="8">AL,CL,DL,BL,AH,CH,DH,BH</op>
             <op idx="2" r="1" type="reg" width="8">AL,CL,DL,BL,AH,CH,DH,BH</op>
             <op flag_AF="w" flag_CF="w" flag_OF="w" flag_PF="w" flag_SF="w" flag_ZF="w" idx="3" suppressed="1" type="flags" w="1"/>
         </instruction>
-        <instruction asm="{load} REX ADD" category="BINARY" cpl="3" extension="BASE" rex="1">
+        <instruction asm="REX ADD" category="BINARY" cpl="3" extension="BASE" rex="1">
             <op idx="1" r="1" type="reg" w="1" width="8">GPR</op>
             <op idx="2" r="1" type="reg" width="8">GPR</op>
             <op flag_AF="w" flag_CF="w" flag_OF="w" flag_PF="w" flag_SF="w" flag_ZF="w" idx="3" suppressed="1" type="flags" w="1"/>
@@ -365,17 +365,17 @@
             <op idx="2" r="1" type="reg" width="64">GPR</op>
             <op flag_AF="w" flag_CF="w" flag_OF="w" flag_PF="w" flag_SF="w" flag_ZF="w" idx="3" suppressed="1" type="flags" w="1"/>
         </instruction>
-        <instruction asm="{load} ADD" category="BINARY" cpl="3" eosz="1" extension="BASE">
+        <instruction asm="ADD" category="BINARY" cpl="3" eosz="1" extension="BASE">
             <op idx="1" r="1" type="reg" w="1" width="16">GPR</op>
             <op idx="2" r="1" type="reg" width="16">GPR</op>
             <op flag_AF="w" flag_CF="w" flag_OF="w" flag_PF="w" flag_SF="w" flag_ZF="w" idx="3" suppressed="1" type="flags" w="1"/>
         </instruction>
-        <instruction asm="{load} ADD" category="BINARY" cpl="3" eosz="2" extension="BASE">
+        <instruction asm="ADD" category="BINARY" cpl="3" eosz="2" extension="BASE">
             <op idx="1" r="1" type="reg" w="1" width="32">GPR</op>
             <op idx="2" r="1" type="reg" width="32">GPR</op>
             <op flag_AF="w" flag_CF="w" flag_OF="w" flag_PF="w" flag_SF="w" flag_ZF="w" idx="3" suppressed="1" type="flags" w="1"/>
         </instruction>
-        <instruction asm="{load} ADD" category="BINARY" cpl="3" eosz="3" extension="BASE">
+        <instruction asm="ADD" category="BINARY" cpl="3" eosz="3" extension="BASE">
             <op idx="1" r="1" type="reg" w="1" width="64">GPR</op>
             <op idx="2" r="1" type="reg" width="64">GPR</op>
             <op flag_AF="w" flag_CF="w" flag_OF="w" flag_PF="w" flag_SF="w" flag_ZF="w" idx="3" suppressed="1" type="flags" w="1"/>
@@ -390,12 +390,12 @@
             <op idx="2" r="1" type="mem" width="8" xtype="u8"/>
             <op flag_AF="w" flag_CF="w" flag_OF="w" flag_PF="w" flag_SF="w" flag_ZF="w" idx="3" suppressed="1" type="flags" w="1"/>
         </instruction>
-        <instruction asm="{store} ADD" category="BINARY" cpl="3" extension="BASE" rex="0">
+        <instruction asm="ADD" category="BINARY" cpl="3" extension="BASE" rex="0">
             <op idx="1" r="1" type="reg" w="1" width="8">AL,CL,DL,BL,AH,CH,DH,BH</op>
             <op idx="2" r="1" type="reg" width="8">AL,CL,DL,BL,AH,CH,DH,BH</op>
             <op flag_AF="w" flag_CF="w" flag_OF="w" flag_PF="w" flag_SF="w" flag_ZF="w" idx="3" suppressed="1" type="flags" w="1"/>
         </instruction>
-        <instruction asm="{store} REX ADD" category="BINARY" cpl="3" extension="BASE" rex="1">
+        <instruction asm="REX ADD" category="BINARY" cpl="3" extension="BASE" rex="1">
             <op idx="1" r="1" type="reg" w="1" width="8">GPR</op>
             <op idx="2" r="1" type="reg" width="8">GPR</op>
             <op flag_AF="w" flag_CF="w" flag_OF="w" flag_PF="w" flag_SF="w" flag_ZF="w" idx="3" suppressed="1" type="flags" w="1"/>
@@ -415,17 +415,17 @@
             <op idx="2" r="1" type="mem" width="64" xtype="int"/>
             <op flag_AF="w" flag_CF="w" flag_OF="w" flag_PF="w" flag_SF="w" flag_ZF="w" idx="3" suppressed="1" type="flags" w="1"/>
         </instruction>
-        <instruction asm="{store} ADD" category="BINARY" cpl="3" eosz="1" extension="BASE">
+        <instruction asm="ADD" category="BINARY" cpl="3" eosz="1" extension="BASE">
             <op idx="1" r="1" type="reg" w="1" width="16">GPR</op>
             <op idx="2" r="1" type="reg" width="16">GPR</op>
             <op flag_AF="w" flag_CF="w" flag_OF="w" flag_PF="w" flag_SF="w" flag_ZF="w" idx="3" suppressed="1" type="flags" w="1"/>
         </instruction>
-        <instruction asm="{store} ADD" category="BINARY" cpl="3" eosz="2" extension="BASE">
+        <instruction asm="ADD" category="BINARY" cpl="3" eosz="2" extension="BASE">
             <op idx="1" r="1" type="reg" w="1" width="32">GPR</op>
             <op idx="2" r="1" type="reg" width="32">GPR</op>
             <op flag_AF="w" flag_CF="w" flag_OF="w" flag_PF="w" flag_SF="w" flag_ZF="w" idx="3" suppressed="1" type="flags" w="1"/>
         </instruction>
-        <instruction asm="{store} ADD" category="BINARY" cpl="3" eosz="3" extension="BASE">
+        <instruction asm="ADD" category="BINARY" cpl="3" eosz="3" extension="BASE">
             <op idx="1" r="1" type="reg" w="1" width="64">GPR</op>
             <op idx="2" r="1" type="reg" width="64">GPR</op>
             <op flag_AF="w" flag_CF="w" flag_OF="w" flag_PF="w" flag_SF="w" flag_ZF="w" idx="3" suppressed="1" type="flags" w="1"/>
@@ -595,12 +595,12 @@
             <op idx="2" r="1" type="reg" width="8">GPR</op>
             <op flag_AF="undef" flag_CF="w" flag_OF="w" flag_PF="w" flag_SF="w" flag_ZF="w" idx="3" suppressed="1" type="flags" w="1"/>
         </instruction>
-        <instruction asm="{load} AND" category="LOGICAL" cpl="3" extension="BASE" rex="0">
+        <instruction asm="AND" category="LOGICAL" cpl="3" extension="BASE" rex="0">
             <op idx="1" r="1" type="reg" w="1" width="8">AL,CL,DL,BL,AH,CH,DH,BH</op>
             <op idx="2" r="1" type="reg" width="8">AL,CL,DL,BL,AH,CH,DH,BH</op>
             <op flag_AF="undef" flag_CF="w" flag_OF="w" flag_PF="w" flag_SF="w" flag_ZF="w" idx="3" suppressed="1" type="flags" w="1"/>
         </instruction>
-        <instruction asm="{load} REX AND" category="LOGICAL" cpl="3" extension="BASE" rex="1">
+        <instruction asm="REX AND" category="LOGICAL" cpl="3" extension="BASE" rex="1">
             <op idx="1" r="1" type="reg" w="1" width="8">GPR</op>
             <op idx="2" r="1" type="reg" width="8">GPR</op>
             <op flag_AF="undef" flag_CF="w" flag_OF="w" flag_PF="w" flag_SF="w" flag_ZF="w" idx="3" suppressed="1" type="flags" w="1"/>
@@ -620,27 +620,27 @@
             <op idx="2" r="1" type="reg" width="64">GPR</op>
             <op flag_AF="undef" flag_CF="w" flag_OF="w" flag_PF="w" flag_SF="w" flag_ZF="w" idx="3" suppressed="1" type="flags" w="1"/>
         </instruction>
-        <instruction asm="{load} AND" category="LOGICAL" cpl="3" eosz="1" extension="BASE">
+        <instruction asm="AND" category="LOGICAL" cpl="3" eosz="1" extension="BASE">
             <op idx="1" r="1" type="reg" w="1" width="16">GPR</op>
             <op idx="2" r="1" type="reg" width="16">GPR</op>
             <op flag_AF="undef" flag_CF="w" flag_OF="w" flag_PF="w" flag_SF="w" flag_ZF="w" idx="3" suppressed="1" type="flags" w="1"/>
         </instruction>
-        <instruction asm="{load} AND" category="LOGICAL" cpl="3" eosz="2" extension="BASE">
+        <instruction asm="AND" category="LOGICAL" cpl="3" eosz="2" extension="BASE">
             <op idx="1" r="1" type="reg" w="1" width="32">GPR</op>
             <op idx="2" r="1" type="reg" width="32">GPR</op>
             <op flag_AF="undef" flag_CF="w" flag_OF="w" flag_PF="w" flag_SF="w" flag_ZF="w" idx="3" suppressed="1" type="flags" w="1"/>
         </instruction>
-        <instruction asm="{load} AND" category="LOGICAL" cpl="3" eosz="3" extension="BASE">
+        <instruction asm="AND" category="LOGICAL" cpl="3" eosz="3" extension="BASE">
             <op idx="1" r="1" type="reg" w="1" width="64">GPR</op>
             <op idx="2" r="1" type="reg" width="64">GPR</op>
             <op flag_AF="undef" flag_CF="w" flag_OF="w" flag_PF="w" flag_SF="w" flag_ZF="w" idx="3" suppressed="1" type="flags" w="1"/>
         </instruction>
-        <instruction asm="{store} AND" category="LOGICAL" cpl="3" extension="BASE" rex="0">
+        <instruction asm="AND" category="LOGICAL" cpl="3" extension="BASE" rex="0">
             <op idx="1" r="1" type="reg" w="1" width="8">AL,CL,DL,BL,AH,CH,DH,BH</op>
             <op idx="2" r="1" type="reg" width="8">AL,CL,DL,BL,AH,CH,DH,BH</op>
             <op flag_AF="undef" flag_CF="w" flag_OF="w" flag_PF="w" flag_SF="w" flag_ZF="w" idx="3" suppressed="1" type="flags" w="1"/>
         </instruction>
-        <instruction asm="{store} REX AND" category="LOGICAL" cpl="3" extension="BASE" rex="1">
+        <instruction asm="REX AND" category="LOGICAL" cpl="3" extension="BASE" rex="1">
             <op idx="1" r="1" type="reg" w="1" width="8">GPR</op>
             <op idx="2" r="1" type="reg" width="8">GPR</op>
             <op flag_AF="undef" flag_CF="w" flag_OF="w" flag_PF="w" flag_SF="w" flag_ZF="w" idx="3" suppressed="1" type="flags" w="1"/>
@@ -655,17 +655,17 @@
             <op idx="2" r="1" type="mem" width="8" xtype="u8"/>
             <op flag_AF="undef" flag_CF="w" flag_OF="w" flag_PF="w" flag_SF="w" flag_ZF="w" idx="3" suppressed="1" type="flags" w="1"/>
         </instruction>
-        <instruction asm="{store} AND" category="LOGICAL" cpl="3" eosz="1" extension="BASE">
+        <instruction asm="AND" category="LOGICAL" cpl="3" eosz="1" extension="BASE">
             <op idx="1" r="1" type="reg" w="1" width="16">GPR</op>
             <op idx="2" r="1" type="reg" width="16">GPR</op>
             <op flag_AF="undef" flag_CF="w" flag_OF="w" flag_PF="w" flag_SF="w" flag_ZF="w" idx="3" suppressed="1" type="flags" w="1"/>
         </instruction>
-        <instruction asm="{store} AND" category="LOGICAL" cpl="3" eosz="2" extension="BASE">
+        <instruction asm="AND" category="LOGICAL" cpl="3" eosz="2" extension="BASE">
             <op idx="1" r="1" type="reg" w="1" width="32">GPR</op>
             <op idx="2" r="1" type="reg" width="32">GPR</op>
             <op flag_AF="undef" flag_CF="w" flag_OF="w" flag_PF="w" flag_SF="w" flag_ZF="w" idx="3" suppressed="1" type="flags" w="1"/>
         </instruction>
-        <instruction asm="{store} AND" category="LOGICAL" cpl="3" eosz="3" extension="BASE">
+        <instruction asm="AND" category="LOGICAL" cpl="3" eosz="3" extension="BASE">
             <op idx="1" r="1" type="reg" w="1" width="64">GPR</op>
             <op idx="2" r="1" type="reg" width="64">GPR</op>
             <op flag_AF="undef" flag_CF="w" flag_OF="w" flag_PF="w" flag_SF="w" flag_ZF="w" idx="3" suppressed="1" type="flags" w="1"/>
@@ -1191,7 +1191,7 @@
             <op idx="3" r="1" suppressed="1" type="reg" w="1" width="64">RIP</op>
             <op base="RSP" idx="4" seg="SS" suppressed="1" type="mem" w="1" width="64" xtype="int"/>
         </instruction>
-        <instruction asm="{disp32} CALL" category="CALL" cpl="3" eosz="3" extension="BASE">
+        <instruction asm="CALL" category="CALL" cpl="3" eosz="3" extension="BASE">
             <op idx="1" r="1" type="relbr" width="32"/>
             <op idx="2" r="1" suppressed="1" type="reg" w="1" width="64">RSP</op>
             <op idx="3" r="1" suppressed="1" type="reg" w="1" width="64">RIP</op>
@@ -1784,12 +1784,12 @@
             <op idx="2" r="1" type="reg" width="8">GPR</op>
             <op flag_AF="w" flag_CF="w" flag_OF="w" flag_PF="w" flag_SF="w" flag_ZF="w" idx="3" suppressed="1" type="flags" w="1"/>
         </instruction>
-        <instruction asm="{load} CMP" category="BINARY" cpl="3" extension="BASE" rex="0">
+        <instruction asm="CMP" category="BINARY" cpl="3" extension="BASE" rex="0">
             <op idx="1" r="1" type="reg" width="8">AL,CL,DL,BL,AH,CH,DH,BH</op>
             <op idx="2" r="1" type="reg" width="8">AL,CL,DL,BL,AH,CH,DH,BH</op>
             <op flag_AF="w" flag_CF="w" flag_OF="w" flag_PF="w" flag_SF="w" flag_ZF="w" idx="3" suppressed="1" type="flags" w="1"/>
         </instruction>
-        <instruction asm="{load} REX CMP" category="BINARY" cpl="3" extension="BASE" rex="1">
+        <instruction asm="REX CMP" category="BINARY" cpl="3" extension="BASE" rex="1">
             <op idx="1" r="1" type="reg" width="8">GPR</op>
             <op idx="2" r="1" type="reg" width="8">GPR</op>
             <op flag_AF="w" flag_CF="w" flag_OF="w" flag_PF="w" flag_SF="w" flag_ZF="w" idx="3" suppressed="1" type="flags" w="1"/>
@@ -1809,17 +1809,17 @@
             <op idx="2" r="1" type="reg" width="64">GPR</op>
             <op flag_AF="w" flag_CF="w" flag_OF="w" flag_PF="w" flag_SF="w" flag_ZF="w" idx="3" suppressed="1" type="flags" w="1"/>
         </instruction>
-        <instruction asm="{load} CMP" category="BINARY" cpl="3" eosz="1" extension="BASE">
+        <instruction asm="CMP" category="BINARY" cpl="3" eosz="1" extension="BASE">
             <op idx="1" r="1" type="reg" width="16">GPR</op>
             <op idx="2" r="1" type="reg" width="16">GPR</op>
             <op flag_AF="w" flag_CF="w" flag_OF="w" flag_PF="w" flag_SF="w" flag_ZF="w" idx="3" suppressed="1" type="flags" w="1"/>
         </instruction>
-        <instruction asm="{load} CMP" category="BINARY" cpl="3" eosz="2" extension="BASE">
+        <instruction asm="CMP" category="BINARY" cpl="3" eosz="2" extension="BASE">
             <op idx="1" r="1" type="reg" width="32">GPR</op>
             <op idx="2" r="1" type="reg" width="32">GPR</op>
             <op flag_AF="w" flag_CF="w" flag_OF="w" flag_PF="w" flag_SF="w" flag_ZF="w" idx="3" suppressed="1" type="flags" w="1"/>
         </instruction>
-        <instruction asm="{load} CMP" category="BINARY" cpl="3" eosz="3" extension="BASE">
+        <instruction asm="CMP" category="BINARY" cpl="3" eosz="3" extension="BASE">
             <op idx="1" r="1" type="reg" width="64">GPR</op>
             <op idx="2" r="1" type="reg" width="64">GPR</op>
             <op flag_AF="w" flag_CF="w" flag_OF="w" flag_PF="w" flag_SF="w" flag_ZF="w" idx="3" suppressed="1" type="flags" w="1"/>
@@ -1834,12 +1834,12 @@
             <op idx="2" r="1" type="mem" width="8" xtype="u8"/>
             <op flag_AF="w" flag_CF="w" flag_OF="w" flag_PF="w" flag_SF="w" flag_ZF="w" idx="3" suppressed="1" type="flags" w="1"/>
         </instruction>
-        <instruction asm="{store} CMP" category="BINARY" cpl="3" extension="BASE" rex="0">
+        <instruction asm="CMP" category="BINARY" cpl="3" extension="BASE" rex="0">
             <op idx="1" r="1" type="reg" width="8">AL,CL,DL,BL,AH,CH,DH,BH</op>
             <op idx="2" r="1" type="reg" width="8">AL,CL,DL,BL,AH,CH,DH,BH</op>
             <op flag_AF="w" flag_CF="w" flag_OF="w" flag_PF="w" flag_SF="w" flag_ZF="w" idx="3" suppressed="1" type="flags" w="1"/>
         </instruction>
-        <instruction asm="{store} REX CMP" category="BINARY" cpl="3" extension="BASE" rex="1">
+        <instruction asm="REX CMP" category="BINARY" cpl="3" extension="BASE" rex="1">
             <op idx="1" r="1" type="reg" width="8">GPR</op>
             <op idx="2" r="1" type="reg" width="8">GPR</op>
             <op flag_AF="w" flag_CF="w" flag_OF="w" flag_PF="w" flag_SF="w" flag_ZF="w" idx="3" suppressed="1" type="flags" w="1"/>
@@ -1859,17 +1859,17 @@
             <op idx="2" r="1" type="mem" width="64" xtype="int"/>
             <op flag_AF="w" flag_CF="w" flag_OF="w" flag_PF="w" flag_SF="w" flag_ZF="w" idx="3" suppressed="1" type="flags" w="1"/>
         </instruction>
-        <instruction asm="{store} CMP" category="BINARY" cpl="3" eosz="1" extension="BASE">
+        <instruction asm="CMP" category="BINARY" cpl="3" eosz="1" extension="BASE">
             <op idx="1" r="1" type="reg" width="16">GPR</op>
             <op idx="2" r="1" type="reg" width="16">GPR</op>
             <op flag_AF="w" flag_CF="w" flag_OF="w" flag_PF="w" flag_SF="w" flag_ZF="w" idx="3" suppressed="1" type="flags" w="1"/>
         </instruction>
-        <instruction asm="{store} CMP" category="BINARY" cpl="3" eosz="2" extension="BASE">
+        <instruction asm="CMP" category="BINARY" cpl="3" eosz="2" extension="BASE">
             <op idx="1" r="1" type="reg" width="32">GPR</op>
             <op idx="2" r="1" type="reg" width="32">GPR</op>
             <op flag_AF="w" flag_CF="w" flag_OF="w" flag_PF="w" flag_SF="w" flag_ZF="w" idx="3" suppressed="1" type="flags" w="1"/>
         </instruction>
-        <instruction asm="{store} CMP" category="BINARY" cpl="3" eosz="3" extension="BASE">
+        <instruction asm="CMP" category="BINARY" cpl="3" eosz="3" extension="BASE">
             <op idx="1" r="1" type="reg" width="64">GPR</op>
             <op idx="2" r="1" type="reg" width="64">GPR</op>
             <op flag_AF="w" flag_CF="w" flag_OF="w" flag_PF="w" flag_SF="w" flag_ZF="w" idx="3" suppressed="1" type="flags" w="1"/>
@@ -2271,19 +2271,19 @@
             <op idx="3" r="1" type="imm" width="32"/>
             <op flag_AF="undef" flag_CF="w" flag_OF="w" flag_PF="undef" flag_SF="undef" flag_ZF="undef" idx="4" suppressed="1" type="flags" w="1"/>
         </instruction>
-        <instruction asm="{store} IMUL" category="BINARY" cpl="3" eosz="1" extension="BASE">
+        <instruction asm="IMUL" category="BINARY" cpl="3" eosz="1" extension="BASE">
             <op idx="1" type="reg" w="1" width="16">GPR</op>
             <op idx="2" r="1" type="reg" width="16">GPR</op>
             <op idx="3" r="1" type="imm" width="16"/>
             <op flag_AF="undef" flag_CF="w" flag_OF="w" flag_PF="undef" flag_SF="undef" flag_ZF="undef" idx="4" suppressed="1" type="flags" w="1"/>
         </instruction>
-        <instruction asm="{store} IMUL" category="BINARY" cpl="3" eosz="2" extension="BASE">
+        <instruction asm="IMUL" category="BINARY" cpl="3" eosz="2" extension="BASE">
             <op idx="1" type="reg" w="1" width="32">GPR</op>
             <op idx="2" r="1" type="reg" width="32">GPR</op>
             <op idx="3" r="1" type="imm" width="32"/>
             <op flag_AF="undef" flag_CF="w" flag_OF="w" flag_PF="undef" flag_SF="undef" flag_ZF="undef" idx="4" suppressed="1" type="flags" w="1"/>
         </instruction>
-        <instruction asm="{store} IMUL" category="BINARY" cpl="3" eosz="3" extension="BASE">
+        <instruction asm="IMUL" category="BINARY" cpl="3" eosz="3" extension="BASE">
             <op idx="1" type="reg" w="1" width="64">GPR</op>
             <op idx="2" r="1" type="reg" width="64">GPR</op>
             <op idx="3" r="1" type="imm" width="32"/>
@@ -2307,19 +2307,19 @@
             <op idx="3" r="1" type="imm" width="8"/>
             <op flag_AF="undef" flag_CF="w" flag_OF="w" flag_PF="undef" flag_SF="undef" flag_ZF="undef" idx="4" suppressed="1" type="flags" w="1"/>
         </instruction>
-        <instruction asm="{load} IMUL" category="BINARY" cpl="3" eosz="1" extension="BASE">
+        <instruction asm="IMUL" category="BINARY" cpl="3" eosz="1" extension="BASE">
             <op idx="1" type="reg" w="1" width="16">GPR</op>
             <op idx="2" r="1" type="reg" width="16">GPR</op>
             <op idx="3" r="1" type="imm" width="8"/>
             <op flag_AF="undef" flag_CF="w" flag_OF="w" flag_PF="undef" flag_SF="undef" flag_ZF="undef" idx="4" suppressed="1" type="flags" w="1"/>
         </instruction>
-        <instruction asm="{load} IMUL" category="BINARY" cpl="3" eosz="2" extension="BASE">
+        <instruction asm="IMUL" category="BINARY" cpl="3" eosz="2" extension="BASE">
             <op idx="1" type="reg" w="1" width="32">GPR</op>
             <op idx="2" r="1" type="reg" width="32">GPR</op>
             <op idx="3" r="1" type="imm" width="8"/>
             <op flag_AF="undef" flag_CF="w" flag_OF="w" flag_PF="undef" flag_SF="undef" flag_ZF="undef" idx="4" suppressed="1" type="flags" w="1"/>
         </instruction>
-        <instruction asm="{load} IMUL" category="BINARY" cpl="3" eosz="3" extension="BASE">
+        <instruction asm="IMUL" category="BINARY" cpl="3" eosz="3" extension="BASE">
             <op idx="1" type="reg" w="1" width="64">GPR</op>
             <op idx="2" r="1" type="reg" width="64">GPR</op>
             <op idx="3" r="1" type="imm" width="8"/>
@@ -2483,7 +2483,7 @@
             <op idx="2" r="1" suppressed="1" type="reg" w="1" width="64">RIP</op>
             <op flag_CF="r" idx="3" r="1" suppressed="1" type="flags"/>
         </instruction>
-        <instruction asm="{disp32} JB" category="COND_BR" cpl="3" extension="BASE">
+        <instruction asm="JB" category="COND_BR" cpl="3" extension="BASE">
             <op idx="1" r="1" type="relbr" width="32"/>
             <op idx="2" r="1" suppressed="1" type="reg" w="1" width="64">RIP</op>
             <op flag_CF="r" idx="3" r="1" suppressed="1" type="flags"/>
@@ -2493,7 +2493,7 @@
             <op idx="2" r="1" suppressed="1" type="reg" w="1" width="64">RIP</op>
             <op flag_CF="r" flag_ZF="r" idx="3" r="1" suppressed="1" type="flags"/>
         </instruction>
-        <instruction asm="{disp32} JBE" category="COND_BR" cpl="3" extension="BASE">
+        <instruction asm="JBE" category="COND_BR" cpl="3" extension="BASE">
             <op idx="1" r="1" type="relbr" width="32"/>
             <op idx="2" r="1" suppressed="1" type="reg" w="1" width="64">RIP</op>
             <op flag_CF="r" flag_ZF="r" idx="3" r="1" suppressed="1" type="flags"/>
@@ -2503,7 +2503,7 @@
             <op idx="2" r="1" suppressed="1" type="reg" w="1" width="64">RIP</op>
             <op flag_OF="r" flag_SF="r" idx="3" r="1" suppressed="1" type="flags"/>
         </instruction>
-        <instruction asm="{disp32} JL" category="COND_BR" cpl="3" extension="BASE">
+        <instruction asm="JL" category="COND_BR" cpl="3" extension="BASE">
             <op idx="1" r="1" type="relbr" width="32"/>
             <op idx="2" r="1" suppressed="1" type="reg" w="1" width="64">RIP</op>
             <op flag_OF="r" flag_SF="r" idx="3" r="1" suppressed="1" type="flags"/>
@@ -2513,7 +2513,7 @@
             <op idx="2" r="1" suppressed="1" type="reg" w="1" width="64">RIP</op>
             <op flag_OF="r" flag_SF="r" flag_ZF="r" idx="3" r="1" suppressed="1" type="flags"/>
         </instruction>
-        <instruction asm="{disp32} JLE" category="COND_BR" cpl="3" extension="BASE">
+        <instruction asm="JLE" category="COND_BR" cpl="3" extension="BASE">
             <op idx="1" r="1" type="relbr" width="32"/>
             <op idx="2" r="1" suppressed="1" type="reg" w="1" width="64">RIP</op>
             <op flag_OF="r" flag_SF="r" flag_ZF="r" idx="3" r="1" suppressed="1" type="flags"/>
@@ -2526,7 +2526,7 @@
             <op idx="1" r="1" type="reg" width="64">GPR</op>
             <op idx="2" suppressed="1" type="reg" w="1" width="64">RIP</op>
         </instruction>
-        <instruction asm="{disp32} JMP" category="UNCOND_BR" cpl="3" extension="BASE">
+        <instruction asm="JMP" category="UNCOND_BR" cpl="3" extension="BASE">
             <op idx="1" r="1" type="relbr" width="32"/>
             <op idx="2" r="1" suppressed="1" type="reg" w="1" width="64">RIP</op>
         </instruction>
@@ -2551,7 +2551,7 @@
             <op idx="2" r="1" suppressed="1" type="reg" w="1" width="64">RIP</op>
             <op flag_CF="r" idx="3" r="1" suppressed="1" type="flags"/>
         </instruction>
-        <instruction asm="{disp32} JNB" category="COND_BR" cpl="3" extension="BASE">
+        <instruction asm="JNB" category="COND_BR" cpl="3" extension="BASE">
             <op idx="1" r="1" type="relbr" width="32"/>
             <op idx="2" r="1" suppressed="1" type="reg" w="1" width="64">RIP</op>
             <op flag_CF="r" idx="3" r="1" suppressed="1" type="flags"/>
@@ -2561,7 +2561,7 @@
             <op idx="2" r="1" suppressed="1" type="reg" w="1" width="64">RIP</op>
             <op flag_CF="r" flag_ZF="r" idx="3" r="1" suppressed="1" type="flags"/>
         </instruction>
-        <instruction asm="{disp32} JNBE" category="COND_BR" cpl="3" extension="BASE">
+        <instruction asm="JNBE" category="COND_BR" cpl="3" extension="BASE">
             <op idx="1" r="1" type="relbr" width="32"/>
             <op idx="2" r="1" suppressed="1" type="reg" w="1" width="64">RIP</op>
             <op flag_CF="r" flag_ZF="r" idx="3" r="1" suppressed="1" type="flags"/>
@@ -2571,7 +2571,7 @@
             <op idx="2" r="1" suppressed="1" type="reg" w="1" width="64">RIP</op>
             <op flag_OF="r" flag_SF="r" idx="3" r="1" suppressed="1" type="flags"/>
         </instruction>
-        <instruction asm="{disp32} JNL" category="COND_BR" cpl="3" extension="BASE">
+        <instruction asm="JNL" category="COND_BR" cpl="3" extension="BASE">
             <op idx="1" r="1" type="relbr" width="32"/>
             <op idx="2" r="1" suppressed="1" type="reg" w="1" width="64">RIP</op>
             <op flag_OF="r" flag_SF="r" idx="3" r="1" suppressed="1" type="flags"/>
@@ -2581,7 +2581,7 @@
             <op idx="2" r="1" suppressed="1" type="reg" w="1" width="64">RIP</op>
             <op flag_OF="r" flag_SF="r" flag_ZF="r" idx="3" r="1" suppressed="1" type="flags"/>
         </instruction>
-        <instruction asm="{disp32} JNLE" category="COND_BR" cpl="3" extension="BASE">
+        <instruction asm="JNLE" category="COND_BR" cpl="3" extension="BASE">
             <op idx="1" r="1" type="relbr" width="32"/>
             <op idx="2" r="1" suppressed="1" type="reg" w="1" width="64">RIP</op>
             <op flag_OF="r" flag_SF="r" flag_ZF="r" idx="3" r="1" suppressed="1" type="flags"/>
@@ -2591,7 +2591,7 @@
             <op idx="2" r="1" suppressed="1" type="reg" w="1" width="64">RIP</op>
             <op flag_OF="r" idx="3" r="1" suppressed="1" type="flags"/>
         </instruction>
-        <instruction asm="{disp32} JNO" category="COND_BR" cpl="3" extension="BASE">
+        <instruction asm="JNO" category="COND_BR" cpl="3" extension="BASE">
             <op idx="1" r="1" type="relbr" width="32"/>
             <op idx="2" r="1" suppressed="1" type="reg" w="1" width="64">RIP</op>
             <op flag_OF="r" idx="3" r="1" suppressed="1" type="flags"/>
@@ -2601,7 +2601,7 @@
             <op idx="2" r="1" suppressed="1" type="reg" w="1" width="64">RIP</op>
             <op flag_PF="r" idx="3" r="1" suppressed="1" type="flags"/>
         </instruction>
-        <instruction asm="{disp32} JNP" category="COND_BR" cpl="3" extension="BASE">
+        <instruction asm="JNP" category="COND_BR" cpl="3" extension="BASE">
             <op idx="1" r="1" type="relbr" width="32"/>
             <op idx="2" r="1" suppressed="1" type="reg" w="1" width="64">RIP</op>
             <op flag_PF="r" idx="3" r="1" suppressed="1" type="flags"/>
@@ -2611,7 +2611,7 @@
             <op idx="2" r="1" suppressed="1" type="reg" w="1" width="64">RIP</op>
             <op flag_SF="r" idx="3" r="1" suppressed="1" type="flags"/>
         </instruction>
-        <instruction asm="{disp32} JNS" category="COND_BR" cpl="3" extension="BASE">
+        <instruction asm="JNS" category="COND_BR" cpl="3" extension="BASE">
             <op idx="1" r="1" type="relbr" width="32"/>
             <op idx="2" r="1" suppressed="1" type="reg" w="1" width="64">RIP</op>
             <op flag_SF="r" idx="3" r="1" suppressed="1" type="flags"/>
@@ -2621,7 +2621,7 @@
             <op idx="2" r="1" suppressed="1" type="reg" w="1" width="64">RIP</op>
             <op flag_ZF="r" idx="3" r="1" suppressed="1" type="flags"/>
         </instruction>
-        <instruction asm="{disp32} JNZ" category="COND_BR" cpl="3" extension="BASE">
+        <instruction asm="JNZ" category="COND_BR" cpl="3" extension="BASE">
             <op idx="1" r="1" type="relbr" width="32"/>
             <op idx="2" r="1" suppressed="1" type="reg" w="1" width="64">RIP</op>
             <op flag_ZF="r" idx="3" r="1" suppressed="1" type="flags"/>
@@ -2631,7 +2631,7 @@
             <op idx="2" r="1" suppressed="1" type="reg" w="1" width="64">RIP</op>
             <op flag_OF="r" idx="3" r="1" suppressed="1" type="flags"/>
         </instruction>
-        <instruction asm="{disp32} JO" category="COND_BR" cpl="3" extension="BASE">
+        <instruction asm="JO" category="COND_BR" cpl="3" extension="BASE">
             <op idx="1" r="1" type="relbr" width="32"/>
             <op idx="2" r="1" suppressed="1" type="reg" w="1" width="64">RIP</op>
             <op flag_OF="r" idx="3" r="1" suppressed="1" type="flags"/>
@@ -2641,7 +2641,7 @@
             <op idx="2" r="1" suppressed="1" type="reg" w="1" width="64">RIP</op>
             <op flag_PF="r" idx="3" r="1" suppressed="1" type="flags"/>
         </instruction>
-        <instruction asm="{disp32} JP" category="COND_BR" cpl="3" extension="BASE">
+        <instruction asm="JP" category="COND_BR" cpl="3" extension="BASE">
             <op idx="1" r="1" type="relbr" width="32"/>
             <op idx="2" r="1" suppressed="1" type="reg" w="1" width="64">RIP</op>
             <op flag_PF="r" idx="3" r="1" suppressed="1" type="flags"/>
@@ -2656,7 +2656,7 @@
             <op idx="2" r="1" suppressed="1" type="reg" w="1" width="64">RIP</op>
             <op flag_SF="r" idx="3" r="1" suppressed="1" type="flags"/>
         </instruction>
-        <instruction asm="{disp32} JS" category="COND_BR" cpl="3" extension="BASE">
+        <instruction asm="JS" category="COND_BR" cpl="3" extension="BASE">
             <op idx="1" r="1" type="relbr" width="32"/>
             <op idx="2" r="1" suppressed="1" type="reg" w="1" width="64">RIP</op>
             <op flag_SF="r" idx="3" r="1" suppressed="1" type="flags"/>
@@ -2666,7 +2666,7 @@
             <op idx="2" r="1" suppressed="1" type="reg" w="1" width="64">RIP</op>
             <op flag_ZF="r" idx="3" r="1" suppressed="1" type="flags"/>
         </instruction>
-        <instruction asm="{disp32} JZ" category="COND_BR" cpl="3" extension="BASE">
+        <instruction asm="JZ" category="COND_BR" cpl="3" extension="BASE">
             <op idx="1" r="1" type="relbr" width="32"/>
             <op idx="2" r="1" suppressed="1" type="reg" w="1" width="64">RIP</op>
             <op flag_ZF="r" idx="3" r="1" suppressed="1" type="flags"/>
@@ -2707,111 +2707,111 @@
         </instruction>
         <instruction agen="R" asm="LEA" category="MISC" cpl="3" eosz="1" extension="BASE">
             <op idx="1" type="reg" w="1" width="16">GPR</op>
-            <op idx="2" r="1" type="agen"/>
+            <op idx="2" r="1" type="agen" width="16"/>
         </instruction>
         <instruction agen="RD" asm="LEA" category="MISC" cpl="3" eosz="1" extension="BASE">
             <op idx="1" type="reg" w="1" width="16">GPR</op>
-            <op idx="2" r="1" type="agen"/>
+            <op idx="2" r="1" type="agen" width="16"/>
         </instruction>
         <instruction agen="B" asm="LEA" category="MISC" cpl="3" eosz="1" extension="BASE">
             <op idx="1" type="reg" w="1" width="16">GPR</op>
-            <op idx="2" r="1" type="agen"/>
+            <op idx="2" r="1" type="agen" width="16"/>
         </instruction>
         <instruction agen="I" asm="LEA" category="MISC" cpl="3" eosz="1" extension="BASE">
             <op idx="1" type="reg" w="1" width="16">GPR</op>
-            <op idx="2" r="1" type="agen"/>
+            <op idx="2" r="1" type="agen" width="16"/>
         </instruction>
         <instruction agen="D" asm="LEA" category="MISC" cpl="3" eosz="1" extension="BASE">
             <op idx="1" type="reg" w="1" width="16">GPR</op>
-            <op idx="2" r="1" type="agen"/>
+            <op idx="2" r="1" type="agen" width="16"/>
         </instruction>
         <instruction agen="BI" asm="LEA" category="MISC" cpl="3" eosz="1" extension="BASE">
             <op idx="1" type="reg" w="1" width="16">GPR</op>
-            <op idx="2" r="1" type="agen"/>
+            <op idx="2" r="1" type="agen" width="16"/>
         </instruction>
         <instruction agen="BD" asm="LEA" category="MISC" cpl="3" eosz="1" extension="BASE">
             <op idx="1" type="reg" w="1" width="16">GPR</op>
-            <op idx="2" r="1" type="agen"/>
+            <op idx="2" r="1" type="agen" width="16"/>
         </instruction>
         <instruction agen="ID" asm="LEA" category="MISC" cpl="3" eosz="1" extension="BASE">
             <op idx="1" type="reg" w="1" width="16">GPR</op>
-            <op idx="2" r="1" type="agen"/>
+            <op idx="2" r="1" type="agen" width="16"/>
         </instruction>
         <instruction agen="BID" asm="LEA" category="MISC" cpl="3" eosz="1" extension="BASE">
             <op idx="1" type="reg" w="1" width="16">GPR</op>
-            <op idx="2" r="1" type="agen"/>
+            <op idx="2" r="1" type="agen" width="16"/>
         </instruction>
         <instruction agen="R" asm="LEA" category="MISC" cpl="3" eosz="2" extension="BASE">
             <op idx="1" type="reg" w="1" width="32">GPR</op>
-            <op idx="2" r="1" type="agen"/>
+            <op idx="2" r="1" type="agen" width="32"/>
         </instruction>
         <instruction agen="RD" asm="LEA" category="MISC" cpl="3" eosz="2" extension="BASE">
             <op idx="1" type="reg" w="1" width="32">GPR</op>
-            <op idx="2" r="1" type="agen"/>
+            <op idx="2" r="1" type="agen" width="32"/>
         </instruction>
         <instruction agen="B" asm="LEA" category="MISC" cpl="3" eosz="2" extension="BASE">
             <op idx="1" type="reg" w="1" width="32">GPR</op>
-            <op idx="2" r="1" type="agen"/>
+            <op idx="2" r="1" type="agen" width="32"/>
         </instruction>
         <instruction agen="I" asm="LEA" category="MISC" cpl="3" eosz="2" extension="BASE">
             <op idx="1" type="reg" w="1" width="32">GPR</op>
-            <op idx="2" r="1" type="agen"/>
+            <op idx="2" r="1" type="agen" width="32"/>
         </instruction>
         <instruction agen="D" asm="LEA" category="MISC" cpl="3" eosz="2" extension="BASE">
             <op idx="1" type="reg" w="1" width="32">GPR</op>
-            <op idx="2" r="1" type="agen"/>
+            <op idx="2" r="1" type="agen" width="32"/>
         </instruction>
         <instruction agen="BI" asm="LEA" category="MISC" cpl="3" eosz="2" extension="BASE">
             <op idx="1" type="reg" w="1" width="32">GPR</op>
-            <op idx="2" r="1" type="agen"/>
+            <op idx="2" r="1" type="agen" width="32"/>
         </instruction>
         <instruction agen="BD" asm="LEA" category="MISC" cpl="3" eosz="2" extension="BASE">
             <op idx="1" type="reg" w="1" width="32">GPR</op>
-            <op idx="2" r="1" type="agen"/>
+            <op idx="2" r="1" type="agen" width="32"/>
         </instruction>
         <instruction agen="ID" asm="LEA" category="MISC" cpl="3" eosz="2" extension="BASE">
             <op idx="1" type="reg" w="1" width="32">GPR</op>
-            <op idx="2" r="1" type="agen"/>
+            <op idx="2" r="1" type="agen" width="32"/>
         </instruction>
         <instruction agen="BID" asm="LEA" category="MISC" cpl="3" eosz="2" extension="BASE">
             <op idx="1" type="reg" w="1" width="32">GPR</op>
-            <op idx="2" r="1" type="agen"/>
+            <op idx="2" r="1" type="agen" width="32"/>
         </instruction>
         <instruction agen="R" asm="LEA" category="MISC" cpl="3" eosz="3" extension="BASE">
             <op idx="1" type="reg" w="1" width="64">GPR</op>
-            <op idx="2" r="1" type="agen"/>
+            <op idx="2" r="1" type="agen" width="64"/>
         </instruction>
         <instruction agen="RD" asm="LEA" category="MISC" cpl="3" eosz="3" extension="BASE">
             <op idx="1" type="reg" w="1" width="64">GPR</op>
-            <op idx="2" r="1" type="agen"/>
+            <op idx="2" r="1" type="agen" width="64"/>
         </instruction>
         <instruction agen="B" asm="LEA" category="MISC" cpl="3" eosz="3" extension="BASE">
             <op idx="1" type="reg" w="1" width="64">GPR</op>
-            <op idx="2" r="1" type="agen"/>
+            <op idx="2" r="1" type="agen" width="64"/>
         </instruction>
         <instruction agen="I" asm="LEA" category="MISC" cpl="3" eosz="3" extension="BASE">
             <op idx="1" type="reg" w="1" width="64">GPR</op>
-            <op idx="2" r="1" type="agen"/>
+            <op idx="2" r="1" type="agen" width="64"/>
         </instruction>
         <instruction agen="D" asm="LEA" category="MISC" cpl="3" eosz="3" extension="BASE">
             <op idx="1" type="reg" w="1" width="64">GPR</op>
-            <op idx="2" r="1" type="agen"/>
+            <op idx="2" r="1" type="agen" width="64"/>
         </instruction>
         <instruction agen="BI" asm="LEA" category="MISC" cpl="3" eosz="3" extension="BASE">
             <op idx="1" type="reg" w="1" width="64">GPR</op>
-            <op idx="2" r="1" type="agen"/>
+            <op idx="2" r="1" type="agen" width="64"/>
         </instruction>
         <instruction agen="BD" asm="LEA" category="MISC" cpl="3" eosz="3" extension="BASE">
             <op idx="1" type="reg" w="1" width="64">GPR</op>
-            <op idx="2" r="1" type="agen"/>
+            <op idx="2" r="1" type="agen" width="64"/>
         </instruction>
         <instruction agen="ID" asm="LEA" category="MISC" cpl="3" eosz="3" extension="BASE">
             <op idx="1" type="reg" w="1" width="64">GPR</op>
-            <op idx="2" r="1" type="agen"/>
+            <op idx="2" r="1" type="agen" width="64"/>
         </instruction>
         <instruction agen="BID" asm="LEA" category="MISC" cpl="3" eosz="3" extension="BASE">
             <op idx="1" type="reg" w="1" width="64">GPR</op>
-            <op idx="2" r="1" type="agen"/>
+            <op idx="2" r="1" type="agen" width="64"/>
         </instruction>
         <instruction asm="LEAVEW" category="MISC" cpl="3" eosz="1" extension="BASE">
             <op base="RBP" idx="1" r="1" seg="SS" suppressed="1" type="mem" width="16" xtype="int"/>
@@ -2826,56 +2826,56 @@
         <instruction asm="LFS" category="SEGOP" cpl="3" eosz="1" extension="BASE">
             <op idx="1" type="reg" w="1" width="16">GPR</op>
             <op idx="2" r="1" type="mem" width="32" xtype="struct"/>
-            <op idx="3" suppressed="1" type="reg" w="1">FS</op>
+            <op idx="3" suppressed="1" type="reg" w="1" width="16">FS</op>
         </instruction>
         <instruction asm="LFS" category="SEGOP" cpl="3" eosz="2" extension="BASE">
             <op idx="1" type="reg" w="1" width="32">GPR</op>
             <op idx="2" r="1" type="mem" width="48" xtype="struct"/>
-            <op idx="3" suppressed="1" type="reg" w="1">FS</op>
+            <op idx="3" suppressed="1" type="reg" w="1" width="16">FS</op>
         </instruction>
         <instruction asm="LFS" category="SEGOP" cpl="3" eosz="3" extension="BASE">
             <op idx="1" type="reg" w="1" width="64">GPR</op>
             <op idx="2" r="1" type="mem" width="80" xtype="struct"/>
-            <op idx="3" suppressed="1" type="reg" w="1">FS</op>
+            <op idx="3" suppressed="1" type="reg" w="1" width="16">FS</op>
         </instruction>
         <instruction asm="LGDT" category="SYSTEM" cpl="3" extension="BASE">
             <op idx="1" r="1" type="mem" width="80" xtype="struct"/>
-            <op idx="2" suppressed="1" type="reg" w="1">GDTR</op>
+            <op idx="2" suppressed="1" type="reg" w="1" width="80">GDTR</op>
         </instruction>
         <instruction asm="LGS" category="SEGOP" cpl="3" eosz="1" extension="BASE">
             <op idx="1" type="reg" w="1" width="16">GPR</op>
             <op idx="2" r="1" type="mem" width="32" xtype="struct"/>
-            <op idx="3" suppressed="1" type="reg" w="1">GS</op>
+            <op idx="3" suppressed="1" type="reg" w="1" width="16">>GS</op>
         </instruction>
         <instruction asm="LGS" category="SEGOP" cpl="3" eosz="2" extension="BASE">
             <op idx="1" type="reg" w="1" width="32">GPR</op>
             <op idx="2" r="1" type="mem" width="48" xtype="struct"/>
-            <op idx="3" suppressed="1" type="reg" w="1">GS</op>
+            <op idx="3" suppressed="1" type="reg" w="1" width="16">GS</op>
         </instruction>
         <instruction asm="LGS" category="SEGOP" cpl="3" eosz="3" extension="BASE">
             <op idx="1" type="reg" w="1" width="64">GPR</op>
             <op idx="2" r="1" type="mem" width="80" xtype="struct"/>
-            <op idx="3" suppressed="1" type="reg" w="1">GS</op>
+            <op idx="3" suppressed="1" type="reg" w="1" width="16">GS</op>
         </instruction>
         <instruction asm="LIDT" category="SYSTEM" cpl="0" extension="BASE">
             <op idx="1" r="1" type="mem" width="80" xtype="struct"/>
-            <op idx="2" suppressed="1" type="reg" w="1">IDTR</op>
+            <op idx="2" suppressed="1" type="reg" w="1" width="80">>IDTR</op>
         </instruction>
         <instruction asm="LLDT" category="SYSTEM" cpl="0" extension="BASE">
             <op idx="1" r="1" type="mem" width="16" xtype="i16"/>
-            <op idx="2" suppressed="1" type="reg" w="1">LDTR</op>
+            <op idx="2" suppressed="1" type="reg" w="1" width="80">LDTR</op>
         </instruction>
         <instruction asm="LLDT" category="SYSTEM" cpl="0" extension="BASE">
             <op idx="1" r="1" type="reg" width="16">GPR</op>
-            <op idx="2" suppressed="1" type="reg" w="1">LDTR</op>
+            <op idx="2" suppressed="1" type="reg" w="1" width="80">LDTR</op>
         </instruction>
         <instruction asm="LMSW" category="SYSTEM" cpl="0" extension="BASE">
             <op idx="1" r="1" type="mem" width="16" xtype="i16"/>
-            <op idx="2" suppressed="1" type="reg" w="1">CR0</op>
+            <op idx="2" suppressed="1" type="reg" w="1" width="64">CR0</op>
         </instruction>
         <instruction asm="LMSW" category="SYSTEM" cpl="0" extension="BASE">
             <op idx="1" r="1" type="reg" width="16">GPR</op>
-            <op idx="2" suppressed="1" type="reg" w="1">CR0</op>
+            <op idx="2" suppressed="1" type="reg" w="1" width="64">CR0</op>
         </instruction>
         <instruction asm="LODSB" category="STRINGOP" cpl="3" extension="BASE">
             <op idx="1" suppressed="1" type="reg" w="1" width="8">AL</op>
@@ -2942,25 +2942,25 @@
         <instruction asm="LSS" category="SEGOP" cpl="3" eosz="1" extension="BASE">
             <op idx="1" type="reg" w="1" width="16">GPR</op>
             <op idx="2" r="1" type="mem" width="32" xtype="struct"/>
-            <op idx="3" suppressed="1" type="reg" w="1">SS</op>
+            <op idx="3" suppressed="1" type="reg" w="1" width="16">SS</op>
         </instruction>
         <instruction asm="LSS" category="SEGOP" cpl="3" eosz="2" extension="BASE">
             <op idx="1" type="reg" w="1" width="32">GPR</op>
             <op idx="2" r="1" type="mem" width="48" xtype="struct"/>
-            <op idx="3" suppressed="1" type="reg" w="1">SS</op>
+            <op idx="3" suppressed="1" type="reg" w="1" width="16">SS</op>
         </instruction>
         <instruction asm="LSS" category="SEGOP" cpl="3" eosz="3" extension="BASE">
             <op idx="1" type="reg" w="1" width="64">GPR</op>
             <op idx="2" r="1" type="mem" width="80" xtype="struct"/>
-            <op idx="3" suppressed="1" type="reg" w="1">SS</op>
+            <op idx="3" suppressed="1" type="reg" w="1" width="16">SS</op>
         </instruction>
         <instruction asm="LTR" category="SYSTEM" cpl="0" extension="BASE">
             <op idx="1" r="1" type="mem" width="16" xtype="i16"/>
-            <op idx="2" suppressed="1" type="reg" w="1">TR</op>
+            <op idx="2" suppressed="1" type="reg" w="1" width="80">TR</op>
         </instruction>
         <instruction asm="LTR" category="SYSTEM" cpl="0" extension="BASE">
             <op idx="1" r="1" type="reg" width="16">GPR</op>
-            <op idx="2" suppressed="1" type="reg" w="1">TR</op>
+            <op idx="2" suppressed="1" type="reg" w="1" width="80">TR</op>
         </instruction>
         <instruction asm="MOV" category="DATAXFER" cpl="3" extension="BASE">
             <op idx="1" type="mem" w="1" width="8" xtype="u8"/>
@@ -2982,11 +2982,11 @@
             <op idx="1" type="mem" w="1" width="64" xtype="int"/>
             <op idx="2" r="1" type="imm" width="32"/>
         </instruction>
-        <instruction asm="{load} MOV" category="DATAXFER" cpl="3" extension="BASE" rex="0">
+        <instruction asm="MOV" category="DATAXFER" cpl="3" extension="BASE" rex="0">
             <op idx="1" type="reg" w="1" width="8">AL,CL,DL,BL,AH,CH,DH,BH</op>
             <op idx="2" r="1" type="reg" width="8">AL,CL,DL,BL,AH,CH,DH,BH</op>
         </instruction>
-        <instruction asm="{load} REX MOV" category="DATAXFER" cpl="3" extension="BASE" rex="1">
+        <instruction asm="REX MOV" category="DATAXFER" cpl="3" extension="BASE" rex="1">
             <op idx="1" type="reg" w="1" width="8">GPR</op>
             <op idx="2" r="1" type="reg" width="8">GPR</op>
         </instruction>
@@ -3010,15 +3010,15 @@
             <op idx="1" type="mem" w="1" width="64" xtype="int"/>
             <op idx="2" r="1" type="reg" width="64">GPR</op>
         </instruction>
-        <instruction asm="{load} MOV" category="DATAXFER" cpl="3" eosz="1" extension="BASE">
+        <instruction asm="MOV" category="DATAXFER" cpl="3" eosz="1" extension="BASE">
             <op idx="1" type="reg" w="1" width="16">GPR</op>
             <op idx="2" r="1" type="reg" width="16">GPR</op>
         </instruction>
-        <instruction asm="{load} MOV" category="DATAXFER" cpl="3" eosz="2" extension="BASE">
+        <instruction asm="MOV" category="DATAXFER" cpl="3" eosz="2" extension="BASE">
             <op idx="1" type="reg" w="1" width="32">GPR</op>
             <op idx="2" r="1" type="reg" width="32">GPR</op>
         </instruction>
-        <instruction asm="{load} MOV" category="DATAXFER" cpl="3" eosz="3" extension="BASE">
+        <instruction asm="MOV" category="DATAXFER" cpl="3" eosz="3" extension="BASE">
             <op idx="1" type="reg" w="1" width="64">GPR</op>
             <op idx="2" r="1" type="reg" width="64">GPR</op>
         </instruction>
@@ -3030,11 +3030,11 @@
             <op idx="1" type="reg" w="1" width="8">GPR</op>
             <op idx="2" r="1" type="mem" width="8" xtype="u8"/>
         </instruction>
-        <instruction asm="{store} MOV" category="DATAXFER" cpl="3" extension="BASE" rex="0">
+        <instruction asm="MOV" category="DATAXFER" cpl="3" extension="BASE" rex="0">
             <op idx="1" type="reg" w="1" width="8">AL,CL,DL,BL,AH,CH,DH,BH</op>
             <op idx="2" r="1" type="reg" width="8">AL,CL,DL,BL,AH,CH,DH,BH</op>
         </instruction>
-        <instruction asm="{store} REX MOV" category="DATAXFER" cpl="3" extension="BASE" rex="1">
+        <instruction asm="REX MOV" category="DATAXFER" cpl="3" extension="BASE" rex="1">
             <op idx="1" type="reg" w="1" width="8">GPR</op>
             <op idx="2" r="1" type="reg" width="8">GPR</op>
         </instruction>
@@ -3050,15 +3050,15 @@
             <op idx="1" type="reg" w="1" width="64">GPR</op>
             <op idx="2" r="1" type="mem" width="64" xtype="int"/>
         </instruction>
-        <instruction asm="{store} MOV" category="DATAXFER" cpl="3" eosz="1" extension="BASE">
+        <instruction asm="MOV" category="DATAXFER" cpl="3" eosz="1" extension="BASE">
             <op idx="1" type="reg" w="1" width="16">GPR</op>
             <op idx="2" r="1" type="reg" width="16">GPR</op>
         </instruction>
-        <instruction asm="{store} MOV" category="DATAXFER" cpl="3" eosz="2" extension="BASE">
+        <instruction asm="MOV" category="DATAXFER" cpl="3" eosz="2" extension="BASE">
             <op idx="1" type="reg" w="1" width="32">GPR</op>
             <op idx="2" r="1" type="reg" width="32">GPR</op>
         </instruction>
-        <instruction asm="{store} MOV" category="DATAXFER" cpl="3" eosz="3" extension="BASE">
+        <instruction asm="MOV" category="DATAXFER" cpl="3" eosz="3" extension="BASE">
             <op idx="1" type="reg" w="1" width="64">GPR</op>
             <op idx="2" r="1" type="reg" width="64">GPR</op>
         </instruction>
@@ -3497,12 +3497,12 @@
             <op idx="2" r="1" type="reg" width="8">GPR</op>
             <op flag_AF="undef" flag_CF="w" flag_OF="w" flag_PF="w" flag_SF="w" flag_ZF="w" idx="3" suppressed="1" type="flags" w="1"/>
         </instruction>
-        <instruction asm="{load} OR" category="LOGICAL" cpl="3" extension="BASE" rex="0">
+        <instruction asm="OR" category="LOGICAL" cpl="3" extension="BASE" rex="0">
             <op idx="1" r="1" type="reg" w="1" width="8">AL,CL,DL,BL,AH,CH,DH,BH</op>
             <op idx="2" r="1" type="reg" width="8">AL,CL,DL,BL,AH,CH,DH,BH</op>
             <op flag_AF="undef" flag_CF="w" flag_OF="w" flag_PF="w" flag_SF="w" flag_ZF="w" idx="3" suppressed="1" type="flags" w="1"/>
         </instruction>
-        <instruction asm="{load} REX OR" category="LOGICAL" cpl="3" extension="BASE" rex="1">
+        <instruction asm="REX OR" category="LOGICAL" cpl="3" extension="BA`SE" rex="1">
             <op idx="1" r="1" type="reg" w="1" width="8">GPR</op>
             <op idx="2" r="1" type="reg" width="8">GPR</op>
             <op flag_AF="undef" flag_CF="w" flag_OF="w" flag_PF="w" flag_SF="w" flag_ZF="w" idx="3" suppressed="1" type="flags" w="1"/>
@@ -3522,17 +3522,17 @@
             <op idx="2" r="1" type="reg" width="64">GPR</op>
             <op flag_AF="undef" flag_CF="w" flag_OF="w" flag_PF="w" flag_SF="w" flag_ZF="w" idx="3" suppressed="1" type="flags" w="1"/>
         </instruction>
-        <instruction asm="{load} OR" category="LOGICAL" cpl="3" eosz="1" extension="BASE">
+        <instruction asm="OR" category="LOGICAL" cpl="3" eosz="1" extension="BASE">
             <op idx="1" r="1" type="reg" w="1" width="16">GPR</op>
             <op idx="2" r="1" type="reg" width="16">GPR</op>
             <op flag_AF="undef" flag_CF="w" flag_OF="w" flag_PF="w" flag_SF="w" flag_ZF="w" idx="3" suppressed="1" type="flags" w="1"/>
         </instruction>
-        <instruction asm="{load} OR" category="LOGICAL" cpl="3" eosz="2" extension="BASE">
+        <instruction asm="OR" category="LOGICAL" cpl="3" eosz="2" extension="BASE">
             <op idx="1" r="1" type="reg" w="1" width="32">GPR</op>
             <op idx="2" r="1" type="reg" width="32">GPR</op>
             <op flag_AF="undef" flag_CF="w" flag_OF="w" flag_PF="w" flag_SF="w" flag_ZF="w" idx="3" suppressed="1" type="flags" w="1"/>
         </instruction>
-        <instruction asm="{load} OR" category="LOGICAL" cpl="3" eosz="3" extension="BASE">
+        <instruction asm="OR" category="LOGICAL" cpl="3" eosz="3" extension="BASE">
             <op idx="1" r="1" type="reg" w="1" width="64">GPR</op>
             <op idx="2" r="1" type="reg" width="64">GPR</op>
             <op flag_AF="undef" flag_CF="w" flag_OF="w" flag_PF="w" flag_SF="w" flag_ZF="w" idx="3" suppressed="1" type="flags" w="1"/>
@@ -3547,12 +3547,12 @@
             <op idx="2" r="1" type="mem" width="8" xtype="u8"/>
             <op flag_AF="undef" flag_CF="w" flag_OF="w" flag_PF="w" flag_SF="w" flag_ZF="w" idx="3" suppressed="1" type="flags" w="1"/>
         </instruction>
-        <instruction asm="{store} OR" category="LOGICAL" cpl="3" extension="BASE" rex="0">
+        <instruction asm="OR" category="LOGICAL" cpl="3" extension="BASE" rex="0">
             <op idx="1" r="1" type="reg" w="1" width="8">AL,CL,DL,BL,AH,CH,DH,BH</op>
             <op idx="2" r="1" type="reg" width="8">AL,CL,DL,BL,AH,CH,DH,BH</op>
             <op flag_AF="undef" flag_CF="w" flag_OF="w" flag_PF="w" flag_SF="w" flag_ZF="w" idx="3" suppressed="1" type="flags" w="1"/>
         </instruction>
-        <instruction asm="{store} REX OR" category="LOGICAL" cpl="3" extension="BASE" rex="1">
+        <instruction asm="REX OR" category="LOGICAL" cpl="3" extension="BASE" rex="1">
             <op idx="1" r="1" type="reg" w="1" width="8">GPR</op>
             <op idx="2" r="1" type="reg" width="8">GPR</op>
             <op flag_AF="undef" flag_CF="w" flag_OF="w" flag_PF="w" flag_SF="w" flag_ZF="w" idx="3" suppressed="1" type="flags" w="1"/>
@@ -3572,17 +3572,17 @@
             <op idx="2" r="1" type="mem" width="64" xtype="int"/>
             <op flag_AF="undef" flag_CF="w" flag_OF="w" flag_PF="w" flag_SF="w" flag_ZF="w" idx="3" suppressed="1" type="flags" w="1"/>
         </instruction>
-        <instruction asm="{store} OR" category="LOGICAL" cpl="3" eosz="1" extension="BASE">
+        <instruction asm="OR" category="LOGICAL" cpl="3" eosz="1" extension="BASE">
             <op idx="1" r="1" type="reg" w="1" width="16">GPR</op>
             <op idx="2" r="1" type="reg" width="16">GPR</op>
             <op flag_AF="undef" flag_CF="w" flag_OF="w" flag_PF="w" flag_SF="w" flag_ZF="w" idx="3" suppressed="1" type="flags" w="1"/>
         </instruction>
-        <instruction asm="{store} OR" category="LOGICAL" cpl="3" eosz="2" extension="BASE">
+        <instruction asm="OR" category="LOGICAL" cpl="3" eosz="2" extension="BASE">
             <op idx="1" r="1" type="reg" w="1" width="32">GPR</op>
             <op idx="2" r="1" type="reg" width="32">GPR</op>
             <op flag_AF="undef" flag_CF="w" flag_OF="w" flag_PF="w" flag_SF="w" flag_ZF="w" idx="3" suppressed="1" type="flags" w="1"/>
         </instruction>
-        <instruction asm="{store} OR" category="LOGICAL" cpl="3" eosz="3" extension="BASE">
+        <instruction asm="OR" category="LOGICAL" cpl="3" eosz="3" extension="BASE">
             <op idx="1" r="1" type="reg" w="1" width="64">GPR</op>
             <op idx="2" r="1" type="reg" width="64">GPR</op>
             <op flag_AF="undef" flag_CF="w" flag_OF="w" flag_PF="w" flag_SF="w" flag_ZF="w" idx="3" suppressed="1" type="flags" w="1"/>
@@ -4096,18 +4096,18 @@
             <op idx="1" suppressed="1" type="reg" w="1" width="32">EAX</op>
             <op idx="2" suppressed="1" type="reg" w="1" width="32">EDX</op>
             <op idx="3" r="1" suppressed="1" type="reg" width="32">ECX</op>
-            <op idx="4" r="1" suppressed="1" type="reg">MSRS</op>
+            <op idx="4" r="1" suppressed="1" type="reg" width="64">MSRS</op>
         </instruction>
         <instruction asm="RDPMC" category="SYSTEM" cpl="3" extension="BASE">
             <op idx="1" suppressed="1" type="reg" w="1" width="32">EAX</op>
             <op idx="2" suppressed="1" type="reg" w="1" width="32">EDX</op>
             <op idx="3" r="1" suppressed="1" type="reg" width="32">ECX</op>
-            <op idx="4" r="1" suppressed="1" type="reg">MSRS</op>
+            <op idx="4" r="1" suppressed="1" type="reg" width="64">MSRS</op>
         </instruction>
         <instruction asm="RDTSC" category="SYSTEM" cpl="3" extension="BASE">
             <op idx="1" suppressed="1" type="reg" w="1" width="32">EAX</op>
             <op idx="2" suppressed="1" type="reg" w="1" width="32">EDX</op>
-            <op idx="3" r="1" suppressed="1" type="reg">TSC</op>
+            <op idx="3" r="1" suppressed="1" type="reg" width="64">TSC</op>
         </instruction>
         <instruction asm="REPE CMPSB" category="STRINGOP" cpl="3" eosz="2" extension="BASE" rep="3">
             <op base="RSI" idx="1" r="1" seg="DS" suppressed="1" type="mem" width="8" xtype="u8"/>
@@ -4903,12 +4903,12 @@
             <op idx="2" r="1" type="reg" width="8">GPR</op>
             <op flag_AF="undef" flag_CF="r/w" flag_OF="w" flag_PF="w" flag_SF="w" flag_ZF="w" idx="3" r="1" suppressed="1" type="flags" w="1"/>
         </instruction>
-        <instruction asm="{load} SBB" category="BINARY" cpl="3" extension="BASE" rex="0">
+        <instruction asm="SBB" category="BINARY" cpl="3" extension="BASE" rex="0">
             <op idx="1" r="1" type="reg" w="1" width="8">AL,CL,DL,BL,AH,CH,DH,BH</op>
             <op idx="2" r="1" type="reg" width="8">AL,CL,DL,BL,AH,CH,DH,BH</op>
             <op flag_AF="undef" flag_CF="r/w" flag_OF="w" flag_PF="w" flag_SF="w" flag_ZF="w" idx="3" r="1" suppressed="1" type="flags" w="1"/>
         </instruction>
-        <instruction asm="{load} REX SBB" category="BINARY" cpl="3" extension="BASE" rex="1">
+        <instruction asm="REX SBB" category="BINARY" cpl="3" extension="BASE" rex="1">
             <op idx="1" r="1" type="reg" w="1" width="8">GPR</op>
             <op idx="2" r="1" type="reg" width="8">GPR</op>
             <op flag_AF="undef" flag_CF="r/w" flag_OF="w" flag_PF="w" flag_SF="w" flag_ZF="w" idx="3" r="1" suppressed="1" type="flags" w="1"/>
@@ -4928,27 +4928,27 @@
             <op idx="2" r="1" type="reg" width="64">GPR</op>
             <op flag_AF="undef" flag_CF="r/w" flag_OF="w" flag_PF="w" flag_SF="w" flag_ZF="w" idx="3" r="1" suppressed="1" type="flags" w="1"/>
         </instruction>
-        <instruction asm="{load} SBB" category="BINARY" cpl="3" eosz="1" extension="BASE">
+        <instruction asm="SBB" category="BINARY" cpl="3" eosz="1" extension="BASE">
             <op idx="1" r="1" type="reg" w="1" width="16">GPR</op>
             <op idx="2" r="1" type="reg" width="16">GPR</op>
             <op flag_AF="undef" flag_CF="r/w" flag_OF="w" flag_PF="w" flag_SF="w" flag_ZF="w" idx="3" r="1" suppressed="1" type="flags" w="1"/>
         </instruction>
-        <instruction asm="{load} SBB" category="BINARY" cpl="3" eosz="2" extension="BASE">
+        <instruction asm="SBB" category="BINARY" cpl="3" eosz="2" extension="BASE">
             <op idx="1" r="1" type="reg" w="1" width="32">GPR</op>
             <op idx="2" r="1" type="reg" width="32">GPR</op>
             <op flag_AF="undef" flag_CF="r/w" flag_OF="w" flag_PF="w" flag_SF="w" flag_ZF="w" idx="3" r="1" suppressed="1" type="flags" w="1"/>
         </instruction>
-        <instruction asm="{load} SBB" category="BINARY" cpl="3" eosz="3" extension="BASE">
+        <instruction asm="SBB" category="BINARY" cpl="3" eosz="3" extension="BASE">
             <op idx="1" r="1" type="reg" w="1" width="64">GPR</op>
             <op idx="2" r="1" type="reg" width="64">GPR</op>
             <op flag_AF="undef" flag_CF="r/w" flag_OF="w" flag_PF="w" flag_SF="w" flag_ZF="w" idx="3" r="1" suppressed="1" type="flags" w="1"/>
         </instruction>
-        <instruction asm="{store} SBB" category="BINARY" cpl="3" extension="BASE" rex="0">
+        <instruction asm="SBB" category="BINARY" cpl="3" extension="BASE" rex="0">
             <op idx="1" r="1" type="reg" w="1" width="8">AL,CL,DL,BL,AH,CH,DH,BH</op>
             <op idx="2" r="1" type="reg" width="8">AL,CL,DL,BL,AH,CH,DH,BH</op>
             <op flag_AF="undef" flag_CF="r/w" flag_OF="w" flag_PF="w" flag_SF="w" flag_ZF="w" idx="3" r="1" suppressed="1" type="flags" w="1"/>
         </instruction>
-        <instruction asm="{store} REX SBB" category="BINARY" cpl="3" extension="BASE" rex="1">
+        <instruction asm="REX SBB" category="BINARY" cpl="3" extension="BASE" rex="1">
             <op idx="1" r="1" type="reg" w="1" width="8">GPR</op>
             <op idx="2" r="1" type="reg" width="8">GPR</op>
             <op flag_AF="undef" flag_CF="r/w" flag_OF="w" flag_PF="w" flag_SF="w" flag_ZF="w" idx="3" r="1" suppressed="1" type="flags" w="1"/>
@@ -4963,17 +4963,17 @@
             <op idx="2" r="1" type="mem" width="8" xtype="u8"/>
             <op flag_AF="undef" flag_CF="r/w" flag_OF="w" flag_PF="w" flag_SF="w" flag_ZF="w" idx="3" r="1" suppressed="1" type="flags" w="1"/>
         </instruction>
-        <instruction asm="{store} SBB" category="BINARY" cpl="3" eosz="1" extension="BASE">
+        <instruction asm="SBB" category="BINARY" cpl="3" eosz="1" extension="BASE">
             <op idx="1" r="1" type="reg" w="1" width="16">GPR</op>
             <op idx="2" r="1" type="reg" width="16">GPR</op>
             <op flag_AF="undef" flag_CF="r/w" flag_OF="w" flag_PF="w" flag_SF="w" flag_ZF="w" idx="3" r="1" suppressed="1" type="flags" w="1"/>
         </instruction>
-        <instruction asm="{store} SBB" category="BINARY" cpl="3" eosz="2" extension="BASE">
+        <instruction asm="SBB" category="BINARY" cpl="3" eosz="2" extension="BASE">
             <op idx="1" r="1" type="reg" w="1" width="32">GPR</op>
             <op idx="2" r="1" type="reg" width="32">GPR</op>
             <op flag_AF="undef" flag_CF="r/w" flag_OF="w" flag_PF="w" flag_SF="w" flag_ZF="w" idx="3" r="1" suppressed="1" type="flags" w="1"/>
         </instruction>
-        <instruction asm="{store} SBB" category="BINARY" cpl="3" eosz="3" extension="BASE">
+        <instruction asm="SBB" category="BINARY" cpl="3" eosz="3" extension="BASE">
             <op idx="1" r="1" type="reg" w="1" width="64">GPR</op>
             <op idx="2" r="1" type="reg" width="64">GPR</op>
             <op flag_AF="undef" flag_CF="r/w" flag_OF="w" flag_PF="w" flag_SF="w" flag_ZF="w" idx="3" r="1" suppressed="1" type="flags" w="1"/>
@@ -5282,7 +5282,7 @@
         </instruction>
         <instruction asm="SGDT" category="SYSTEM" cpl="3" extension="BASE">
             <op idx="1" type="mem" w="1" width="80" xtype="struct"/>
-            <op idx="2" r="1" suppressed="1" type="reg">GDTR</op>
+            <op idx="2" r="1" suppressed="1" type="reg" width="80">>GDTR</op>
         </instruction>
         <instruction asm="SHL" category="SHIFT" cpl="3" extension="BASE">
             <op idx="1" r="1" type="mem" w="1" width="8" xtype="u8"/>
@@ -5437,19 +5437,19 @@
             <op idx="3" r="1" type="imm" width="8"/>
             <op conditionalWrite="1" flag_AF="undef" flag_CF="cw" flag_OF="undef" flag_PF="cw" flag_SF="cw" flag_ZF="cw" idx="4" suppressed="1" type="flags" w="1"/>
         </instruction>
-        <instruction asm="{store} SHLD" category="SHIFT" cpl="3" eosz="1" extension="BASE">
+        <instruction asm="SHLD" category="SHIFT" cpl="3" eosz="1" extension="BASE">
             <op conditionalWrite="1" idx="1" r="1" type="reg" w="1" width="16">GPR</op>
             <op idx="2" r="1" type="reg" width="16">GPR</op>
             <op idx="3" r="1" type="imm" width="8"/>
             <op conditionalWrite="1" flag_AF="undef" flag_CF="cw" flag_OF="undef" flag_PF="cw" flag_SF="cw" flag_ZF="cw" idx="4" suppressed="1" type="flags" w="1"/>
         </instruction>
-        <instruction asm="{store} SHLD" category="SHIFT" cpl="3" eosz="2" extension="BASE">
+        <instruction asm="SHLD" category="SHIFT" cpl="3" eosz="2" extension="BASE">
             <op conditionalWrite="1" idx="1" r="1" type="reg" w="1" width="32">GPR</op>
             <op idx="2" r="1" type="reg" width="32">GPR</op>
             <op idx="3" r="1" type="imm" width="8"/>
             <op conditionalWrite="1" flag_AF="undef" flag_CF="cw" flag_OF="undef" flag_PF="cw" flag_SF="cw" flag_ZF="cw" idx="4" suppressed="1" type="flags" w="1"/>
         </instruction>
-        <instruction asm="{store} SHLD" category="SHIFT" cpl="3" eosz="3" extension="BASE">
+        <instruction asm="SHLD" category="SHIFT" cpl="3" eosz="3" extension="BASE">
             <op conditionalWrite="1" idx="1" r="1" type="reg" w="1" width="64">GPR</op>
             <op idx="2" r="1" type="reg" width="64">GPR</op>
             <op idx="3" r="1" type="imm" width="8"/>
@@ -5473,19 +5473,19 @@
             <op idx="3" implicit="1" r="1" type="reg" width="8">CL</op>
             <op conditionalWrite="1" flag_AF="undef" flag_CF="cw" flag_OF="undef" flag_PF="cw" flag_SF="cw" flag_ZF="cw" idx="4" suppressed="1" type="flags" w="1"/>
         </instruction>
-        <instruction asm="{load} SHLD" category="SHIFT" cpl="3" eosz="1" extension="BASE">
+        <instruction asm="SHLD" category="SHIFT" cpl="3" eosz="1" extension="BASE">
             <op conditionalWrite="1" idx="1" r="1" type="reg" w="1" width="16">GPR</op>
             <op idx="2" r="1" type="reg" width="16">GPR</op>
             <op idx="3" implicit="1" r="1" type="reg" width="8">CL</op>
             <op conditionalWrite="1" flag_AF="undef" flag_CF="cw" flag_OF="undef" flag_PF="cw" flag_SF="cw" flag_ZF="cw" idx="4" suppressed="1" type="flags" w="1"/>
         </instruction>
-        <instruction asm="{load} SHLD" category="SHIFT" cpl="3" eosz="2" extension="BASE">
+        <instruction asm="SHLD" category="SHIFT" cpl="3" eosz="2" extension="BASE">
             <op conditionalWrite="1" idx="1" r="1" type="reg" w="1" width="32">GPR</op>
             <op idx="2" r="1" type="reg" width="32">GPR</op>
             <op idx="3" implicit="1" r="1" type="reg" width="8">CL</op>
             <op conditionalWrite="1" flag_AF="undef" flag_CF="cw" flag_OF="undef" flag_PF="cw" flag_SF="cw" flag_ZF="cw" idx="4" suppressed="1" type="flags" w="1"/>
         </instruction>
-        <instruction asm="{load} SHLD" category="SHIFT" cpl="3" eosz="3" extension="BASE">
+        <instruction asm="SHLD" category="SHIFT" cpl="3" eosz="3" extension="BASE">
             <op conditionalWrite="1" idx="1" r="1" type="reg" w="1" width="64">GPR</op>
             <op idx="2" r="1" type="reg" width="64">GPR</op>
             <op idx="3" implicit="1" r="1" type="reg" width="8">CL</op>
@@ -5644,19 +5644,19 @@
             <op idx="3" r="1" type="imm" width="8"/>
             <op conditionalWrite="1" flag_AF="undef" flag_CF="cw" flag_OF="undef" flag_PF="cw" flag_SF="cw" flag_ZF="cw" idx="4" suppressed="1" type="flags" w="1"/>
         </instruction>
-        <instruction asm="{store} SHRD" category="SHIFT" cpl="3" eosz="1" extension="BASE">
+        <instruction asm="SHRD" category="SHIFT" cpl="3" eosz="1" extension="BASE">
             <op conditionalWrite="1" idx="1" r="1" type="reg" w="1" width="16">GPR</op>
             <op idx="2" r="1" type="reg" width="16">GPR</op>
             <op idx="3" r="1" type="imm" width="8"/>
             <op conditionalWrite="1" flag_AF="undef" flag_CF="cw" flag_OF="undef" flag_PF="cw" flag_SF="cw" flag_ZF="cw" idx="4" suppressed="1" type="flags" w="1"/>
         </instruction>
-        <instruction asm="{store} SHRD" category="SHIFT" cpl="3" eosz="2" extension="BASE">
+        <instruction asm="SHRD" category="SHIFT" cpl="3" eosz="2" extension="BASE">
             <op conditionalWrite="1" idx="1" r="1" type="reg" w="1" width="32">GPR</op>
             <op idx="2" r="1" type="reg" width="32">GPR</op>
             <op idx="3" r="1" type="imm" width="8"/>
             <op conditionalWrite="1" flag_AF="undef" flag_CF="cw" flag_OF="undef" flag_PF="cw" flag_SF="cw" flag_ZF="cw" idx="4" suppressed="1" type="flags" w="1"/>
         </instruction>
-        <instruction asm="{store} SHRD" category="SHIFT" cpl="3" eosz="3" extension="BASE">
+        <instruction asm="SHRD" category="SHIFT" cpl="3" eosz="3" extension="BASE">
             <op conditionalWrite="1" idx="1" r="1" type="reg" w="1" width="64">GPR</op>
             <op idx="2" r="1" type="reg" width="64">GPR</op>
             <op idx="3" r="1" type="imm" width="8"/>
@@ -5680,19 +5680,19 @@
             <op idx="3" implicit="1" r="1" type="reg" width="8">CL</op>
             <op conditionalWrite="1" flag_AF="undef" flag_CF="cw" flag_OF="undef" flag_PF="cw" flag_SF="cw" flag_ZF="cw" idx="4" suppressed="1" type="flags" w="1"/>
         </instruction>
-        <instruction asm="{load} SHRD" category="SHIFT" cpl="3" eosz="1" extension="BASE">
+        <instruction asm="SHRD" category="SHIFT" cpl="3" eosz="1" extension="BASE">
             <op conditionalWrite="1" idx="1" r="1" type="reg" w="1" width="16">GPR</op>
             <op idx="2" r="1" type="reg" width="16">GPR</op>
             <op idx="3" implicit="1" r="1" type="reg" width="8">CL</op>
             <op conditionalWrite="1" flag_AF="undef" flag_CF="cw" flag_OF="undef" flag_PF="cw" flag_SF="cw" flag_ZF="cw" idx="4" suppressed="1" type="flags" w="1"/>
         </instruction>
-        <instruction asm="{load} SHRD" category="SHIFT" cpl="3" eosz="2" extension="BASE">
+        <instruction asm="SHRD" category="SHIFT" cpl="3" eosz="2" extension="BASE">
             <op conditionalWrite="1" idx="1" r="1" type="reg" w="1" width="32">GPR</op>
             <op idx="2" r="1" type="reg" width="32">GPR</op>
             <op idx="3" implicit="1" r="1" type="reg" width="8">CL</op>
             <op conditionalWrite="1" flag_AF="undef" flag_CF="cw" flag_OF="undef" flag_PF="cw" flag_SF="cw" flag_ZF="cw" idx="4" suppressed="1" type="flags" w="1"/>
         </instruction>
-        <instruction asm="{load} SHRD" category="SHIFT" cpl="3" eosz="3" extension="BASE">
+        <instruction asm="SHRD" category="SHIFT" cpl="3" eosz="3" extension="BASE">
             <op conditionalWrite="1" idx="1" r="1" type="reg" w="1" width="64">GPR</op>
             <op idx="2" r="1" type="reg" width="64">GPR</op>
             <op idx="3" implicit="1" r="1" type="reg" width="8">CL</op>
@@ -5700,39 +5700,39 @@
         </instruction>
         <instruction asm="SIDT" category="SYSTEM" cpl="3" extension="BASE">
             <op idx="1" type="mem" w="1" width="80" xtype="struct"/>
-            <op idx="2" r="1" suppressed="1" type="reg">IDTR</op>
+            <op idx="2" r="1" suppressed="1" type="reg" width="80">>IDTR</op>
         </instruction>
         <instruction asm="SLDT" category="SYSTEM" cpl="3" extension="BASE">
             <op idx="1" type="mem" w="1" width="16" xtype="i16"/>
-            <op idx="2" r="1" suppressed="1" type="reg">LDTR</op>
+            <op idx="2" r="1" suppressed="1" type="reg" width="80">LDTR</op>
         </instruction>
         <instruction asm="SLDT" category="SYSTEM" cpl="3" eosz="1" extension="BASE">
             <op idx="1" type="reg" w="1" width="16">GPR</op>
-            <op idx="2" r="1" suppressed="1" type="reg">LDTR</op>
+            <op idx="2" r="1" suppressed="1" type="reg" width="80">LDTR</op>
         </instruction>
         <instruction asm="SLDT" category="SYSTEM" cpl="3" eosz="2" extension="BASE">
             <op idx="1" type="reg" w="1" width="32">GPR</op>
-            <op idx="2" r="1" suppressed="1" type="reg">LDTR</op>
+            <op idx="2" r="1" suppressed="1" type="reg" width="80">LDTR</op>
         </instruction>
         <instruction asm="SLDT" category="SYSTEM" cpl="3" eosz="3" extension="BASE">
             <op idx="1" type="reg" w="1" width="64">GPR</op>
-            <op idx="2" r="1" suppressed="1" type="reg">LDTR</op>
+            <op idx="2" r="1" suppressed="1" type="reg" width="80">LDTR</op>
         </instruction>
         <instruction asm="SMSW" category="SYSTEM" cpl="3" extension="BASE">
             <op idx="1" type="mem" w="1" width="16" xtype="i16"/>
-            <op idx="2" r="1" suppressed="1" type="reg">CR0</op>
+            <op idx="2" r="1" suppressed="1" type="reg" width="64">CR0</op>
         </instruction>
         <instruction asm="SMSW" category="SYSTEM" cpl="3" eosz="1" extension="BASE">
             <op idx="1" type="reg" w="1" width="16">GPR</op>
-            <op idx="2" r="1" suppressed="1" type="reg">CR0</op>
+            <op idx="2" r="1" suppressed="1" type="reg" width="64">CR0</op>
         </instruction>
         <instruction asm="SMSW" category="SYSTEM" cpl="3" eosz="2" extension="BASE">
             <op idx="1" type="reg" w="1" width="32">GPR</op>
-            <op idx="2" r="1" suppressed="1" type="reg">CR0</op>
+            <op idx="2" r="1" suppressed="1" type="reg" width="64">CR0</op>
         </instruction>
         <instruction asm="SMSW" category="SYSTEM" cpl="3" eosz="3" extension="BASE">
             <op idx="1" type="reg" w="1" width="64">GPR</op>
-            <op idx="2" r="1" suppressed="1" type="reg">CR0</op>
+            <op idx="2" r="1" suppressed="1" type="reg" width="64">CR0</op>
         </instruction>
         <instruction asm="STC" category="FLAGOP" cpl="3" extension="BASE">
             <op flag_CF="w" idx="1" suppressed="1" type="flags" w="1"/>
@@ -5760,19 +5760,19 @@
         </instruction>
         <instruction asm="STR" category="SYSTEM" cpl="3" extension="BASE">
             <op idx="1" type="mem" w="1" width="16" xtype="i16"/>
-            <op idx="2" r="1" suppressed="1" type="reg">TR</op>
+            <op idx="2" r="1" suppressed="1" type="reg" width="80">TR</op>
         </instruction>
         <instruction asm="STR" category="SYSTEM" cpl="3" eosz="1" extension="BASE">
             <op idx="1" type="reg" w="1" width="16">GPR</op>
-            <op idx="2" r="1" suppressed="1" type="reg">TR</op>
+            <op idx="2" r="1" suppressed="1" type="reg" width="80">TR</op>
         </instruction>
         <instruction asm="STR" category="SYSTEM" cpl="3" eosz="2" extension="BASE">
             <op idx="1" type="reg" w="1" width="32">GPR</op>
-            <op idx="2" r="1" suppressed="1" type="reg">TR</op>
+            <op idx="2" r="1" suppressed="1" type="reg" width="80">TR</op>
         </instruction>
         <instruction asm="STR" category="SYSTEM" cpl="3" eosz="3" extension="BASE">
             <op idx="1" type="reg" w="1" width="64">GPR</op>
-            <op idx="2" r="1" suppressed="1" type="reg">TR</op>
+            <op idx="2" r="1" suppressed="1" type="reg" width="80">TR</op>
         </instruction>
         <instruction asm="SUB" category="BINARY" cpl="3" extension="BASE">
             <op idx="1" r="1" type="mem" w="1" width="8" xtype="u8"/>
@@ -5859,12 +5859,12 @@
             <op idx="2" r="1" type="reg" width="8">GPR</op>
             <op flag_AF="w" flag_CF="w" flag_OF="w" flag_PF="w" flag_SF="w" flag_ZF="w" idx="3" suppressed="1" type="flags" w="1"/>
         </instruction>
-        <instruction asm="{load} SUB" category="BINARY" cpl="3" extension="BASE" rex="0">
+        <instruction asm="SUB" category="BINARY" cpl="3" extension="BASE" rex="0">
             <op idx="1" r="1" type="reg" w="1" width="8">AL,CL,DL,BL,AH,CH,DH,BH</op>
             <op idx="2" r="1" type="reg" width="8">AL,CL,DL,BL,AH,CH,DH,BH</op>
             <op flag_AF="w" flag_CF="w" flag_OF="w" flag_PF="w" flag_SF="w" flag_ZF="w" idx="3" suppressed="1" type="flags" w="1"/>
         </instruction>
-        <instruction asm="{load} REX SUB" category="BINARY" cpl="3" extension="BASE" rex="1">
+        <instruction asm="REX SUB" category="BINARY" cpl="3" extension="BASE" rex="1">
             <op idx="1" r="1" type="reg" w="1" width="8">GPR</op>
             <op idx="2" r="1" type="reg" width="8">GPR</op>
             <op flag_AF="w" flag_CF="w" flag_OF="w" flag_PF="w" flag_SF="w" flag_ZF="w" idx="3" suppressed="1" type="flags" w="1"/>
@@ -5884,27 +5884,27 @@
             <op idx="2" r="1" type="reg" width="64">GPR</op>
             <op flag_AF="w" flag_CF="w" flag_OF="w" flag_PF="w" flag_SF="w" flag_ZF="w" idx="3" suppressed="1" type="flags" w="1"/>
         </instruction>
-        <instruction asm="{load} SUB" category="BINARY" cpl="3" eosz="1" extension="BASE">
+        <instruction asm="SUB" category="BINARY" cpl="3" eosz="1" extension="BASE">
             <op idx="1" r="1" type="reg" w="1" width="16">GPR</op>
             <op idx="2" r="1" type="reg" width="16">GPR</op>
             <op flag_AF="w" flag_CF="w" flag_OF="w" flag_PF="w" flag_SF="w" flag_ZF="w" idx="3" suppressed="1" type="flags" w="1"/>
         </instruction>
-        <instruction asm="{load} SUB" category="BINARY" cpl="3" eosz="2" extension="BASE">
+        <instruction asm="SUB" category="BINARY" cpl="3" eosz="2" extension="BASE">
             <op idx="1" r="1" type="reg" w="1" width="32">GPR</op>
             <op idx="2" r="1" type="reg" width="32">GPR</op>
             <op flag_AF="w" flag_CF="w" flag_OF="w" flag_PF="w" flag_SF="w" flag_ZF="w" idx="3" suppressed="1" type="flags" w="1"/>
         </instruction>
-        <instruction asm="{load} SUB" category="BINARY" cpl="3" eosz="3" extension="BASE">
+        <instruction asm="SUB" category="BINARY" cpl="3" eosz="3" extension="BASE">
             <op idx="1" r="1" type="reg" w="1" width="64">GPR</op>
             <op idx="2" r="1" type="reg" width="64">GPR</op>
             <op flag_AF="w" flag_CF="w" flag_OF="w" flag_PF="w" flag_SF="w" flag_ZF="w" idx="3" suppressed="1" type="flags" w="1"/>
         </instruction>
-        <instruction asm="{store} SUB" category="BINARY" cpl="3" extension="BASE" rex="0">
+        <instruction asm="SUB" category="BINARY" cpl="3" extension="BASE" rex="0">
             <op idx="1" r="1" type="reg" w="1" width="8">AL,CL,DL,BL,AH,CH,DH,BH</op>
             <op idx="2" r="1" type="reg" width="8">AL,CL,DL,BL,AH,CH,DH,BH</op>
             <op flag_AF="w" flag_CF="w" flag_OF="w" flag_PF="w" flag_SF="w" flag_ZF="w" idx="3" suppressed="1" type="flags" w="1"/>
         </instruction>
-        <instruction asm="{store} REX SUB" category="BINARY" cpl="3" extension="BASE" rex="1">
+        <instruction asm="REX SUB" category="BINARY" cpl="3" extension="BASE" rex="1">
             <op idx="1" r="1" type="reg" w="1" width="8">GPR</op>
             <op idx="2" r="1" type="reg" width="8">GPR</op>
             <op flag_AF="w" flag_CF="w" flag_OF="w" flag_PF="w" flag_SF="w" flag_ZF="w" idx="3" suppressed="1" type="flags" w="1"/>
@@ -5919,17 +5919,17 @@
             <op idx="2" r="1" type="mem" width="8" xtype="u8"/>
             <op flag_AF="w" flag_CF="w" flag_OF="w" flag_PF="w" flag_SF="w" flag_ZF="w" idx="3" suppressed="1" type="flags" w="1"/>
         </instruction>
-        <instruction asm="{store} SUB" category="BINARY" cpl="3" eosz="1" extension="BASE">
+        <instruction asm="SUB" category="BINARY" cpl="3" eosz="1" extension="BASE">
             <op idx="1" r="1" type="reg" w="1" width="16">GPR</op>
             <op idx="2" r="1" type="reg" width="16">GPR</op>
             <op flag_AF="w" flag_CF="w" flag_OF="w" flag_PF="w" flag_SF="w" flag_ZF="w" idx="3" suppressed="1" type="flags" w="1"/>
         </instruction>
-        <instruction asm="{store} SUB" category="BINARY" cpl="3" eosz="2" extension="BASE">
+        <instruction asm="SUB" category="BINARY" cpl="3" eosz="2" extension="BASE">
             <op idx="1" r="1" type="reg" w="1" width="32">GPR</op>
             <op idx="2" r="1" type="reg" width="32">GPR</op>
             <op flag_AF="w" flag_CF="w" flag_OF="w" flag_PF="w" flag_SF="w" flag_ZF="w" idx="3" suppressed="1" type="flags" w="1"/>
         </instruction>
-        <instruction asm="{store} SUB" category="BINARY" cpl="3" eosz="3" extension="BASE">
+        <instruction asm="SUB" category="BINARY" cpl="3" eosz="3" extension="BASE">
             <op idx="1" r="1" type="reg" w="1" width="64">GPR</op>
             <op idx="2" r="1" type="reg" width="64">GPR</op>
             <op flag_AF="w" flag_CF="w" flag_OF="w" flag_PF="w" flag_SF="w" flag_ZF="w" idx="3" suppressed="1" type="flags" w="1"/>
@@ -6179,7 +6179,7 @@
             <op idx="1" r="1" suppressed="1" type="reg" width="32">EAX</op>
             <op idx="2" r="1" suppressed="1" type="reg" width="32">EDX</op>
             <op idx="3" r="1" suppressed="1" type="reg" width="32">ECX</op>
-            <op idx="4" suppressed="1" type="reg" w="1">MSRS</op>
+            <op idx="4" suppressed="1" type="reg" w="1" width="64">MSRS</op>
         </instruction>
         <instruction asm="XADD" category="SEMAPHORE" cpl="3" extension="BASE" rex="0">
             <op idx="1" r="1" type="mem" w="1" width="8" xtype="u8"/>
@@ -6397,12 +6397,12 @@
             <op idx="2" r="1" type="reg" width="8">GPR</op>
             <op flag_AF="undef" flag_CF="w" flag_OF="w" flag_PF="w" flag_SF="w" flag_ZF="w" idx="3" suppressed="1" type="flags" w="1"/>
         </instruction>
-        <instruction asm="{load} XOR" category="LOGICAL" cpl="3" extension="BASE" rex="0">
+        <instruction asm="XOR" category="LOGICAL" cpl="3" extension="BASE" rex="0">
             <op idx="1" r="1" type="reg" w="1" width="8">AL,CL,DL,BL,AH,CH,DH,BH</op>
             <op idx="2" r="1" type="reg" width="8">AL,CL,DL,BL,AH,CH,DH,BH</op>
             <op flag_AF="undef" flag_CF="w" flag_OF="w" flag_PF="w" flag_SF="w" flag_ZF="w" idx="3" suppressed="1" type="flags" w="1"/>
         </instruction>
-        <instruction asm="{load} REX XOR" category="LOGICAL" cpl="3" extension="BASE" rex="1">
+        <instruction asm="REX XOR" category="LOGICAL" cpl="3" extension="BASE" rex="1">
             <op idx="1" r="1" type="reg" w="1" width="8">GPR</op>
             <op idx="2" r="1" type="reg" width="8">GPR</op>
             <op flag_AF="undef" flag_CF="w" flag_OF="w" flag_PF="w" flag_SF="w" flag_ZF="w" idx="3" suppressed="1" type="flags" w="1"/>
@@ -6422,27 +6422,27 @@
             <op idx="2" r="1" type="reg" width="64">GPR</op>
             <op flag_AF="undef" flag_CF="w" flag_OF="w" flag_PF="w" flag_SF="w" flag_ZF="w" idx="3" suppressed="1" type="flags" w="1"/>
         </instruction>
-        <instruction asm="{load} XOR" category="LOGICAL" cpl="3" eosz="1" extension="BASE">
+        <instruction asm="XOR" category="LOGICAL" cpl="3" eosz="1" extension="BASE">
             <op idx="1" r="1" type="reg" w="1" width="16">GPR</op>
             <op idx="2" r="1" type="reg" width="16">GPR</op>
             <op flag_AF="undef" flag_CF="w" flag_OF="w" flag_PF="w" flag_SF="w" flag_ZF="w" idx="3" suppressed="1" type="flags" w="1"/>
         </instruction>
-        <instruction asm="{load} XOR" category="LOGICAL" cpl="3" eosz="2" extension="BASE">
+        <instruction asm="XOR" category="LOGICAL" cpl="3" eosz="2" extension="BASE">
             <op idx="1" r="1" type="reg" w="1" width="32">GPR</op>
             <op idx="2" r="1" type="reg" width="32">GPR</op>
             <op flag_AF="undef" flag_CF="w" flag_OF="w" flag_PF="w" flag_SF="w" flag_ZF="w" idx="3" suppressed="1" type="flags" w="1"/>
         </instruction>
-        <instruction asm="{load} XOR" category="LOGICAL" cpl="3" eosz="3" extension="BASE">
+        <instruction asm="XOR" category="LOGICAL" cpl="3" eosz="3" extension="BASE">
             <op idx="1" r="1" type="reg" w="1" width="64">GPR</op>
             <op idx="2" r="1" type="reg" width="64">GPR</op>
             <op flag_AF="undef" flag_CF="w" flag_OF="w" flag_PF="w" flag_SF="w" flag_ZF="w" idx="3" suppressed="1" type="flags" w="1"/>
         </instruction>
-        <instruction asm="{store} XOR" category="LOGICAL" cpl="3" extension="BASE" rex="0">
+        <instruction asm="XOR" category="LOGICAL" cpl="3" extension="BASE" rex="0">
             <op idx="1" r="1" type="reg" w="1" width="8">AL,CL,DL,BL,AH,CH,DH,BH</op>
             <op idx="2" r="1" type="reg" width="8">AL,CL,DL,BL,AH,CH,DH,BH</op>
             <op flag_AF="undef" flag_CF="w" flag_OF="w" flag_PF="w" flag_SF="w" flag_ZF="w" idx="3" suppressed="1" type="flags" w="1"/>
         </instruction>
-        <instruction asm="{store} REX XOR" category="LOGICAL" cpl="3" extension="BASE" rex="1">
+        <instruction asm="REX XOR" category="LOGICAL" cpl="3" extension="BASE" rex="1">
             <op idx="1" r="1" type="reg" w="1" width="8">GPR</op>
             <op idx="2" r="1" type="reg" width="8">GPR</op>
             <op flag_AF="undef" flag_CF="w" flag_OF="w" flag_PF="w" flag_SF="w" flag_ZF="w" idx="3" suppressed="1" type="flags" w="1"/>
@@ -6457,17 +6457,17 @@
             <op idx="2" r="1" type="mem" width="8" xtype="u8"/>
             <op flag_AF="undef" flag_CF="w" flag_OF="w" flag_PF="w" flag_SF="w" flag_ZF="w" idx="3" suppressed="1" type="flags" w="1"/>
         </instruction>
-        <instruction asm="{store} XOR" category="LOGICAL" cpl="3" eosz="1" extension="BASE">
+        <instruction asm="XOR" category="LOGICAL" cpl="3" eosz="1" extension="BASE">
             <op idx="1" r="1" type="reg" w="1" width="16">GPR</op>
             <op idx="2" r="1" type="reg" width="16">GPR</op>
             <op flag_AF="undef" flag_CF="w" flag_OF="w" flag_PF="w" flag_SF="w" flag_ZF="w" idx="3" suppressed="1" type="flags" w="1"/>
         </instruction>
-        <instruction asm="{store} XOR" category="LOGICAL" cpl="3" eosz="2" extension="BASE">
+        <instruction asm="XOR" category="LOGICAL" cpl="3" eosz="2" extension="BASE">
             <op idx="1" r="1" type="reg" w="1" width="32">GPR</op>
             <op idx="2" r="1" type="reg" width="32">GPR</op>
             <op flag_AF="undef" flag_CF="w" flag_OF="w" flag_PF="w" flag_SF="w" flag_ZF="w" idx="3" suppressed="1" type="flags" w="1"/>
         </instruction>
-        <instruction asm="{store} XOR" category="LOGICAL" cpl="3" eosz="3" extension="BASE">
+        <instruction asm="XOR" category="LOGICAL" cpl="3" eosz="3" extension="BASE">
             <op idx="1" r="1" type="reg" w="1" width="64">GPR</op>
             <op idx="2" r="1" type="reg" width="64">GPR</op>
             <op flag_AF="undef" flag_CF="w" flag_OF="w" flag_PF="w" flag_SF="w" flag_ZF="w" idx="3" suppressed="1" type="flags" w="1"/>
@@ -6566,6 +6566,27 @@
             <op idx="1" r="1" type="mem" w="1" width="64" xtype="int"/>
             <op idx="2" r="1" type="reg" width="64">GPR</op>
             <op flag_AF="undef" flag_CF="w" flag_OF="w" flag_PF="w" flag_SF="w" flag_ZF="w" idx="3" suppressed="1" type="flags" w="1"/>
+        </instruction>
+    </extension>
+    <extension ex="SSE2">
+        <instruction asm="LFENCE" category="MISC" cpl="3" extension="SSE2">
+        </instruction>
+        <instruction asm="MFENCE" category="MISC" cpl="3" extension="SSE2">
+        </instruction>
+        <instruction asm="SFENCE" category="MISC" cpl="3" extension="SSE2">
+        </instruction>
+    </extension>
+    <extension name="CLFSH">        <instruction asm="CLFLUSH" category="MISC" cpl="3" extension="CLFSH">
+            <op idx="1" r="1" type="mem" width="64"/>
+        </instruction>
+        <instruction asm="CLFLUSH" category="MISC" cpl="3" extension="CLFSH">
+            <op idx="1" r="1" type="mem" width="32"/>
+        </instruction>
+        <instruction asm="CLFLUSH" category="MISC" cpl="3" extension="CLFSH">
+            <op idx="1" r="1" type="mem" width="16"/>
+        </instruction>
+        <instruction asm="CLFLUSH" category="MISC" cpl="3" extension="CLFSH">
+            <op idx="1" r="1" type="mem" width="8"/>
         </instruction>
     </extension>
 </root>
