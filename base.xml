@@ -6570,28 +6570,28 @@
     </extension>
     <extension name="BMI1">
         <instruction asm="ANDN" category="BMI1" cpl="3" iclass="ANDN" isa-set="BMI1" vex="1">
-            <op idx="1" name="REG0" type="reg" w="1" width="32" xtype="i32">GPR</op>
-            <op idx="2" name="REG1" r="1" type="reg" width="32" xtype="i32">GPR</op>
-            <op idx="3" name="MEM0" r="1" type="mem" width="32" xtype="i32"/>
-            <op flag_AF="undef" flag_CF="w" flag_OF="w" flag_PF="undef" flag_SF="w" flag_ZF="w" idx="4" name="REG2" suppressed="1" type="flags" w="1"/>
+            <op idx="1" type="reg" w="1" width="32" xtype="i32">GPR</op>
+            <op idx="2" r="1" type="reg" width="32" xtype="i32">GPR</op>
+            <op idx="3" r="1" type="mem" width="32" xtype="i32"/>
+            <op flag_AF="undef" flag_CF="w" flag_OF="w" flag_PF="undef" flag_SF="w" flag_ZF="w" idx="4" suppressed="1" type="flags" w="1"/>
         </instruction>
         <instruction asm="ANDN" category="BMI1" cpl="3" iclass="ANDN" isa-set="BMI1" vex="1">
-            <op idx="1" name="REG0" type="reg" w="1" width="32" xtype="i32">GPR</op>
-            <op idx="2" name="REG1" r="1" type="reg" width="32" xtype="i32">GPR</op>
-            <op idx="3" name="REG2" r="1" type="reg" width="32" xtype="i32">GPR</op>
-            <op flag_AF="undef" flag_CF="w" flag_OF="w" flag_PF="undef" flag_SF="w" flag_ZF="w" idx="4" name="REG3" suppressed="1" type="flags" w="1"/>
+            <op idx="1" type="reg" w="1" width="32" xtype="i32">GPR</op>
+            <op idx="2" r="1" type="reg" width="32" xtype="i32">GPR</op>
+            <op idx="3" r="1" type="reg" width="32" xtype="i32">GPR</op>
+            <op flag_AF="undef" flag_CF="w" flag_OF="w" flag_PF="undef" flag_SF="w" flag_ZF="w" idx="4" suppressed="1" type="flags" w="1"/>
         </instruction>
         <instruction asm="ANDN" category="BMI1" cpl="3" iclass="ANDN" isa-set="BMI1" vex="1">
-            <op idx="1" name="REG0" type="reg" w="1" width="64" xtype="i64">GPR</op>
-            <op idx="2" name="REG1" r="1" type="reg" width="64" xtype="i64">GPR</op>
-            <op idx="3" name="MEM0" r="1" type="mem" width="64" xtype="i64"/>
-            <op flag_AF="undef" flag_CF="w" flag_OF="w" flag_PF="undef" flag_SF="w" flag_ZF="w" idx="4" name="REG2" suppressed="1" type="flags" w="1"/>
+            <op idx="1" type="reg" w="1" width="64" xtype="i64">GPR</op>
+            <op idx="2" r="1" type="reg" width="64" xtype="i64">GPR</op>
+            <op idx="3" r="1" type="mem" width="64" xtype="i64"/>
+            <op flag_AF="undef" flag_CF="w" flag_OF="w" flag_PF="undef" flag_SF="w" flag_ZF="w" idx="4" suppressed="1" type="flags" w="1"/>
         </instruction>
         <instruction asm="ANDN" category="BMI1" cpl="3" iclass="ANDN" isa-set="BMI1" vex="1">
-            <op idx="1" name="REG0" type="reg" w="1" width="64" xtype="i64">GPR</op>
-            <op idx="2" name="REG1" r="1" type="reg" width="64" xtype="i64">GPR</op>
-            <op idx="3" name="REG2" r="1" type="reg" width="64" xtype="i64">GPR</op>
-            <op flag_AF="undef" flag_CF="w" flag_OF="w" flag_PF="undef" flag_SF="w" flag_ZF="w" idx="4" name="REG3" suppressed="1" type="flags" w="1"/>
+            <op idx="1" type="reg" w="1" width="64" xtype="i64">GPR</op>
+            <op idx="2" r="1" type="reg" width="64" xtype="i64">GPR</op>
+            <op idx="3" r="1" type="reg" width="64" xtype="i64">GPR</op>
+            <op flag_AF="undef" flag_CF="w" flag_OF="w" flag_PF="undef" flag_SF="w" flag_ZF="w" idx="4" suppressed="1" type="flags" w="1"/>
         </instruction>
         <instruction asm="BEXTR" category="BMI1" cpl="3" iclass="BEXTR" isa-set="BMI1" vex="1">
             <op idx="1" type="reg" w="1" width="32" xtype="i32">GPR</op>
@@ -6646,7 +6646,7 @@
             <op idx="1" type="reg" w="1" width="32" xtype="i32">GPR</op>
             <op idx="2" r="1" type="reg" width="32" xtype="i32">GPR</op>
             <op flag_AF="undef" flag_CF="w" flag_OF="w" flag_PF="undef" flag_SF="w" flag_ZF="w" idx="3" suppressed="1" type="flags" w="1"/>
-            </instruction>
+        </instruction>
         <instruction asm="BLSMSK" category="BMI1" cpl="3" iclass="BLSMSK" isa-set="BMI1" vex="1">
             <op idx="1" type="reg" w="1" width="64" xtype="i64">GPR</op>
             <op idx="2" r="1" type="mem" width="64" xtype="i64"/>
@@ -6656,8 +6656,59 @@
             <op idx="1" type="reg" w="1" width="64" xtype="i64">GPR</op>
             <op idx="2" r="1" type="reg" width="64" xtype="i64">GPR</op>
             <op flag_AF="undef" flag_CF="w" flag_OF="w" flag_PF="undef" flag_SF="w" flag_ZF="w" idx="3" suppressed="1" type="flags" w="1"/>
+        </instruction>
+        <instruction asm="BLSR" category="BMI1" cpl="3" iclass="BLSR" isa-set="BMI1" vex="1">
+            <op idx="1" type="reg" w="1" width="32" xtype="i32">GPR</op>
+            <op idx="2" r="1" type="mem" width="32" xtype="i32"/>
+            <op flag_AF="undef" flag_CF="w" flag_OF="w" flag_PF="undef" flag_SF="w" flag_ZF="w" idx="3" suppressed="1" type="flags" w="1"/>
+        </instruction>
+        <instruction asm="BLSR" category="BMI1" cpl="3" iclass="BLSR" isa-set="BMI1" vex="1">
+            <op idx="1" type="reg" w="1" width="32" xtype="i32">GPR</op>
+            <op idx="2" r="1" type="reg" width="32" xtype="i32">GPR</op>
+            <op flag_AF="undef" flag_CF="w" flag_OF="w" flag_PF="undef" flag_SF="w" flag_ZF="w" idx="3" suppressed="1" type="flags" w="1"/>
+        </instruction>
+        <instruction asm="BLSR" category="BMI1" cpl="3" iclass="BLSR" isa-set="BMI1" vex="1">
+            <op idx="1" type="reg" w="1" width="64" xtype="i64">GPR</op>
+            <op idx="2" r="1" type="mem" width="64" xtype="i64"/>
+            <op flag_AF="undef" flag_CF="w" flag_OF="w" flag_PF="undef" flag_SF="w" flag_ZF="w" idx="3" suppressed="1" type="flags" w="1"/>
+        </instruction>
+        <instruction asm="BLSR" category="BMI1" cpl="3" iclass="BLSR" isa-set="BMI1" vex="1">
+            <op idx="1" type="reg" w="1" width="64" xtype="i64">GPR</op>
+            <op idx="2" r="1" type="reg" width="64" xtype="i64">GPR</op>
+            <op flag_AF="undef" flag_CF="w" flag_OF="w" flag_PF="undef" flag_SF="w" flag_ZF="w" idx="3" suppressed="1" type="flags" w="1"/>
+        </instruction>
+        <instruction asm="TZCNT" category="BMI1" cpl="3" eosz="1" iclass="TZCNT" isa-set="BMI1">
+            <op idx="1" type="reg" w="1" width="16">GPR</op>
+            <op idx="2" r="1" type="mem" width="16" xtype="int"/>
+            <op flag_AF="undef" flag_CF="w" flag_OF="undef" flag_PF="undef" flag_SF="undef" flag_ZF="w" idx="3" suppressed="1" type="flags" w="1"/>
+        </instruction>
+        <instruction asm="TZCNT" category="BMI1" cpl="3" eosz="2" iclass="TZCNT" isa-set="BMI1">
+            <op idx="1" type="reg" w="1" width="32">GPR</op>
+            <op idx="2" r="1" type="mem" width="32" xtype="int"/>
+            <op flag_AF="undef" flag_CF="w" flag_OF="undef" flag_PF="undef" flag_SF="undef" flag_ZF="w" idx="3" suppressed="1" type="flags" w="1"/>
+        </instruction>
+        <instruction asm="TZCNT" category="BMI1" cpl="3" eosz="3" iclass="TZCNT" isa-set="BMI1">
+            <op idx="1" type="reg" w="1" width="64">GPR</op>
+            <op idx="2" r="1" type="mem" width="64" xtype="int"/>
+            <op flag_AF="undef" flag_CF="w" flag_OF="undef" flag_PF="undef" flag_SF="undef" flag_ZF="w" idx="3" suppressed="1" type="flags" w="1"/>
+        </instruction>
+        <instruction asm="TZCNT" category="BMI1" cpl="3" eosz="1" iclass="TZCNT" isa-set="BMI1">
+            <op idx="1" type="reg" w="1" width="16">GPR</op>
+            <op idx="2" r="1" type="reg" width="16">GPR</op>
+            <op flag_AF="undef" flag_CF="w" flag_OF="undef" flag_PF="undef" flag_SF="undef" flag_ZF="w" idx="3" suppressed="1" type="flags" w="1"/>
+        </instruction>
+        <instruction asm="TZCNT" category="BMI1" cpl="3" eosz="2" iclass="TZCNT" isa-set="BMI1">
+            <op idx="1" type="reg" w="1" width="32">GPR</op>
+            <op idx="2" r="1" type="reg" width="32">GPR</op>
+            <op flag_AF="undef" flag_CF="w" flag_OF="undef" flag_PF="undef" flag_SF="undef" flag_ZF="w" idx="3" suppressed="1" type="flags" w="1"/>
+        </instruction>
+        <instruction asm="TZCNT" category="BMI1" cpl="3" eosz="3" iclass="TZCNT" isa-set="BMI1">
+            <op idx="1" type="reg" w="1" width="64">GPR</op>
+            <op idx="2" r="1" type="reg" width="64">GPR</op>
+            <op flag_AF="undef" flag_CF="w" flag_OF="undef" flag_PF="undef" flag_SF="undef" flag_ZF="w" idx="3" suppressed="1" type="flags" w="1"/>
         </instruction>
     </extension>
+
     <extension ex="SSE2">
         <instruction asm="LFENCE" category="MISC" cpl="3" extension="SSE2">
         </instruction>
