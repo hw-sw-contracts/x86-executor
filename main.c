@@ -2,10 +2,10 @@
 /// File: Kernel module interface
 ///
 // -----------------------------------------------------------------------------------------------
-// Based originally on the Andreas Abel's nanoBench
-// Copyright (C) 2020 Oleksii Oleksenko
+// Based on the Andreas Abel's nanoBench
+// Extended and modified by Oleksii Oleksenko
 //
-// Copyright notices from the original nanoBench code:
+// Copyright notices from the nanoBench code:
 // -----------------------------------------------------------------------------------------------
 //
 // This program is free software: you can redistribute it and/or modify it under the terms
@@ -19,9 +19,6 @@
 // this program.
 // If not, see <https://www.gnu.org/licenses/>.
 // -----------------------------------------------------------------------------------------------
-//
-// This file is subject to the terms and conditions of the GNU General Public License.
-// See the file LICENCE in the main directory of the Revizor distribution for more details.
 //
 
 #include <linux/module.h>
